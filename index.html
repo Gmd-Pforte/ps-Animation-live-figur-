@@ -387,6 +387,35 @@ footer {
   pointer-events: none;
 }
 
+
+/* Schritt 5: große Touch-Steuerung */
+.touch-panel{grid-column:1/-1}
+.touch-title{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.touch-title p{margin:3px 0 0;color:var(--muted);font-size:12px}
+#touchReset{border:1px solid rgba(39,200,255,.35);background:var(--accent-soft);color:var(--text);border-radius:12px;min-height:44px;padding:8px 13px;font-weight:800}
+.touch-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px}
+.touch-card{border:1px solid rgba(255,255,255,.07);background:rgba(0,0,0,.15);border-radius:16px;padding:10px}
+.touch-card-head{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:8px;font-size:13px}
+.touch-card-head span{color:var(--accent);font-variant-numeric:tabular-nums}
+.touch-pad{position:relative;aspect-ratio:1/1;border-radius:18px;overflow:hidden;touch-action:none;user-select:none;background:radial-gradient(circle at 50% 50%,rgba(39,200,255,.10),rgba(0,0,0,.20));border:1px solid #28506a;box-shadow:inset 0 0 28px rgba(0,0,0,.25)}
+.touch-pad:active{border-color:var(--accent);box-shadow:inset 0 0 35px rgba(39,200,255,.10),0 0 18px rgba(39,200,255,.12)}
+.axis-x,.axis-y{position:absolute;background:rgba(39,200,255,.15);pointer-events:none}
+.axis-x{left:8%;right:8%;height:1px;top:50%}
+.axis-y{top:8%;bottom:8%;width:1px;left:50%}
+.touch-knob{position:absolute;width:34px;height:34px;border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--accent);border:4px solid rgba(255,255,255,.9);box-shadow:0 0 0 7px rgba(39,200,255,.10),0 4px 14px rgba(0,0,0,.35);pointer-events:none}
+.hint{position:absolute;color:#7590a2;font-size:9px;pointer-events:none}
+.hint.top{top:7px;left:50%;transform:translateX(-50%)}
+.hint.bottom{bottom:7px;left:50%;transform:translateX(-50%)}
+.hint.left{left:7px;top:50%;transform:translateY(-50%)}
+.hint.right{right:7px;top:50%;transform:translateY(-50%)}
+.big-actions,.expression-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:12px}
+.big-actions button,.expression-actions button{min-height:54px;border-radius:13px;border:1px solid #254a63;background:#091925;color:var(--text);font-weight:800}
+.big-actions button:active,.expression-actions button:active,.expression-actions button.active{border-color:var(--accent);background:var(--accent-soft)}
+.toggle-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:13px}
+.toggle-row label{display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.14);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:10px 12px;font-size:12px;color:var(--muted)}
+.toggle-row input{width:23px;height:23px;accent-color:var(--accent)}
+@media(max-width:760px){.touch-grid{grid-template-columns:1fr}.touch-pad{aspect-ratio:1.35/1}.touch-card{padding:11px}.avatar-stage{min-height:420px}.avatar-head-module{width:min(360px,84vw)}}
+
 </style>
 </head>
 <body>
@@ -396,7 +425,7 @@ footer {
         <p class="eyebrow">PS AI MUSIC</p>
         <h1>Avatar Development</h1>
       </div>
-      <div class="version-badge">v0.04.1</div>
+      <div class="version-badge">v0.05</div>
     </header>
 
     <section class="stage-card">
@@ -439,11 +468,19 @@ footer {
                 <rect id="lidBottomRight" x="640" y="580" width="190" height="0" fill="#efad73"/>
               </g>
             </g>
+
+            <g id="mouthModule">
+              <rect id="mouthCover" x="545" y="700" width="164" height="54" rx="27" fill="#efad73"/>
+              <ellipse id="mouthHole" cx="627" cy="728" rx="0" ry="0" fill="#090909"/>
+              <ellipse id="tongueShape" cx="627" cy="742" rx="0" ry="0" fill="#cf6b70" opacity="0"/>
+              <path id="mouthLine" d="M584 728 Q627 728 670 728"
+                    fill="none" stroke="#111" stroke-width="8" stroke-linecap="round"/>
+            </g>
           </svg>
         </div>
 
         <div class="stage-caption">
-          <strong>Schritt 4.1:</strong> Originaler Avatar-Kopf eingebaut</div>
+          <strong>Schritt 5:</strong> Touch-Steuerung + Mund</div>
       </div>
     </section>
 
@@ -465,7 +502,7 @@ footer {
           </div>
           <div>
             <span class="stat-label">Version</span>
-            <strong id="versionValue">0.04</strong>
+            <strong id="versionValue">0.05</strong>
           </div>
         </div>
       </article>
@@ -476,7 +513,7 @@ footer {
           <div class="progress-row done"><span>Grundmotor</span><strong>✓</strong></div>
           <div class="progress-row done"><span>Kopf</span><strong>✓</strong></div>
           <div class="progress-row done"><span>Augen</span><strong>✓</strong></div>
-          <div class="progress-row"><span>Mund</span><strong>○</strong></div>
+          <div class="progress-row done"><span>Mund</span><strong>✓</strong></div>
           <div class="progress-row"><span>Körper</span><strong>○</strong></div>
           <div class="progress-row"><span>Arme</span><strong>○</strong></div>
           <div class="progress-row"><span>Beine</span><strong>○</strong></div>
@@ -484,59 +521,71 @@ footer {
         </div>
       </article>
 
-      <article class="panel head-controls">
-        <h2>Kopf-Test</h2>
-        <label>
-          <span>Kopf neigen</span>
-          <input id="headTilt" type="range" min="-25" max="25" value="0">
-          <strong id="headTiltValue">0°</strong>
-        </label>
-        <label>
-          <span>Kopf bewegen</span>
-          <input id="headTurn" type="range" min="-18" max="18" value="0">
-          <strong id="headTurnValue">0°</strong>
-        </label>
-        <label>
-          <span>Kopfgröße</span>
-          <input id="headScale" type="range" min="85" max="115" value="100">
-          <strong id="headScaleValue">100%</strong>
-        </label>
-        <button id="headReset" type="button">Kopf zurücksetzen</button>
-      </article>
+      <article class="panel touch-panel">
+        <div class="touch-title">
+          <div>
+            <h2>Touch-Steuerung</h2>
+            <p>Große Flächen für Handy – Finger drauf und direkt bewegen.</p>
+          </div>
+          <button id="touchReset" type="button">↺ Alles zurück</button>
+        </div>
 
-      <article class="panel head-controls eye-controls">
-        <h2>Augen-Test</h2>
-        <label>
-          <span>Blick links/rechts</span>
-          <input id="lookX" type="range" min="-10" max="10" value="0">
-          <strong id="lookXValue">0</strong>
-        </label>
-        <label>
-          <span>Blick hoch/runter</span>
-          <input id="lookY" type="range" min="-7" max="7" value="0">
-          <strong id="lookYValue">0</strong>
-        </label>
-        <label>
-          <span>Blinzeln links</span>
-          <input id="blinkLeft" type="range" min="0" max="100" value="0">
-          <strong id="blinkLeftValue">0%</strong>
-        </label>
-        <label>
-          <span>Blinzeln rechts</span>
-          <input id="blinkRight" type="range" min="0" max="100" value="0">
-          <strong id="blinkRightValue">0%</strong>
-        </label>
-        <label>
-          <span>Pupillengröße</span>
-          <input id="pupilScale" type="range" min="60" max="145" value="100">
-          <strong id="pupilScaleValue">100%</strong>
-        </label>
-        <div class="eye-actions">
-          <button id="blinkNow" type="button">😉 Einmal blinzeln</button>
-          <label class="auto-blink">
-            <input id="autoBlink" type="checkbox" checked>
-            <span>Automatisch blinzeln</span>
-          </label>
+        <div class="touch-grid">
+          <section class="touch-card">
+            <div class="touch-card-head">
+              <strong>👀 Blick</strong>
+              <span id="eyeTouchValue">0 / 0</span>
+            </div>
+            <div id="eyePad" class="touch-pad" aria-label="Blick steuern">
+              <div class="axis-x"></div><div class="axis-y"></div>
+              <div id="eyeKnob" class="touch-knob"></div>
+              <span class="hint top">hoch</span><span class="hint bottom">runter</span>
+              <span class="hint left">links</span><span class="hint right">rechts</span>
+            </div>
+          </section>
+
+          <section class="touch-card">
+            <div class="touch-card-head">
+              <strong>🧢 Kopf</strong>
+              <span id="headTouchValue">0° / 0°</span>
+            </div>
+            <div id="headPad" class="touch-pad" aria-label="Kopf steuern">
+              <div class="axis-x"></div><div class="axis-y"></div>
+              <div id="headKnob" class="touch-knob"></div>
+              <span class="hint top">neigen</span><span class="hint bottom">zurück</span>
+              <span class="hint left">links</span><span class="hint right">rechts</span>
+            </div>
+          </section>
+
+          <section class="touch-card">
+            <div class="touch-card-head">
+              <strong>👄 Mund</strong>
+              <span id="mouthTouchValue">0% / 100%</span>
+            </div>
+            <div id="mouthPad" class="touch-pad mouth-pad" aria-label="Mund steuern">
+              <div class="axis-x"></div><div class="axis-y"></div>
+              <div id="mouthKnob" class="touch-knob"></div>
+              <span class="hint top">weiter offen</span><span class="hint bottom">geschlossen</span>
+              <span class="hint left">schmal</span><span class="hint right">breit</span>
+            </div>
+          </section>
+        </div>
+
+        <div class="big-actions">
+          <button id="blinkLeftTouch" type="button">😉 Links</button>
+          <button id="blinkNow" type="button">😌 Beide</button>
+          <button id="blinkRightTouch" type="button">😉 Rechts</button>
+        </div>
+
+        <div class="expression-actions">
+          <button data-mouth="sad" type="button">🙁 Traurig</button>
+          <button data-mouth="neutral" type="button" class="active">😐 Neutral</button>
+          <button data-mouth="smile" type="button">🙂 Lächeln</button>
+        </div>
+
+        <div class="toggle-row">
+          <label><input id="autoBlink" type="checkbox" checked><span>Automatisch blinzeln</span></label>
+          <label><input id="autoTalk" type="checkbox"><span>Sprechen testen</span></label>
         </div>
       </article>
     </section>
@@ -550,7 +599,7 @@ footer {
 (() => {
   "use strict";
 
-  const VERSION = "0.04.1";
+  const VERSION = "0.05";
 
   const avatarState = {
     version: VERSION,
@@ -570,7 +619,10 @@ footer {
       pupilScale: 1,
       autoBlink: true,
       mouthOpen: 0,
-      mouthWidth: 100
+      mouthWidth: 100,
+      mouthCornerLeft: 0,
+      mouthCornerRight: 0,
+      autoTalk: false
     },
 
     head: {
@@ -646,7 +698,24 @@ footer {
     lidTopLeft: document.getElementById("lidTopLeft"),
     lidBottomLeft: document.getElementById("lidBottomLeft"),
     lidTopRight: document.getElementById("lidTopRight"),
-    lidBottomRight: document.getElementById("lidBottomRight")
+    lidBottomRight: document.getElementById("lidBottomRight"),
+    eyePad: document.getElementById("eyePad"),
+    eyeKnob: document.getElementById("eyeKnob"),
+    headPad: document.getElementById("headPad"),
+    headKnob: document.getElementById("headKnob"),
+    mouthPad: document.getElementById("mouthPad"),
+    mouthKnob: document.getElementById("mouthKnob"),
+    eyeTouchValue: document.getElementById("eyeTouchValue"),
+    headTouchValue: document.getElementById("headTouchValue"),
+    mouthTouchValue: document.getElementById("mouthTouchValue"),
+    touchReset: document.getElementById("touchReset"),
+    blinkLeftTouch: document.getElementById("blinkLeftTouch"),
+    blinkRightTouch: document.getElementById("blinkRightTouch"),
+    autoTalk: document.getElementById("autoTalk"),
+    mouthCover: document.getElementById("mouthCover"),
+    mouthHole: document.getElementById("mouthHole"),
+    tongueShape: document.getElementById("tongueShape"),
+    mouthLine: document.getElementById("mouthLine")
   };
 
   function registerPart(name, element) {
@@ -679,11 +748,13 @@ footer {
     const head = avatarState.head;
 
     if (ui.headPart) {
-      const squash = 1 - Math.min(Math.abs(head.rotation) / 220, 0.055);
+      const turnScale = 1 - Math.min(Math.abs(head.rotation) * 0.003, 0.035);
+      const turnSkew = head.rotation * 0.18;
       ui.headPart.style.transform =
-        "translateX(" + head.rotation + "px) " +
         "rotate(" + head.tilt + "deg) " +
-        "scale(" + (head.scale * squash) + "," + head.scale + ")";
+        "skewY(" + turnSkew + "deg) " +
+        "scaleX(" + (head.scale * turnScale) + ") " +
+        "scaleY(" + head.scale + ")";
     }
 
     if (ui.headTiltValue) {
@@ -731,6 +802,51 @@ footer {
     if (ui.blinkLeftValue) ui.blinkLeftValue.textContent = Math.round(face.blinkLeft) + "%";
     if (ui.blinkRightValue) ui.blinkRightValue.textContent = Math.round(face.blinkRight) + "%";
     if (ui.pupilScaleValue) ui.pupilScaleValue.textContent = Math.round(face.pupilScale * 100) + "%";
+
+    if (ui.mouthHole && ui.mouthLine) {
+      const cx = 627;
+      const baseY = 728;
+      const widthScale = face.mouthWidth / 100;
+      const halfWidth = 48 * widthScale;
+      const openRy = (face.mouthOpen / 100) * 28;
+      const leftY = baseY - face.mouthCornerLeft * 0.55;
+      const rightY = baseY - face.mouthCornerRight * 0.55;
+      const controlY = baseY - ((face.mouthCornerLeft + face.mouthCornerRight) / 2) * 0.40;
+
+      ui.mouthHole.setAttribute("rx", halfWidth * 0.82);
+      ui.mouthHole.setAttribute("ry", openRy);
+      ui.mouthHole.setAttribute("cy", baseY + 4);
+
+      if (ui.tongueShape) {
+        ui.tongueShape.setAttribute("rx", halfWidth * 0.48);
+        ui.tongueShape.setAttribute("ry", openRy * 0.34);
+        ui.tongueShape.setAttribute("cy", baseY + 12 + openRy * 0.25);
+        ui.tongueShape.setAttribute("opacity", face.mouthOpen > 20 ? "0.86" : "0");
+      }
+
+      ui.mouthLine.setAttribute("d",
+        "M " + (cx-halfWidth) + " " + leftY +
+        " Q " + cx + " " + controlY +
+        " " + (cx+halfWidth) + " " + rightY
+      );
+    }
+
+    if (ui.eyeTouchValue) ui.eyeTouchValue.textContent = Math.round(face.lookX) + " / " + Math.round(face.lookY);
+    if (ui.headTouchValue) ui.headTouchValue.textContent = Math.round(head.rotation) + "° / " + Math.round(head.tilt) + "°";
+    if (ui.mouthTouchValue) ui.mouthTouchValue.textContent = Math.round(face.mouthOpen) + "% / " + Math.round(face.mouthWidth) + "%";
+
+    if (ui.eyeKnob) {
+      ui.eyeKnob.style.left = (50 + face.lookX * 4) + "%";
+      ui.eyeKnob.style.top = (50 + face.lookY * 5.5) + "%";
+    }
+    if (ui.headKnob) {
+      ui.headKnob.style.left = (50 + head.rotation * 3.2) + "%";
+      ui.headKnob.style.top = (50 + head.tilt * 3.2) + "%";
+    }
+    if (ui.mouthKnob) {
+      ui.mouthKnob.style.left = (8 + ((face.mouthWidth - 70) / 65) * 84) + "%";
+      ui.mouthKnob.style.top = (92 - (face.mouthOpen / 100) * 84) + "%";
+    }
   }
 
   let lastFpsTime = performance.now();
@@ -752,7 +868,7 @@ footer {
       ui.heartbeatText.textContent =
         "Engine läuft · Frame " +
         avatarState.engine.frame.toLocaleString("de-DE") +
-        " · Schritt 3 aktiv: Augen & Pupillen";
+        " · Touch-Steuerung + Mund aktiv";
     }
   }
 
@@ -903,6 +1019,138 @@ footer {
     scheduleAutoBlink();
   }
 
+  function bindTouchPad(element, callback) {
+    if (!element) return;
+
+    const update = (event) => {
+      const rect = element.getBoundingClientRect();
+      const x = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
+      const y = Math.max(0, Math.min(1, (event.clientY - rect.top) / rect.height));
+      callback(x, y);
+      renderAvatar();
+    };
+
+    element.addEventListener("pointerdown", (event) => {
+      element.setPointerCapture(event.pointerId);
+      update(event);
+    });
+
+    element.addEventListener("pointermove", (event) => {
+      if (element.hasPointerCapture(event.pointerId)) update(event);
+    });
+  }
+
+  let talkTimer = null;
+
+  function setMouthMood(mode) {
+    document.querySelectorAll("[data-mouth]").forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.mouth === mode);
+    });
+
+    if (mode === "smile") {
+      avatarState.face.mouthCornerLeft = 14;
+      avatarState.face.mouthCornerRight = 14;
+    } else if (mode === "sad") {
+      avatarState.face.mouthCornerLeft = -14;
+      avatarState.face.mouthCornerRight = -14;
+    } else {
+      avatarState.face.mouthCornerLeft = 0;
+      avatarState.face.mouthCornerRight = 0;
+    }
+    renderAvatar();
+  }
+
+  function setAutoTalk(enabled) {
+    avatarState.face.autoTalk = enabled;
+    if (talkTimer) {
+      clearInterval(talkTimer);
+      talkTimer = null;
+    }
+    if (!enabled) {
+      avatarState.face.mouthOpen = 0;
+      renderAvatar();
+      return;
+    }
+
+    const sequence = [
+      [18, 98],[54, 106],[28, 91],[72, 112],[12, 100],[44, 94]
+    ];
+    let i = 0;
+    talkTimer = setInterval(() => {
+      const [open,width] = sequence[i++ % sequence.length];
+      avatarState.face.mouthOpen = open;
+      avatarState.face.mouthWidth = width;
+      renderAvatar();
+    }, 145);
+  }
+
+  function bindTouchControls() {
+    bindTouchPad(ui.eyePad, (x,y) => {
+      avatarState.face.lookX = (x - 0.5) * 20;
+      avatarState.face.lookY = (y - 0.5) * 14;
+    });
+
+    bindTouchPad(ui.headPad, (x,y) => {
+      avatarState.head.rotation = (x - 0.5) * 20;
+      avatarState.head.tilt = (y - 0.5) * 16;
+    });
+
+    bindTouchPad(ui.mouthPad, (x,y) => {
+      avatarState.face.mouthWidth = 70 + x * 65;
+      avatarState.face.mouthOpen = (1 - y) * 100;
+    });
+
+    const holdBlink = (button, side) => {
+      if (!button) return;
+      const close = (event) => {
+        event.preventDefault();
+        if (side === "left") avatarState.face.blinkLeft = 100;
+        if (side === "right") avatarState.face.blinkRight = 100;
+        renderAvatar();
+      };
+      const open = () => {
+        if (side === "left") avatarState.face.blinkLeft = 0;
+        if (side === "right") avatarState.face.blinkRight = 0;
+        renderAvatar();
+      };
+      button.addEventListener("pointerdown", close);
+      button.addEventListener("pointerup", open);
+      button.addEventListener("pointercancel", open);
+      button.addEventListener("pointerleave", open);
+    };
+
+    holdBlink(ui.blinkLeftTouch, "left");
+    holdBlink(ui.blinkRightTouch, "right");
+
+    document.querySelectorAll("[data-mouth]").forEach(btn => {
+      btn.addEventListener("click", () => setMouthMood(btn.dataset.mouth));
+    });
+
+    if (ui.autoTalk) {
+      ui.autoTalk.addEventListener("change", () => setAutoTalk(ui.autoTalk.checked));
+    }
+
+    if (ui.touchReset) {
+      ui.touchReset.addEventListener("click", () => {
+        avatarState.face.lookX = 0;
+        avatarState.face.lookY = 0;
+        avatarState.face.blinkLeft = 0;
+        avatarState.face.blinkRight = 0;
+        avatarState.face.mouthOpen = 0;
+        avatarState.face.mouthWidth = 100;
+        avatarState.face.mouthCornerLeft = 0;
+        avatarState.face.mouthCornerRight = 0;
+        avatarState.head.rotation = 0;
+        avatarState.head.tilt = 0;
+        avatarState.head.scale = 1;
+        if (ui.autoTalk) ui.autoTalk.checked = false;
+        setAutoTalk(false);
+        setMouthMood("neutral");
+        renderAvatar();
+      });
+    }
+  }
+
   function startEngine() {
     avatarState.engine.running = true;
 
@@ -916,6 +1164,7 @@ footer {
 
   bindHeadControls();
   bindEyeControls();
+  bindTouchControls();
   renderAvatar();
 
   window.PSAvatarEngine = {
