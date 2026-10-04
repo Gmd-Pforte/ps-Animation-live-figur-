@@ -69,6 +69,21 @@ radial-gradient(circle at center,#0d2534,#071018 70%);background-size:25% 25%,25
 
 .log{margin-top:10px;padding:9px;border:1px solid #182833;border-radius:11px;background:#050b10;color:#78909e;font-size:9px;line-height:1.45;min-height:35px}
 @media(min-width:680px){.panel.live-grid{grid-template-columns:1fr 1fr}.panel.live-grid .wide{grid-column:1/-1}.avatar-grid{grid-template-columns:repeat(4,1fr)}.pad-grid{grid-template-columns:repeat(3,1fr)}}
+
+.answer-create-row{display:grid;grid-template-columns:1fr auto;gap:7px;margin-bottom:9px}
+.answer-create-row input{min-width:0;min-height:42px;border:1px solid #334858;border-radius:10px;background:#08121a;color:#fff;padding:8px 10px}
+.answer-create-row button{min-height:42px;border:1px solid #3a5b6d;border-radius:10px;background:#0a1a24;color:#fff;padding:8px 11px;font-weight:900}
+.answer-manager-list{display:grid;gap:7px}
+.answer-manager-item{display:grid;grid-template-columns:minmax(90px,.7fr) 1.3fr auto;gap:7px;align-items:center;padding:8px;border:1px solid rgba(255,255,255,.07);border-radius:11px;background:#080e14}
+.answer-manager-meta{display:grid;gap:2px;min-width:0}.answer-manager-meta strong{font-size:11px}.answer-manager-meta span{font-size:8px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.answer-manager-actions{display:flex;gap:5px;justify-content:flex-end}.answer-manager-actions button,.answer-file-label{min-height:36px;border-radius:8px;font-size:9px;font-weight:850}
+.answer-play-small{border:1px solid #31566e;background:#0a1a24;color:#fff;padding:6px 8px}.answer-play-small:disabled{opacity:.35}
+.answer-file-label{display:grid;place-items:center;border:1px solid #57415a;background:#180f18;color:#f2d8ea;padding:6px 8px;cursor:pointer}.answer-file-label input{display:none}
+.answer-delete-small{border:1px solid #63313b;background:#1b0b0f;color:#ff9aaa;padding:6px 8px}.answer-delete-small.locked{opacity:.35;pointer-events:none}
+.answer-status-pill{justify-self:start;padding:3px 6px;border-radius:999px;background:#111922;color:#8fa1ad;font-size:8px;font-weight:850}.answer-status-pill.ready{background:rgba(61,213,149,.09);color:#6ee2aa}
+.answer-btn.empty{opacity:.55;border-style:dashed}.answer-btn small{display:block;font-size:8px;color:var(--muted);margin-top:2px;font-weight:700}
+@media(max-width:560px){.answer-manager-item{grid-template-columns:1fr}.answer-manager-actions{justify-content:stretch}.answer-manager-actions>*{flex:1}}
+
 </style>
 </head>
 <body>
@@ -113,11 +128,20 @@ radial-gradient(circle at center,#0d2534,#071018 70%);background-size:25% 25%,25
     </article>
 
     <article class="card">
-      <div class="card-head"><strong>🔊 Schnellantworten</strong><span>Tablet-MP3</span></div>
-      <div class="answer-grid">
-        <button class="answer-btn" type="button" data-answer="ja" data-label="Ja">JA</button>
-        <button class="answer-btn no" type="button" data-answer="nein" data-label="Nein">NEIN</button>
+      <div class="card-head"><strong>🔊 Schnellantworten</strong><span id="answerCountLabel">0 gespeichert</span></div>
+      <div id="quickAnswerGrid" class="answer-grid">
+        <span class="subtle">Antworten werden geladen …</span>
       </div>
+    </article>
+
+    <article class="card wide">
+      <div class="card-head"><strong>🗂️ Antworten verwalten</strong><span id="answerManagerAvatar">PS Avatar</span></div>
+      <div class="answer-create-row">
+        <input id="newAnswerLabel" type="text" maxlength="60" placeholder="Neue Antwort, z. B. Danke">
+        <button id="newAnswerAdd" type="button">＋ Anlegen</button>
+      </div>
+      <div id="answerManagerList" class="answer-manager-list"></div>
+      <p class="subtle">Jede Figur hat ihre eigene Antwortbibliothek. Die MP3 liegt zentral in Supabase und funktioniert deshalb auch direkt auf der Tablet-Bühne.</p>
     </article>
 
     <article class="card">
@@ -269,6 +293,9 @@ const roomEl=$("room"),connectBtn=$("connect"),connEl=$("connectionStatus"),stag
 const danceBtn=$("danceToggle"),walkBtn=$("walkToggle"),intensity=$("intensity"),speed=$("speed");
 let channel=null,room="",connected=false,dance=false,walk=false,danceStyle="groove",lastStageSeen=0,lastStageSnapshot=null,lastSendAt=0;
 let currentBackgroundUrl="";
+let currentCharacter="human";
+let remoteAnswers=[];
+let lastAnswerLoadKey="";
 
 function cleanRoom(value){return String(value||"").toUpperCase().replace(/[^A-Z0-9_-]/g,"").slice(0,24)}
 function generateRoom(){const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789",bytes=new Uint8Array(8);crypto.getRandomValues(bytes);let out="PS-";for(const b of bytes)out+=chars[b%chars.length];return out}
@@ -280,8 +307,12 @@ function avatarName(c){return c==="bear"?"PS Bär":c==="gull"?"BreuerBeatz":c===
 function setStageOnline(snapshot={}){
   lastStageSeen=Date.now();lastStageSnapshot=snapshot;stageEl.textContent="Tablet: ● ONLINE";stageEl.classList.add("online");
   if(snapshot.character){
+    const changed=currentCharacter!==snapshot.character;
+    currentCharacter=snapshot.character;
     $("activeAvatar").textContent=avatarName(snapshot.character);
+    $("answerManagerAvatar").textContent=avatarName(snapshot.character);
     document.querySelectorAll("[data-avatar]").forEach(b=>b.classList.toggle("active",b.dataset.avatar===snapshot.character));
+    if(changed) loadRemoteAnswers(true);
   }
   dance=!!snapshot.dance;walk=!!snapshot.walk;
   danceBtn.classList.toggle("active",dance);danceBtn.textContent=dance?"⏸ Tanz stoppen":"💃 Tanzen";
@@ -299,6 +330,154 @@ function setStageOnline(snapshot={}){
     $("audioUploadStatus").textContent=audio.playing?"Tablet: Audio läuft 🔊":"Tablet: Audio geladen";
   }
 }
+const DEFAULT_REMOTE_ANSWERS=[
+  {answer_id:"ja",label:"Ja",file_url:null,file_name:null,locked:true},
+  {answer_id:"nein",label:"Nein",file_url:null,file_name:null,locked:true}
+];
+
+function answerIdFromLabel(label){
+  return String(label||"antwort").toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+    .replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")
+    .slice(0,44)||("antwort-"+Date.now());
+}
+
+function mergedAnswers(rows=[]){
+  const map=new Map();
+  DEFAULT_REMOTE_ANSWERS.forEach(x=>map.set(x.answer_id,{...x}));
+  rows.forEach(row=>{
+    const prev=map.get(row.answer_id)||{};
+    map.set(row.answer_id,{...prev,...row,locked:["ja","nein"].includes(row.answer_id)});
+  });
+  return [...map.values()];
+}
+
+async function loadRemoteAnswers(force=false){
+  if(!room)return;
+  const key=room+"::"+currentCharacter;
+  if(!force&&key===lastAnswerLoadKey&&remoteAnswers.length)return;
+  lastAnswerLoadKey=key;
+
+  $("answerManagerAvatar").textContent=avatarName(currentCharacter);
+  $("quickAnswerGrid").innerHTML='<span class="subtle">Antworten werden geladen …</span>';
+  $("answerManagerList").innerHTML="";
+
+  const {data,error}=await supabase.rpc("get_avatar_remote_answers",{p_room:room,p_character:currentCharacter});
+  if(error){
+    log("Antworten konnten nicht geladen werden: "+error.message);
+    remoteAnswers=mergedAnswers([]);
+  }else{
+    remoteAnswers=mergedAnswers(data||[]);
+  }
+  renderRemoteAnswers();
+}
+
+function renderRemoteAnswers(){
+  const quick=$("quickAnswerGrid"),manager=$("answerManagerList");
+  quick.innerHTML="";manager.innerHTML="";
+
+  let readyCount=0;
+  remoteAnswers.forEach(answer=>{
+    const ready=!!answer.file_url;
+    if(ready)readyCount++;
+
+    const q=document.createElement("button");
+    q.type="button";
+    q.className="answer-btn"+(answer.answer_id==="nein"?" no":"")+(ready?"":" empty");
+    q.innerHTML=(ready?"🔊 ":"＋ ")+escapeHtml(answer.label)+(ready?"":"<small>MP3 fehlt</small>");
+    q.addEventListener("click",()=>{
+      if(!answer.file_url){
+        log("Für „"+answer.label+"“ fehlt noch eine MP3.");
+        return;
+      }
+      sendCommand({action:"answer_remote",id:answer.answer_id,label:answer.label,url:answer.file_url});
+    });
+    quick.appendChild(q);
+
+    const row=document.createElement("div");
+    row.className="answer-manager-item";
+
+    const meta=document.createElement("div");
+    meta.className="answer-manager-meta";
+    meta.innerHTML="<strong>"+escapeHtml(answer.label)+"</strong><span>"+escapeHtml(answer.file_name||"Noch keine MP3")+"</span>";
+
+    const pill=document.createElement("span");
+    pill.className="answer-status-pill"+(ready?" ready":"");
+    pill.textContent=ready?"● gespeichert":"leer";
+
+    const actions=document.createElement("div");
+    actions.className="answer-manager-actions";
+
+    const play=document.createElement("button");
+    play.className="answer-play-small";play.type="button";play.textContent="▶ Test";play.disabled=!ready;
+    play.addEventListener("click",()=>ready&&sendCommand({action:"answer_remote",id:answer.answer_id,label:answer.label,url:answer.file_url}));
+
+    const upload=document.createElement("label");
+    upload.className="answer-file-label";
+    upload.innerHTML='<input type="file" accept="audio/mpeg,audio/mp3,audio/wav,audio/*"><span>＋ MP3</span>';
+    upload.querySelector("input").addEventListener("change",async e=>{
+      const file=e.target.files?.[0];if(!file)return;
+      pill.className="answer-status-pill";pill.textContent="Upload …";
+      const url=await uploadRemoteFile(file,"answers/"+currentCharacter+"/"+answer.answer_id,pill);
+      if(!url){pill.textContent="Fehler";return}
+      const {error}=await supabase.rpc("upsert_avatar_remote_answer",{
+        p_room:room,
+        p_character:currentCharacter,
+        p_answer_id:answer.answer_id,
+        p_label:answer.label,
+        p_file_url:url,
+        p_file_name:file.name
+      });
+      if(error){log("Antwort speichern fehlgeschlagen: "+error.message);return}
+      await loadRemoteAnswers(true);
+      log("✅ „"+answer.label+"“ gespeichert.");
+    });
+
+    const del=document.createElement("button");
+    del.className="answer-delete-small";del.type="button";del.textContent=answer.locked?"MP3 löschen":"✕ Löschen";
+    del.addEventListener("click",async()=>{
+      const {error}=await supabase.rpc("delete_avatar_remote_answer",{
+        p_room:room,p_character:currentCharacter,p_answer_id:answer.answer_id
+      });
+      if(error){log("Löschen fehlgeschlagen: "+error.message);return}
+      await loadRemoteAnswers(true);
+      log(answer.locked?"MP3 entfernt.":"Antwort gelöscht.");
+    });
+
+    actions.append(play,upload,del);
+    row.append(meta,pill,actions);
+    manager.appendChild(row);
+  });
+
+  $("answerCountLabel").textContent=readyCount+" gespeichert";
+}
+
+function escapeHtml(value){
+  return String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[ch]));
+}
+
+async function addRemoteAnswer(){
+  const input=$("newAnswerLabel");
+  const label=(input.value||"").trim();
+  if(!label)return;
+
+  let id=answerIdFromLabel(label);
+  if(remoteAnswers.some(x=>x.answer_id===id))id=id+"-"+Date.now().toString().slice(-4);
+
+  const {error}=await supabase.rpc("upsert_avatar_remote_answer",{
+    p_room:room,
+    p_character:currentCharacter,
+    p_answer_id:id,
+    p_label:label,
+    p_file_url:null,
+    p_file_name:null
+  });
+  if(error){log("Antwort konnte nicht angelegt werden: "+error.message);return}
+  input.value="";
+  await loadRemoteAnswers(true);
+  log("Neue Antwort „"+label+"“ angelegt. Jetzt MP3 hinzufügen.");
+}
+
 async function sendCommand(payload,quiet=false){
   if(!channel||!connected){if(!quiet)log("⚠️ Erst verbinden.");return false}
   try{
@@ -321,7 +500,12 @@ async function connect(value){
   channel=supabase.channel("ps-avatar:"+next,{config:{broadcast:{ack:true,self:false}}})
     .on("broadcast",{event:"stage_status"},({payload})=>setStageOnline(payload||{}));
   channel.subscribe(async status=>{
-    if(status==="SUBSCRIBED"){connected=true;setConnection("● verbunden · "+next,true);log("Remote v2 bereit.");await channel.send({type:"broadcast",event:"ping",payload:{from:"control",at:Date.now()}});await sendCommand({action:"ping"},true)}
+    if(status==="SUBSCRIBED"){
+      connected=true;setConnection("● verbunden · "+next,true);log("Remote v2 bereit.");
+      await loadRemoteAnswers(true);
+      await channel.send({type:"broadcast",event:"ping",payload:{from:"control",at:Date.now()}});
+      await sendCommand({action:"ping"},true)
+    }
     else if(status==="CHANNEL_ERROR"||status==="TIMED_OUT"){connected=false;setConnection("Verbindung fehlgeschlagen")}
     else if(status==="CLOSED"){connected=false;setConnection("Verbindung getrennt")}
   });
@@ -340,10 +524,16 @@ roomEl.addEventListener("keydown",e=>{if(e.key==="Enter")connect(roomEl.value)})
 
 // Avatars + answers
 document.querySelectorAll("[data-avatar]").forEach(btn=>btn.addEventListener("click",()=>{
-  const character=btn.dataset.avatar;sendCommand({action:"avatar",character});
-  document.querySelectorAll("[data-avatar]").forEach(b=>b.classList.toggle("active",b===btn));$("activeAvatar").textContent=avatarName(character);
+  const character=btn.dataset.avatar;
+  currentCharacter=character;
+  sendCommand({action:"avatar",character});
+  document.querySelectorAll("[data-avatar]").forEach(b=>b.classList.toggle("active",b===btn));
+  $("activeAvatar").textContent=avatarName(character);
+  $("answerManagerAvatar").textContent=avatarName(character);
+  loadRemoteAnswers(true);
 }));
-document.querySelectorAll("[data-answer]").forEach(btn=>btn.addEventListener("click",()=>sendCommand({action:"answer",id:btn.dataset.answer,label:btn.dataset.label})));
+$("newAnswerAdd").addEventListener("click",addRemoteAnswer);
+$("newAnswerLabel").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();addRemoteAnswer();}});
 
 // Dance / walk
 danceBtn.addEventListener("click",()=>{dance=!dance;if(dance)walk=false;sendCommand({action:"dance",enabled:dance,style:danceStyle,intensity:Number(intensity.value)/100,speed:Number(speed.value)/100})});
@@ -416,14 +606,14 @@ function inferContentType(file,type){
 }
 async function uploadRemoteFile(file,kind,statusEl){
   if(!file)return null;
-  if(file.size>30*1024*1024){statusEl.className="upload-status bad";statusEl.textContent="Datei ist größer als 30 MB.";return null}
+  if(file.size>30*1024*1024){statusEl.textContent="Datei ist größer als 30 MB.";if(statusEl.classList?.contains("upload-status"))statusEl.classList.add("bad");return null}
   const cleanRoomId=cleanRoom(room)||"unpaired";
   const path="remote/"+cleanRoomId+"/"+kind+"/"+Date.now()+"-"+safeFileName(file.name);
-  statusEl.className="upload-status";statusEl.textContent="Upload läuft … "+Math.round(file.size/1024)+" KB";
+  statusEl.textContent="Upload läuft … "+Math.round(file.size/1024)+" KB";
   const {data,error}=await supabase.storage.from(REMOTE_BUCKET).upload(path,file,{contentType:inferContentType(file,kind),cacheControl:"3600",upsert:false});
-  if(error){statusEl.className="upload-status bad";statusEl.textContent="Upload fehlgeschlagen: "+error.message;return null}
+  if(error){statusEl.textContent="Upload fehlgeschlagen";if(statusEl.classList?.contains("upload-status"))statusEl.classList.add("bad");return null}
   const {data:urlData}=supabase.storage.from(REMOTE_BUCKET).getPublicUrl(data.path);
-  statusEl.className="upload-status ok";statusEl.textContent="✅ Hochgeladen · "+file.name;
+  statusEl.textContent="✅ Hochgeladen · "+file.name;if(statusEl.classList?.contains("upload-status"))statusEl.classList.add("ok");
   return urlData.publicUrl;
 }
 
