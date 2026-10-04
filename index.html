@@ -14,7 +14,7 @@
         <p class="eyebrow">PS AI MUSIC</p>
         <h1>Avatar Development</h1>
       </div>
-      <div class="version-badge">v0.01</div>
+      <div class="version-badge">v0.02</div>
     </header>
 
     <section class="stage-card">
@@ -30,10 +30,54 @@
       </div>
 
       <div id="avatarStage" class="avatar-stage" aria-label="Avatar Entwicklungsfläche">
-        <div class="empty-stage">
-          <div class="stage-mark">PS</div>
-          <h3>Noch keine Figur</h3>
-          <p>Schritt 1: Grundmotor und Entwicklungsumgebung.</p>
+        <div class="stage-grid"></div>
+
+        <div id="headPart" class="avatar-head-module" aria-label="Avatar Kopf">
+          <svg viewBox="0 0 360 360" role="img" aria-label="PS AI MUSIC Cartoon Kopf">
+            <defs>
+              <linearGradient id="capGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#262b32"/>
+                <stop offset="1" stop-color="#0c0f13"/>
+              </linearGradient>
+            </defs>
+
+            <path d="M88 116 C94 58 135 28 181 28 C232 28 271 61 276 119 Z"
+                  fill="url(#capGrad)" stroke="#050608" stroke-width="8"/>
+            <path d="M113 92 C137 72 218 70 263 94 C233 104 181 108 128 104 Z"
+                  fill="#12161b" stroke="#050608" stroke-width="7"/>
+
+            <ellipse cx="180" cy="173" rx="101" ry="104"
+                     fill="#efad73" stroke="#111419" stroke-width="8"/>
+
+            <path d="M103 180 C94 226 111 277 149 303 C168 315 192 315 211 303 C248 278 265 226 256 181
+                     C245 206 229 218 214 226 C198 237 163 237 146 226 C130 217 115 203 103 180 Z"
+                  fill="#5b3a2d" stroke="#15100d" stroke-width="6"/>
+
+            <path d="M138 183 C145 170 155 163 169 160" fill="none" stroke="#3a271f" stroke-width="7" stroke-linecap="round"/>
+            <path d="M222 183 C215 170 205 163 191 160" fill="none" stroke="#3a271f" stroke-width="7" stroke-linecap="round"/>
+
+            <g id="glassesGroup">
+              <rect x="92" y="145" width="76" height="58" rx="22" fill="rgba(255,255,255,.08)" stroke="#111" stroke-width="9"/>
+              <rect x="192" y="145" width="76" height="58" rx="22" fill="rgba(255,255,255,.08)" stroke="#111" stroke-width="9"/>
+              <path d="M168 168 C176 163 184 163 192 168" fill="none" stroke="#111" stroke-width="8" stroke-linecap="round"/>
+              <path d="M94 160 L72 151 M266 160 L287 151" fill="none" stroke="#111" stroke-width="8" stroke-linecap="round"/>
+            </g>
+
+            <ellipse cx="133" cy="174" rx="22" ry="18" fill="#fff"/>
+            <ellipse cx="227" cy="174" rx="22" ry="18" fill="#fff"/>
+            <circle cx="139" cy="174" r="6" fill="#000"/>
+            <circle cx="221" cy="174" r="6" fill="#000"/>
+
+            <path d="M180 177 L169 211 Q180 218 191 211" fill="none" stroke="#b9784c" stroke-width="5" stroke-linecap="round"/>
+            <path d="M152 236 Q180 246 208 236" fill="none" stroke="#15100d" stroke-width="6" stroke-linecap="round"/>
+
+            <path d="M120 116 C108 132 103 150 101 171" fill="none" stroke="#5b3a2d" stroke-width="12" stroke-linecap="round"/>
+            <path d="M240 116 C252 132 257 150 259 171" fill="none" stroke="#5b3a2d" stroke-width="12" stroke-linecap="round"/>
+          </svg>
+        </div>
+
+        <div class="stage-caption">
+          <strong>Schritt 2:</strong> Kopf-Modul eingebaut
         </div>
       </div>
     </section>
@@ -65,7 +109,7 @@
         <h2>Entwicklungsstand</h2>
         <div class="progress-list">
           <div class="progress-row done"><span>Grundmotor</span><strong>✓</strong></div>
-          <div class="progress-row"><span>Kopf</span><strong>○</strong></div>
+          <div class="progress-row done"><span>Kopf</span><strong>✓</strong></div>
           <div class="progress-row"><span>Augen</span><strong>○</strong></div>
           <div class="progress-row"><span>Mund</span><strong>○</strong></div>
           <div class="progress-row"><span>Körper</span><strong>○</strong></div>
@@ -73,6 +117,26 @@
           <div class="progress-row"><span>Beine</span><strong>○</strong></div>
           <div class="progress-row"><span>Idle / Leben</span><strong>○</strong></div>
         </div>
+      </article>
+
+      <article class="panel head-controls">
+        <h2>Kopf-Test</h2>
+        <label>
+          <span>Kopf neigen</span>
+          <input id="headTilt" type="range" min="-25" max="25" value="0">
+          <strong id="headTiltValue">0°</strong>
+        </label>
+        <label>
+          <span>Kopf bewegen</span>
+          <input id="headTurn" type="range" min="-18" max="18" value="0">
+          <strong id="headTurnValue">0°</strong>
+        </label>
+        <label>
+          <span>Kopfgröße</span>
+          <input id="headScale" type="range" min="85" max="115" value="100">
+          <strong id="headScaleValue">100%</strong>
+        </label>
+        <button id="headReset" type="button">Kopf zurücksetzen</button>
       </article>
     </section>
 
