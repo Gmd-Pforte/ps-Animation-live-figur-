@@ -14,7 +14,7 @@
         <p class="eyebrow">PS AI MUSIC</p>
         <h1>Avatar Development</h1>
       </div>
-      <div class="version-badge">v0.02</div>
+      <div class="version-badge">v0.03</div>
     </header>
 
     <section class="stage-card">
@@ -39,6 +39,12 @@
                 <stop offset="0" stop-color="#262b32"/>
                 <stop offset="1" stop-color="#0c0f13"/>
               </linearGradient>
+              <clipPath id="eyeClipLeft">
+                <ellipse cx="133" cy="174" rx="22" ry="18"/>
+              </clipPath>
+              <clipPath id="eyeClipRight">
+                <ellipse cx="227" cy="174" rx="22" ry="18"/>
+              </clipPath>
             </defs>
 
             <path d="M88 116 C94 58 135 28 181 28 C232 28 271 61 276 119 Z"
@@ -56,17 +62,29 @@
             <path d="M138 183 C145 170 155 163 169 160" fill="none" stroke="#3a271f" stroke-width="7" stroke-linecap="round"/>
             <path d="M222 183 C215 170 205 163 191 160" fill="none" stroke="#3a271f" stroke-width="7" stroke-linecap="round"/>
 
+            <g id="eyesModule">
+              <ellipse id="eyeWhiteLeft" cx="133" cy="174" rx="22" ry="18" fill="#fff"/>
+              <ellipse id="eyeWhiteRight" cx="227" cy="174" rx="22" ry="18" fill="#fff"/>
+
+              <g clip-path="url(#eyeClipLeft)">
+                <circle id="pupilLeft" cx="139" cy="174" r="6" fill="#000"/>
+                <rect id="lidTopLeft" x="109" y="154" width="48" height="0" fill="#efad73"/>
+                <rect id="lidBottomLeft" x="109" y="192" width="48" height="0" fill="#efad73"/>
+              </g>
+
+              <g clip-path="url(#eyeClipRight)">
+                <circle id="pupilRight" cx="221" cy="174" r="6" fill="#000"/>
+                <rect id="lidTopRight" x="203" y="154" width="48" height="0" fill="#efad73"/>
+                <rect id="lidBottomRight" x="203" y="192" width="48" height="0" fill="#efad73"/>
+              </g>
+            </g>
+
             <g id="glassesGroup">
               <rect x="92" y="145" width="76" height="58" rx="22" fill="rgba(255,255,255,.08)" stroke="#111" stroke-width="9"/>
               <rect x="192" y="145" width="76" height="58" rx="22" fill="rgba(255,255,255,.08)" stroke="#111" stroke-width="9"/>
               <path d="M168 168 C176 163 184 163 192 168" fill="none" stroke="#111" stroke-width="8" stroke-linecap="round"/>
               <path d="M94 160 L72 151 M266 160 L287 151" fill="none" stroke="#111" stroke-width="8" stroke-linecap="round"/>
             </g>
-
-            <ellipse cx="133" cy="174" rx="22" ry="18" fill="#fff"/>
-            <ellipse cx="227" cy="174" rx="22" ry="18" fill="#fff"/>
-            <circle cx="139" cy="174" r="6" fill="#000"/>
-            <circle cx="221" cy="174" r="6" fill="#000"/>
 
             <path d="M180 177 L169 211 Q180 218 191 211" fill="none" stroke="#b9784c" stroke-width="5" stroke-linecap="round"/>
             <path d="M152 236 Q180 246 208 236" fill="none" stroke="#15100d" stroke-width="6" stroke-linecap="round"/>
@@ -77,7 +95,7 @@
         </div>
 
         <div class="stage-caption">
-          <strong>Schritt 2:</strong> Kopf-Modul eingebaut
+          <strong>Schritt 3:</strong> Augen & Pupillen aktiv
         </div>
       </div>
     </section>
@@ -100,7 +118,7 @@
           </div>
           <div>
             <span class="stat-label">Version</span>
-            <strong id="versionValue">0.01</strong>
+            <strong id="versionValue">0.03</strong>
           </div>
         </div>
       </article>
@@ -110,7 +128,7 @@
         <div class="progress-list">
           <div class="progress-row done"><span>Grundmotor</span><strong>✓</strong></div>
           <div class="progress-row done"><span>Kopf</span><strong>✓</strong></div>
-          <div class="progress-row"><span>Augen</span><strong>○</strong></div>
+          <div class="progress-row done"><span>Augen</span><strong>✓</strong></div>
           <div class="progress-row"><span>Mund</span><strong>○</strong></div>
           <div class="progress-row"><span>Körper</span><strong>○</strong></div>
           <div class="progress-row"><span>Arme</span><strong>○</strong></div>
@@ -137,6 +155,42 @@
           <strong id="headScaleValue">100%</strong>
         </label>
         <button id="headReset" type="button">Kopf zurücksetzen</button>
+      </article>
+
+      <article class="panel head-controls eye-controls">
+        <h2>Augen-Test</h2>
+        <label>
+          <span>Blick links/rechts</span>
+          <input id="lookX" type="range" min="-10" max="10" value="0">
+          <strong id="lookXValue">0</strong>
+        </label>
+        <label>
+          <span>Blick hoch/runter</span>
+          <input id="lookY" type="range" min="-7" max="7" value="0">
+          <strong id="lookYValue">0</strong>
+        </label>
+        <label>
+          <span>Blinzeln links</span>
+          <input id="blinkLeft" type="range" min="0" max="100" value="0">
+          <strong id="blinkLeftValue">0%</strong>
+        </label>
+        <label>
+          <span>Blinzeln rechts</span>
+          <input id="blinkRight" type="range" min="0" max="100" value="0">
+          <strong id="blinkRightValue">0%</strong>
+        </label>
+        <label>
+          <span>Pupillengröße</span>
+          <input id="pupilScale" type="range" min="60" max="145" value="100">
+          <strong id="pupilScaleValue">100%</strong>
+        </label>
+        <div class="eye-actions">
+          <button id="blinkNow" type="button">😉 Einmal blinzeln</button>
+          <label class="auto-blink">
+            <input id="autoBlink" type="checkbox" checked>
+            <span>Automatisch blinzeln</span>
+          </label>
+        </div>
       </article>
     </section>
 
