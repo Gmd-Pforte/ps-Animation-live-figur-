@@ -439,30 +439,73 @@ footer {
 .audio-note{margin:10px 0 0;color:#7890a1;font-size:10px;line-height:1.45}
 @media(max-width:520px){.audio-actions{grid-template-columns:1fr 1fr}.audio-actions #audioLipSyncToggle{grid-column:1/-1}.audio-file-button{width:100%;justify-content:center}.audio-head{align-items:stretch}.audio-mode{align-items:stretch;flex-direction:column}.audio-mode>div{max-width:none}}
 
+
+/* Schritt 7: Fokusmodus + Menü */
+body{padding:8px;overflow-x:hidden}
+.app-shell{width:min(1180px,100%)}
+.compact-topbar{min-height:58px;padding:9px 12px;margin-bottom:8px}
+.compact-brand{display:flex;align-items:center;gap:8px;font-weight:900;letter-spacing:.05em;font-size:14px}
+.brand-ps{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;border:1px solid rgba(39,200,255,.45);background:var(--accent-soft);color:var(--accent)}
+.menu-button,.menu-close{border:1px solid rgba(39,200,255,.35);background:var(--accent-soft);color:var(--text);border-radius:12px;font-weight:900;cursor:pointer}
+.menu-button{width:46px;height:42px;font-size:22px}
+.menu-close{width:42px;height:42px;font-size:17px}
+
+.stage-card{border-radius:20px}
+.avatar-stage{min-height:clamp(500px,68vh,820px)}
+.avatar-head-module{width:min(560px,94vw)}
+.stage-caption{bottom:10px;font-size:10px;padding:6px 9px;opacity:.8}
+
+.touch-workspace{margin-top:8px;border:1px solid var(--border);background:linear-gradient(180deg,var(--panel-2),var(--panel));border-radius:18px;padding:10px}
+.touch-workspace-head{display:flex;align-items:end;justify-content:space-between;gap:10px;padding:2px 2px 8px}
+.touch-workspace-head>div{display:grid;gap:2px}
+.touch-workspace-head strong{font-size:15px}
+.mini-label{font-size:9px;letter-spacing:.14em;color:var(--accent);font-weight:900}
+.touch-help{font-size:10px;color:var(--muted)}
+.touch-workspace .touch-grid{margin-top:0}
+
+.menu-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.62);backdrop-filter:blur(4px);z-index:80}
+.menu-backdrop[hidden]{display:none}
+.control-menu{position:fixed;z-index:90;top:0;right:0;width:min(430px,92vw);height:100dvh;background:#06111c;border-left:1px solid #24506a;box-shadow:-18px 0 45px rgba(0,0,0,.45);transform:translateX(105%);transition:transform .24s ease;display:flex;flex-direction:column}
+.control-menu.open{transform:translateX(0)}
+.menu-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px;border-bottom:1px solid var(--border);background:#071522}
+.menu-header h2{margin:2px 0 0;font-size:20px}
+.menu-scroll{overflow:auto;padding:12px 12px 28px}
+.menu-section{border:1px solid rgba(255,255,255,.07);background:linear-gradient(180deg,#081827,#06131f);border-radius:16px;padding:11px;margin-bottom:10px}
+.menu-section-title{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:900;margin-bottom:9px}
+.menu-inner-panel{padding:0}
+.menu-inner-panel h2{font-size:14px}
+.menu-wide-button{width:100%;min-height:48px;border-radius:12px;border:1px solid rgba(39,200,255,.32);background:var(--accent-soft);color:var(--text);font-weight:850;margin-bottom:9px}
+.menu-section .big-actions,.menu-section .expression-actions{margin-top:9px}
+.menu-section .toggle-row{margin-top:9px}
+.menu-section .audio-lipsync{margin-top:0;border:0;background:transparent;padding:0}
+.menu-version{text-align:center;color:var(--muted);font-size:10px;padding:8px}
+body.menu-open{overflow:hidden}
+
+@media(max-width:760px){
+  .avatar-stage{min-height:58vh}
+  .avatar-head-module{width:min(500px,98vw)}
+  .touch-workspace{padding:8px}
+  .touch-workspace .touch-grid{display:flex;overflow-x:auto;gap:9px;scroll-snap-type:x mandatory;padding-bottom:3px}
+  .touch-workspace .touch-card{min-width:72vw;scroll-snap-align:center}
+  .touch-workspace .touch-pad{aspect-ratio:1.45/1}
+}
+@media(min-width:761px){
+  .touch-workspace .touch-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+
 </style>
 </head>
 <body>
   <main class="app-shell">
-    <header class="topbar">
-      <div>
-        <p class="eyebrow">PS AI MUSIC</p>
-        <h1>Avatar Development</h1>
+    <header class="topbar compact-topbar">
+      <div class="compact-brand">
+        <span class="brand-ps">PS</span>
+        <span>AI MUSIC · AVATAR</span>
       </div>
-      <div class="version-badge">v0.06</div>
+      <button id="menuButton" class="menu-button" type="button" aria-label="Menü öffnen" aria-expanded="false">☰</button>
     </header>
 
     <section class="stage-card">
-      <div class="stage-header">
-        <div>
-          <h2>Entwicklungsfläche</h2>
-          <p>Diese Fläche bleibt bestehen. Hier wächst die Figur Schritt für Schritt.</p>
-        </div>
-        <div class="engine-status">
-          <span id="engineDot" class="status-dot"></span>
-          <span id="engineLabel">Engine startet …</span>
-        </div>
-      </div>
-
       <div id="avatarStage" class="avatar-stage" aria-label="Avatar Entwicklungsfläche">
         <div class="stage-grid"></div>
 
@@ -507,53 +550,15 @@ footer {
       </div>
     </section>
 
-    <section class="dashboard">
-      <article class="panel">
-        <h2>Engine</h2>
-        <div class="stat-grid">
-          <div>
-            <span class="stat-label">Status</span>
-            <strong id="engineState">STARTING</strong>
-          </div>
-          <div>
-            <span class="stat-label">Frames</span>
-            <strong id="frameCount">0</strong>
-          </div>
-          <div>
-            <span class="stat-label">FPS</span>
-            <strong id="fpsValue">0</strong>
-          </div>
-          <div>
-            <span class="stat-label">Version</span>
-            <strong id="versionValue">0.05</strong>
-          </div>
+    <section class="touch-workspace">
+      <div class="touch-workspace-head">
+        <div>
+          <span class="mini-label">LIVE CONTROL</span>
+          <strong>Touch-Steuerung</strong>
         </div>
-      </article>
-
-      <article class="panel">
-        <h2>Entwicklungsstand</h2>
-        <div class="progress-list">
-          <div class="progress-row done"><span>Grundmotor</span><strong>✓</strong></div>
-          <div class="progress-row done"><span>Kopf</span><strong>✓</strong></div>
-          <div class="progress-row done"><span>Augen</span><strong>✓</strong></div>
-          <div class="progress-row done"><span>Mund</span><strong>✓</strong></div>
-          <div class="progress-row"><span>Körper</span><strong>○</strong></div>
-          <div class="progress-row"><span>Arme</span><strong>○</strong></div>
-          <div class="progress-row"><span>Beine</span><strong>○</strong></div>
-          <div class="progress-row"><span>Idle / Leben</span><strong>○</strong></div>
-        </div>
-      </article>
-
-      <article class="panel touch-panel">
-        <div class="touch-title">
-          <div>
-            <h2>Touch-Steuerung</h2>
-            <p>Große Flächen für Handy – Finger drauf und direkt bewegen.</p>
-          </div>
-          <button id="touchReset" type="button">↺ Alles zurück</button>
-        </div>
-
-        <div class="touch-grid">
+        <span class="touch-help">Finger bewegen</span>
+      </div>
+      <div class="touch-grid">
           <section class="touch-card">
             <div class="touch-card-head">
               <strong>👀 Blick</strong>
@@ -593,25 +598,41 @@ footer {
             </div>
           </section>
         </div>
+    </section>
+  
+    <div id="menuBackdrop" class="menu-backdrop" hidden></div>
+    <aside id="controlMenu" class="control-menu" aria-hidden="true">
+      <div class="menu-header">
+        <div>
+          <span class="mini-label">PS AI MUSIC</span>
+          <h2>Steuerung</h2>
+        </div>
+        <button id="menuClose" class="menu-close" type="button" aria-label="Menü schließen">✕</button>
+      </div>
 
-        <div class="big-actions">
+      <div class="menu-scroll">
+        <section class="menu-section">
+          <div class="menu-section-title">Schnellsteuerung</div>
+          <button id="touchReset" class="menu-wide-button" type="button">↺ Avatar zurücksetzen</button>
+          <div class="big-actions">
           <button id="blinkLeftTouch" type="button">😉 Links</button>
           <button id="blinkNow" type="button">😌 Beide</button>
           <button id="blinkRightTouch" type="button">😉 Rechts</button>
         </div>
-
-        <div class="expression-actions">
+          <div class="expression-actions">
           <button data-mouth="sad" type="button">🙁 Traurig</button>
           <button data-mouth="neutral" type="button" class="active">😐 Neutral</button>
           <button data-mouth="smile" type="button">🙂 Lächeln</button>
         </div>
-
-        <div class="toggle-row">
+          <div class="toggle-row">
           <label><input id="autoBlink" type="checkbox" checked><span>Automatisch blinzeln</span></label>
           <label><input id="autoTalk" type="checkbox"><span>Sprechen testen</span></label>
         </div>
+        </section>
 
-        <section class="audio-lipsync">
+        <section class="menu-section">
+          <div class="menu-section-title">Audio & Lip-Sync</div>
+          <section class="audio-lipsync">
           <div class="audio-head">
             <div>
               <strong>🎙️ Audio-Lip-Sync</strong>
@@ -646,19 +667,61 @@ footer {
 
           <p class="audio-note">Die Audiodatei bleibt auf deinem Gerät. Die Seite liest nur den Tonpegel für die Mundbewegung.</p>
         </section>
-      </article>
-    </section>
+        </section>
 
-    <footer>
-      <span id="heartbeatText">Warte auf Engine …</span>
-    </footer>
+        <section class="menu-section">
+          <div class="menu-section-title">Engine</div>
+          <article class="menu-inner-panel">
+        <h2>Engine</h2>
+        <div class="stat-grid">
+          <div>
+            <span class="stat-label">Status</span>
+            <strong id="engineState">STARTING</strong>
+          </div>
+          <div>
+            <span class="stat-label">Frames</span>
+            <strong id="frameCount">0</strong>
+          </div>
+          <div>
+            <span class="stat-label">FPS</span>
+            <strong id="fpsValue">0</strong>
+          </div>
+          <div>
+            <span class="stat-label">Version</span>
+            <strong id="versionValue">0.05</strong>
+          </div>
+        </div>
+      </article>
+        </section>
+
+        <section class="menu-section">
+          <div class="menu-section-title">Entwicklung</div>
+          <article class="menu-inner-panel">
+        <h2>Entwicklungsstand</h2>
+        <div class="progress-list">
+          <div class="progress-row done"><span>Grundmotor</span><strong>✓</strong></div>
+          <div class="progress-row done"><span>Kopf</span><strong>✓</strong></div>
+          <div class="progress-row done"><span>Augen</span><strong>✓</strong></div>
+          <div class="progress-row done"><span>Mund</span><strong>✓</strong></div>
+          <div class="progress-row"><span>Körper</span><strong>○</strong></div>
+          <div class="progress-row"><span>Arme</span><strong>○</strong></div>
+          <div class="progress-row"><span>Beine</span><strong>○</strong></div>
+          <div class="progress-row"><span>Idle / Leben</span><strong>○</strong></div>
+        </div>
+      </article>
+        </section>
+
+        <div class="menu-version">Version <strong>0.07</strong></div>
+      </div>
+    </aside>
+
   </main>
 
   <script>
 (() => {
   "use strict";
 
-  const VERSION = "0.06";
+  const VERSION = "0.07";
 
   const avatarState = {
     version: VERSION,
@@ -781,7 +844,11 @@ footer {
     audioStop: document.getElementById("audioStop"),
     audioLipSyncToggle: document.getElementById("audioLipSyncToggle"),
     audioStatus: document.getElementById("audioStatus"),
-    audioMeterFill: document.getElementById("audioMeterFill")
+    audioMeterFill: document.getElementById("audioMeterFill"),
+    menuButton: document.getElementById("menuButton"),
+    menuClose: document.getElementById("menuClose"),
+    menuBackdrop: document.getElementById("menuBackdrop"),
+    controlMenu: document.getElementById("controlMenu")
   };
 
   function registerPart(name, element) {
@@ -926,15 +993,17 @@ footer {
       framesThisSecond = 0;
       lastFpsTime = now;
 
-      ui.fpsValue.textContent = avatarState.engine.fps;
+      if (ui.fpsValue) ui.fpsValue.textContent = avatarState.engine.fps;
     }
 
     if (avatarState.engine.frame % 30 === 0) {
-      ui.frameCount.textContent = avatarState.engine.frame.toLocaleString("de-DE");
-      ui.heartbeatText.textContent =
-        "Engine läuft · Frame " +
-        avatarState.engine.frame.toLocaleString("de-DE") +
-        " · Touch + Audio-Lip-Sync aktiv";
+      if (ui.frameCount) ui.frameCount.textContent = avatarState.engine.frame.toLocaleString("de-DE");
+      if (ui.heartbeatText) {
+        ui.heartbeatText.textContent =
+          "Engine läuft · Frame " +
+          avatarState.engine.frame.toLocaleString("de-DE") +
+          " · Fokusmodus aktiv";
+      }
     }
   }
 
@@ -1388,13 +1457,31 @@ footer {
     }
   }
 
+  function setMenu(open) {
+    if (!ui.controlMenu || !ui.menuBackdrop) return;
+    ui.controlMenu.classList.toggle("open", open);
+    ui.controlMenu.setAttribute("aria-hidden", open ? "false" : "true");
+    ui.menuBackdrop.hidden = !open;
+    document.body.classList.toggle("menu-open", open);
+    if (ui.menuButton) ui.menuButton.setAttribute("aria-expanded", open ? "true" : "false");
+  }
+
+  function bindMenu() {
+    if (ui.menuButton) ui.menuButton.addEventListener("click", () => setMenu(true));
+    if (ui.menuClose) ui.menuClose.addEventListener("click", () => setMenu(false));
+    if (ui.menuBackdrop) ui.menuBackdrop.addEventListener("click", () => setMenu(false));
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") setMenu(false);
+    });
+  }
+
   function startEngine() {
     avatarState.engine.running = true;
 
-    ui.engineDot.classList.add("running");
-    ui.engineLabel.textContent = "Engine läuft";
-    ui.engineState.textContent = "RUNNING";
-    ui.versionValue.textContent = VERSION;
+    if (ui.engineDot) ui.engineDot.classList.add("running");
+    if (ui.engineLabel) ui.engineLabel.textContent = "Engine läuft";
+    if (ui.engineState) ui.engineState.textContent = "RUNNING";
+    if (ui.versionValue) ui.versionValue.textContent = VERSION;
 
     requestAnimationFrame(engineLoop);
   }
@@ -1403,6 +1490,7 @@ footer {
   bindEyeControls();
   bindTouchControls();
   bindAudioLipSync();
+  bindMenu();
   renderAvatar();
 
   window.PSAvatarEngine = {
