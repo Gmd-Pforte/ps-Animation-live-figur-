@@ -393,7 +393,19 @@ function setStageOnline(snapshot={}){
   const rec=snapshot.recording||{};
   const recording=rec.state==="recording";
   $("recordLed").classList.toggle("on",recording);
-  $("recordStatus").textContent=recording?("REC · "+(rec.seconds||0)+" s"):(rec.ready?"fertig · "+(rec.format||"Video"):"inaktiv");
+
+  if(rec.error){
+    $("recordStatus").textContent="Fehler · "+rec.error;
+    log("Recorder: "+rec.error);
+  }else if(recording){
+    $("recordStatus").textContent="REC · "+(rec.seconds||0)+" s · "+(rec.format||"WebM");
+  }else if(rec.ready){
+    $("recordStatus").textContent="fertig · "+(rec.format||"Video")+" · "+(rec.chunks||0)+" Blöcke";
+  }else if(rec.status && rec.status!=="inaktiv"){
+    $("recordStatus").textContent=rec.status;
+  }else{
+    $("recordStatus").textContent="inaktiv";
+  }
 
   const audio=snapshot.audio||{};
   if(audio.loaded){
