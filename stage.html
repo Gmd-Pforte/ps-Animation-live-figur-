@@ -1817,6 +1817,52 @@ body.remote-stage-clean .remote-stage-open{display:block}
   .remote-speech-bubble{top:7%;width:86%;padding:12px 14px;border-width:3px;border-radius:18px}
 }
 
+
+/* REMOTE LIVE OVERLAY */
+html.overlay-transparent-root,
+body.remote-stage-mode.overlay-transparent{
+  background:transparent!important;
+}
+body.remote-stage-mode.overlay-transparent .stage-card,
+body.remote-stage-mode.overlay-transparent .avatar-stage{
+  background:transparent!important;
+  box-shadow:none!important;
+}
+body.remote-stage-mode.overlay-green,
+body.remote-stage-mode.overlay-green .stage-card,
+body.remote-stage-mode.overlay-green .avatar-stage{
+  background:#00ff00!important;
+}
+body.remote-stage-mode.overlay-pink,
+body.remote-stage-mode.overlay-pink .stage-card,
+body.remote-stage-mode.overlay-pink .avatar-stage{
+  background:#ff00ff!important;
+}
+body.remote-stage-mode.overlay-transparent #stageBackgroundColor,
+body.remote-stage-mode.overlay-transparent #stageBackgroundMedia,
+body.remote-stage-mode.overlay-transparent #stageBackgroundShade,
+body.remote-stage-mode.overlay-transparent #stageGrid,
+body.remote-stage-mode.overlay-green #stageBackgroundColor,
+body.remote-stage-mode.overlay-green #stageBackgroundMedia,
+body.remote-stage-mode.overlay-green #stageBackgroundShade,
+body.remote-stage-mode.overlay-green #stageGrid,
+body.remote-stage-mode.overlay-pink #stageBackgroundColor,
+body.remote-stage-mode.overlay-pink #stageBackgroundMedia,
+body.remote-stage-mode.overlay-pink #stageBackgroundShade,
+body.remote-stage-mode.overlay-pink #stageGrid{
+  display:none!important;
+}
+body.remote-stage-mode.overlay-live .remote-stage-dock,
+body.remote-stage-mode.overlay-live .remote-stage-open{
+  display:none!important;
+}
+body.remote-stage-mode.overlay-live.overlay-shadow-off #torsoPart svg > ellipse:first-of-type{
+  opacity:0!important;
+}
+body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
+  display:none!important;
+}
+
 </style>
 </head>
 <body class="remote-stage-mode">
@@ -3060,6 +3106,12 @@ body.remote-stage-clean .remote-stage-open{display:block}
       name: "Studio Grid"
     },
 
+    overlay: {
+      mode: "normal",
+      shadow: false,
+      bubble: true
+    },
+
     designer: {
       headWidth:100, headHeight:100, faceRoundness:55,
       eyeSize:100, eyeSpacing:100, eyeY:0,
@@ -3414,6 +3466,48 @@ body.remote-stage-clean .remote-stage-open{display:block}
     }
 
     renderBackground();
+  }
+
+  // --- Live Overlay -------------------------------------------------------
+  function applyOverlayMode(){
+    const overlay=avatarState.overlay||{mode:"normal",shadow:false,bubble:true};
+    const allowed=["normal","transparent","green","pink"];
+    const mode=allowed.includes(overlay.mode)?overlay.mode:"normal";
+    const live=mode!=="normal";
+
+    document.body.classList.remove("overlay-transparent","overlay-green","overlay-pink","overlay-live","overlay-shadow-off","overlay-bubble-off");
+    document.documentElement.classList.remove("overlay-transparent-root");
+
+    if(mode==="transparent"){
+      document.body.classList.add("overlay-transparent","overlay-live");
+      document.documentElement.classList.add("overlay-transparent-root");
+    }else if(mode==="green"){
+      document.body.classList.add("overlay-green","overlay-live");
+    }else if(mode==="pink"){
+      document.body.classList.add("overlay-pink","overlay-live");
+    }
+
+    if(live && !overlay.shadow) document.body.classList.add("overlay-shadow-off");
+    if(live && !overlay.bubble) document.body.classList.add("overlay-bubble-off");
+
+    // Normal restores the original background exactly as it was.
+    if(!live) renderBackground();
+  }
+
+  function setOverlayMode(mode){
+    const allowed=["normal","transparent","green","pink"];
+    avatarState.overlay.mode=allowed.includes(mode)?mode:"normal";
+    applyOverlayMode();
+  }
+
+  function setOverlayShadow(enabled){
+    avatarState.overlay.shadow=!!enabled;
+    applyOverlayMode();
+  }
+
+  function setOverlayBubble(enabled){
+    avatarState.overlay.bubble=!!enabled;
+    applyOverlayMode();
   }
 
   // --- Avatar Designer v1 -----------------------------------------------
@@ -6909,6 +7003,17 @@ body.remote-stage-clean .remote-stage-open{display:block}
 
   function drawRecordingBackground(ctx,w,h) {
     const bg = avatarState.background || {type:"grid",color:"#0b0f14",fit:"cover",dim:0};
+    const overlay=avatarState.overlay||{mode:"normal"};
+
+    if(overlay.mode==="transparent"){
+      ctx.clearRect(0,0,w,h);
+      return;
+    }
+    if(overlay.mode==="green"||overlay.mode==="pink"){
+      ctx.fillStyle=overlay.mode==="green"?"#00ff00":"#ff00ff";
+      ctx.fillRect(0,0,w,h);
+      return;
+    }
 
     // Grundfläche verhindert Transparenz in der WebM-Datei.
     ctx.fillStyle = bg.type === "color" ? bg.color : "#0b0f14";
@@ -7521,8 +7626,10 @@ body.remote-stage-clean .remote-stage-open{display:block}
     const rightArmAngle=getEffectiveRightArmAngle();
 
     // floor shadow
-    ctx.beginPath();ctx.ellipse(210,601,126,15,0,0,Math.PI*2);
-    ctx.fillStyle="rgba(0,0,0,.28)";ctx.fill();
+    if((avatarState.overlay?.mode||"normal")==="normal" || avatarState.overlay?.shadow){
+      ctx.beginPath();ctx.ellipse(210,601,126,15,0,0,Math.PI*2);
+      ctx.fillStyle="rgba(0,0,0,.28)";ctx.fill();
+    }
 
     const sleeveGrad=ctx.createLinearGradient(55,0,130,0);
     sleeveGrad.addColorStop(0,hexAdjust(designer.hoodieColor,-28));sleeveGrad.addColorStop(.52,hexAdjust(designer.hoodieColor,8));sleeveGrad.addColorStop(1,hexAdjust(designer.hoodieColor,-34));
@@ -7760,7 +7867,9 @@ body.remote-stage-clean .remote-stage-open{display:block}
 
   function drawRecordedSpeechBubble(ctx){
     const t=avatarState.textSpeech;
+    const overlay=avatarState.overlay||{mode:"normal",bubble:true};
     if(!t?.active||!t.text) return;
+    if(overlay.mode!=="normal" && !overlay.bubble) return;
 
     ctx.save();
     ctx.font="900 25px Arial";
@@ -8380,6 +8489,7 @@ body.remote-stage-clean .remote-stage-open{display:block}
   bindAnswerLibrary();
   bindAvatarDesigner();
   bindBackgroundControls();
+  applyOverlayMode();
   bindCharacterSelector();
   bindAppTabs();
   bindAvatarRecorder();
@@ -8407,6 +8517,9 @@ body.remote-stage-clean .remote-stage-open{display:block}
     setRemoteBackgroundGrid,
     setRemoteBackgroundFit,
     setRemoteBackgroundDim,
+    setOverlayMode,
+    setOverlayShadow,
+    setOverlayBubble,
     startRecording: startAvatarRecording,
     stopRecording: stopAvatarRecording,
     saveRecording: saveAvatarRecording,
@@ -8471,6 +8584,7 @@ function snapshot(){
     recording:e?.recordingState?.()||{state:"inactive"},
     audio:e?.audioState?.()||{loaded:false,playing:false},
     background:s?.background||{},
+    overlay:s?.overlay||{mode:"normal",shadow:false,bubble:true},
     version:e?.version||"",
     sentAt:Date.now()
   };
@@ -8564,6 +8678,12 @@ function applyRemoteCommand(command={}){
     engine.setRemoteBackgroundFit(String(command.fit||"cover"));
   }else if(action==="background_dim"){
     engine.setRemoteBackgroundDim(Number(command.dim)||0);
+  }else if(action==="overlay_mode"){
+    engine.setOverlayMode(String(command.mode||"normal"));
+  }else if(action==="overlay_shadow"){
+    engine.setOverlayShadow(!!command.enabled);
+  }else if(action==="overlay_bubble"){
+    engine.setOverlayBubble(!!command.enabled);
   }else if(action==="record_start"){
     engine.startRecording();
   }else if(action==="record_stop"){
