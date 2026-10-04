@@ -1521,16 +1521,17 @@ body.menu-open{overflow:hidden}
 
 
 
-/* v0.36.0: direkte Mund-Feinposition */
-.mouth-position-card{
-  margin-top:8px;padding:11px 13px;border:1px solid rgba(39,200,255,.22);
-  border-radius:14px;background:linear-gradient(180deg,rgba(39,200,255,.055),rgba(0,0,0,.13));
+/* v0.37.0: Mundposition in Live Control */
+.mouth-position-inline{
+  margin-top:10px;padding:9px 10px;border:1px solid rgba(39,200,255,.18);
+  border-radius:12px;background:rgba(0,0,0,.12)
 }
 .mouth-position-head,.mouth-position-labels{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.mouth-position-head span{color:var(--accent);font-weight:900;font-variant-numeric:tabular-nums}
-#mouthPositionSlider{width:100%;margin:10px 0 7px;accent-color:var(--accent)}
-.mouth-position-labels{font-size:10px;color:var(--muted)}
-#mouthPositionReset{border:1px solid rgba(39,200,255,.28);background:var(--accent-soft);color:var(--text);border-radius:9px;padding:6px 10px;font-weight:800}
+.mouth-position-head{font-size:10px;color:var(--muted)}
+.mouth-position-head strong{color:var(--accent);font-weight:900;font-variant-numeric:tabular-nums}
+#mouthPositionSlider{width:100%;margin:9px 0 6px;accent-color:var(--accent)}
+.mouth-position-labels{font-size:9px;color:var(--muted)}
+#mouthPositionReset{border:1px solid rgba(39,200,255,.28);background:var(--accent-soft);color:var(--text);border-radius:8px;padding:5px 9px;font-weight:800}
 
 /* v0.34.0: Recorder-Format */
 .record-format-choice{
@@ -2121,15 +2122,6 @@ body.menu-open{overflow:hidden}
         </div>
         <div id="liveAnswerStatus" class="live-answer-status">Bereit · Antwort antippen</div>
       </div>
-
-      <div class="mouth-position-card app-tab-section" data-app-view="studio">
-        <div class="mouth-position-head">
-          <strong>👄 Mundposition</strong>
-          <span id="mouthPositionValue">+4</span>
-        </div>
-        <input id="mouthPositionSlider" type="range" min="-20" max="24" step="1" value="4" aria-label="Mund hoch oder runter">
-        <div class="mouth-position-labels"><span>hoch</span><button id="mouthPositionReset" type="button">↺ Mitte</button><span>runter</span></div>
-      </div>
     </section>
 
     <section class="designer-panel app-tab-section" data-app-view="designer" hidden aria-label="Avatar Designer">
@@ -2284,6 +2276,19 @@ body.menu-open{overflow:hidden}
               <div id="mouthKnob" class="touch-knob"></div>
               <span class="hint top">weiter offen</span><span class="hint bottom">geschlossen</span>
               <span class="hint left">schmal</span><span class="hint right">breit</span>
+            </div>
+
+            <div class="mouth-position-inline">
+              <div class="mouth-position-head">
+                <span>Position hoch / runter</span>
+                <strong id="mouthPositionValue">+4</strong>
+              </div>
+              <input id="mouthPositionSlider" type="range" min="-20" max="24" step="1" value="4" aria-label="Mundposition hoch oder runter">
+              <div class="mouth-position-labels">
+                <span>hoch</span>
+                <button id="mouthPositionReset" type="button">↺ Mitte</button>
+                <span>runter</span>
+              </div>
             </div>
           </section>
 
