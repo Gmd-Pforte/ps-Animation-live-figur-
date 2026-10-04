@@ -860,14 +860,14 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.20: Touch-Fix – JS darf den Kopf transformieren */
+/* v0.21: Touch-Fix – JS darf den Kopf transformieren */
 .avatar-head-module{
   will-change:transform;
   transition:transform 70ms linear;
 }
 
 
-/* v0.20: Kopfneigung über festen Cutout-Anker */
+/* v0.21: Kopfneigung über festen Cutout-Anker */
 .head-anchor{
   transform-origin:0 0;
   will-change:transform;
@@ -944,7 +944,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.20: Aufnahme sichtbar unter den Touchfeldern */
+/* v0.21: Aufnahme sichtbar unter den Touchfeldern */
 .record-workspace{
   margin-top:14px;
   border:1px solid rgba(255,255,255,.07);
@@ -992,7 +992,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.20: gleiche Figur auf Handy, Desktop und Aufnahme */
+/* v0.21: gleiche Figur auf Handy, Desktop und Aufnahme */
 .avatar-body{
   width:min(330px,65vw)!important;
   bottom:4px!important;
@@ -1018,7 +1018,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.20: sichtbare Arm-Regler auf der Hauptseite */
+/* v0.21: sichtbare Arm-Regler auf der Hauptseite */
 .arm-main-controls{
   margin-top:14px;
   border:1px solid rgba(39,200,255,.22);
@@ -1130,13 +1130,13 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.20: drei Charaktere */
+/* v0.21: vier Charaktere */
 .character-buttons{
-  grid-template-columns:repeat(3,minmax(0,1fr));
+  grid-template-columns:repeat(4,minmax(0,1fr));
 }
 @media(max-width:560px){
   .character-buttons{
-    grid-template-columns:repeat(3,minmax(0,1fr));
+    grid-template-columns:repeat(2,minmax(0,1fr));
     gap:6px;
   }
   .character-button{
@@ -1551,6 +1551,10 @@ body.menu-open{overflow:hidden}
         <button id="avatarGullButton" class="character-button" type="button" data-character="gull">
           <span class="character-icon">🐦</span>
           <span>BreuerBeatz</span>
+        </button>
+        <button id="avatarMaskButton" class="character-button" type="button" data-character="mask">
+          <span class="character-icon">🎭</span>
+          <span>Mask Avatar</span>
         </button>
       </div>
     </section>
@@ -2169,7 +2173,7 @@ body.menu-open{overflow:hidden}
           <div class="progress-row done"><span>Arme beweglich</span><strong>✓</strong></div>
           <div class="progress-row done"><span>Beine</span><strong>✓</strong></div>
           <div class="progress-row done"><span>Aufnahme</span><strong>✓</strong></div>
-          <div class="progress-row done"><span>3 Charaktere</span><strong>✓</strong></div>
+          <div class="progress-row done"><span>4 Charaktere</span><strong>✓</strong></div>
           <div class="progress-row done"><span>Avatar Brain v1</span><strong>✓</strong></div>
           <div class="progress-row done"><span>Avatar Talk v1</span><strong>✓</strong></div>
           <div class="progress-row done"><span>Bild / GIF Hintergrund</span><strong>✓</strong></div>
@@ -2177,7 +2181,7 @@ body.menu-open{overflow:hidden}
       </article>
         </section>
 
-        <div class="menu-version">Version <strong>0.20</strong></div>
+        <div class="menu-version">Version <strong>0.21</strong></div>
       </div>
     </aside>
 
@@ -2187,7 +2191,7 @@ body.menu-open{overflow:hidden}
 (() => {
   "use strict";
 
-  const VERSION = "0.20";
+  const VERSION = "0.21";
 
   const avatarState = {
     version: VERSION,
@@ -2299,6 +2303,7 @@ body.menu-open{overflow:hidden}
     avatarHumanButton: document.getElementById("avatarHumanButton"),
     avatarBearButton: document.getElementById("avatarBearButton"),
     avatarGullButton: document.getElementById("avatarGullButton"),
+    avatarMaskButton: document.getElementById("avatarMaskButton"),
     activeCharacterName: document.getElementById("activeCharacterName"),
     avatarStage: document.getElementById("avatarStage"),
     stageGrid: document.getElementById("stageGrid"),
@@ -2925,6 +2930,156 @@ body.menu-open{overflow:hidden}
     `
   };
 
+  const maskCharacterTemplate = {
+    body: `
+      <svg viewBox="0 0 420 620" role="img" aria-label="Mask Avatar Ganzkörper">
+        <defs>
+          <linearGradient id="maskRedTrim" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#ff1838"/>
+            <stop offset="100%" stop-color="#7b0013"/>
+          </linearGradient>
+        </defs>
+
+        <g id="leftArmBase">
+          <path d="M105 112 Q76 124 61 168 Q48 210 50 280 Q52 335 73 365
+                   Q84 378 101 367 Q116 356 111 335 Q98 289 103 235 Q108 179 132 153 Z"
+                fill="#0d1015" stroke="#050608" stroke-width="9"/>
+          <path d="M66 168 Q52 227 63 316" fill="none" stroke="#ff1739" stroke-width="7" stroke-linecap="round"/>
+          <ellipse cx="88" cy="374" rx="25" ry="28" fill="#6c5555" stroke="#171014" stroke-width="6"/>
+        </g>
+
+        <g id="rightArmBase">
+          <path d="M315 112 Q344 124 359 168 Q372 210 370 280 Q368 335 347 365
+                   Q336 378 319 367 Q304 356 309 335 Q322 289 317 235 Q312 179 288 153 Z"
+                fill="#0d1015" stroke="#050608" stroke-width="9"/>
+          <path d="M354 168 Q368 227 357 316" fill="none" stroke="#ff1739" stroke-width="7" stroke-linecap="round"/>
+          <ellipse cx="332" cy="374" rx="25" ry="28" fill="#6c5555" stroke="#171014" stroke-width="6"/>
+        </g>
+
+        <!-- schwarzer Hoodie / Jacke -->
+        <path d="M112 100 Q150 64 210 62 Q270 64 308 100 Q332 123 339 171
+                 L330 344 Q324 375 292 387 L128 387 Q96 375 90 344 L81 171
+                 Q88 123 112 100 Z"
+              fill="#0a0d12" stroke="#050608" stroke-width="10"/>
+        <path d="M112 115 Q145 75 210 79 Q275 75 308 115
+                 Q276 104 253 116 Q231 127 210 146 Q189 127 167 116
+                 Q144 104 112 115 Z"
+              fill="#161b22" stroke="#050608" stroke-width="8"/>
+        <path d="M158 129 Q180 148 210 153 Q240 148 262 129 L273 377 L147 377 Z"
+              fill="#05070a"/>
+
+        <!-- rote Jackenkanten -->
+        <path d="M100 125 Q83 185 91 330 M320 125 Q337 185 329 330"
+              fill="none" stroke="url(#maskRedTrim)" stroke-width="8" stroke-linecap="round"/>
+        <path d="M148 144 L188 369 M272 144 L232 369"
+              fill="none" stroke="#a20a20" stroke-width="5" opacity=".75"/>
+
+        <!-- Silberkette -->
+        <path d="M151 152 Q164 211 210 226 Q256 211 269 152"
+              fill="none" stroke="#d6d9dd" stroke-width="6" stroke-linecap="round"/>
+        <path d="M158 156 Q172 201 210 214 Q248 201 262 156"
+              fill="none" stroke="#6f757d" stroke-width="3"/>
+
+        <path d="M130 375 Q210 389 290 375 L298 407 Q210 420 122 407 Z"
+              fill="#080a0e" stroke="#050608" stroke-width="7"/>
+        <path d="M130 405 Q210 419 290 405 L292 450 Q210 463 128 450 Z"
+              fill="#11141a" stroke="#050608" stroke-width="8"/>
+        <path d="M128 443 L202 450 L195 566 Q194 583 177 587 L142 587 Q125 582 126 565 Z"
+              fill="#101319" stroke="#050608" stroke-width="8"/>
+        <path d="M218 450 L292 443 L294 565 Q295 582 278 587 L243 587 Q226 583 225 566 Z"
+              fill="#101319" stroke="#050608" stroke-width="8"/>
+
+        <path d="M123 572 Q143 560 188 565 Q204 568 210 589 L207 606
+                 Q164 614 118 604 Q108 596 112 585 Q115 578 123 572 Z"
+              fill="#171a20" stroke="#050608" stroke-width="7"/>
+        <path d="M297 572 Q277 560 232 565 Q216 568 210 589 L213 606
+                 Q256 614 302 604 Q312 596 308 585 Q305 578 297 572 Z"
+              fill="#171a20" stroke="#050608" stroke-width="7"/>
+        <path d="M135 590 L193 595 M285 590 L227 595"
+              stroke="#c51a30" stroke-width="4" stroke-linecap="round"/>
+      </svg>
+    `,
+    head: `
+      <svg viewBox="0 0 420 360" role="img" aria-label="Mask Avatar Kopf">
+        <defs>
+          <clipPath id="eyeClipLeft"><ellipse cx="155" cy="164" rx="42" ry="30"/></clipPath>
+          <clipPath id="eyeClipRight"><ellipse cx="265" cy="164" rx="42" ry="30"/></clipPath>
+          <filter id="maskEyeGlow" x="-80%" y="-80%" width="260%" height="260%">
+            <feGaussianBlur stdDeviation="7" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+
+        <g id="headMotionGroup">
+          <!-- Ohren -->
+          <ellipse cx="76" cy="169" rx="25" ry="41" fill="#725555" stroke="#160d11" stroke-width="7"/>
+          <ellipse cx="344" cy="169" rx="25" ry="41" fill="#725555" stroke="#160d11" stroke-width="7"/>
+
+          <!-- dunkle Maske / Gesicht -->
+          <ellipse cx="210" cy="169" rx="137" ry="145" fill="#705b61" stroke="#120d10" stroke-width="8"/>
+          <path d="M91 180 Q101 246 136 294 Q166 335 210 346 Q254 335 284 294
+                   Q319 246 329 180 Q303 214 274 225 Q242 237 210 238
+                   Q178 237 146 225 Q117 214 91 180 Z"
+                fill="#3a3035" opacity=".62"/>
+
+          <!-- Cap -->
+          <path d="M89 105 Q91 37 145 19 Q210 -2 275 19 Q329 37 331 105
+                   Q289 80 210 80 Q131 80 89 105 Z"
+                fill="#090b0f" stroke="#020304" stroke-width="9"/>
+          <path d="M102 90 Q210 62 318 90 Q285 114 210 118 Q135 114 102 90 Z"
+                fill="#06070a" stroke="#020304" stroke-width="8"/>
+          <path d="M94 94 Q129 42 172 23 M248 22 Q300 42 326 92"
+                fill="none" stroke="#ff1739" stroke-width="7" stroke-linecap="round"/>
+
+          <!-- Augenhöhlen / leuchtende Augen -->
+          <path d="M108 151 Q150 121 198 148 Q180 190 148 194 Q122 192 108 174 Z"
+                fill="#111016" stroke="#35141d" stroke-width="5"/>
+          <path d="M312 151 Q270 121 222 148 Q240 190 272 194 Q298 192 312 174 Z"
+                fill="#111016" stroke="#35141d" stroke-width="5"/>
+
+          <g id="eyesModule" filter="url(#maskEyeGlow)">
+            <g clip-path="url(#eyeClipLeft)">
+              <ellipse cx="155" cy="164" rx="36" ry="21" fill="#dff8ff"/>
+              <circle id="pupilLeft" cx="155" cy="164" r="12" fill="#ffffff"/>
+              <rect id="lidTopLeft" x="112" y="132" width="86" height="0" fill="#705b61"/>
+              <rect id="lidBottomLeft" x="112" y="196" width="86" height="0" fill="#705b61"/>
+            </g>
+            <g clip-path="url(#eyeClipRight)">
+              <ellipse cx="265" cy="164" rx="36" ry="21" fill="#dff8ff"/>
+              <circle id="pupilRight" cx="265" cy="164" r="12" fill="#ffffff"/>
+              <rect id="lidTopRight" x="222" y="132" width="86" height="0" fill="#705b61"/>
+              <rect id="lidBottomRight" x="222" y="196" width="86" height="0" fill="#705b61"/>
+            </g>
+          </g>
+
+          <!-- Risse -->
+          <g fill="none" stroke="#21151a" stroke-width="4" stroke-linecap="round">
+            <path d="M131 184 L118 206 L137 214 L124 235 L145 248"/>
+            <path d="M171 180 L163 205 L181 218 L171 239 L186 258"/>
+            <path d="M283 181 L296 203 L281 216 L300 230 L288 254"/>
+            <path d="M247 187 L255 208 L241 222 L252 241 L239 262"/>
+            <path d="M205 110 L198 133 L210 147 L201 164"/>
+          </g>
+          <g fill="none" stroke="#8e101f" stroke-width="3" opacity=".9">
+            <path d="M120 208 L108 226 M137 214 L147 225 M296 203 L308 220 M281 216 L270 229"/>
+          </g>
+
+          <!-- Nase -->
+          <path d="M210 167 L199 207 Q210 216 221 207"
+                fill="none" stroke="#2a2024" stroke-width="6" stroke-linecap="round"/>
+
+          <!-- Dynamischer Mund -->
+          <g id="mouthModule">
+            <ellipse id="mouthHole" cx="210" cy="250" rx="0" ry="0" fill="#070407"/>
+            <ellipse id="tongueShape" cx="210" cy="257" rx="0" ry="0" fill="#7b2632" opacity="0"/>
+            <path id="mouthLine" d="M184 250 Q210 258 236 250"
+                  fill="none" stroke="#160b0f" stroke-width="7" stroke-linecap="round"/>
+          </g>
+        </g>
+      </svg>
+    `
+  };
+
   function refreshCharacterRefs() {
     ui.headMotionGroup = document.getElementById("headMotionGroup");
     ui.leftArmBase = document.getElementById("leftArmBase");
@@ -2942,7 +3097,7 @@ body.menu-open{overflow:hidden}
   }
 
   function switchCharacter(character) {
-    if (!["human","bear","gull"].includes(character)) return;
+    if (!["human","bear","gull","mask"].includes(character)) return;
     if (!ui.torsoPart || !ui.headPart) return;
 
     avatarState.character = character;
@@ -2950,6 +3105,7 @@ body.menu-open{overflow:hidden}
     const template =
       character === "bear" ? bearCharacterTemplate :
       character === "gull" ? gullCharacterTemplate :
+      character === "mask" ? maskCharacterTemplate :
       humanCharacterTemplate;
 
     ui.torsoPart.innerHTML = template.body;
@@ -2965,10 +3121,14 @@ body.menu-open{overflow:hidden}
     if (ui.avatarGullButton) {
       ui.avatarGullButton.classList.toggle("active", character === "gull");
     }
+    if (ui.avatarMaskButton) {
+      ui.avatarMaskButton.classList.toggle("active", character === "mask");
+    }
     if (ui.activeCharacterName) {
       ui.activeCharacterName.textContent =
         character === "bear" ? "PS Bär" :
         character === "gull" ? "BreuerBeatz" :
+        character === "mask" ? "Mask Avatar" :
         "PS Avatar";
     }
 
@@ -2984,6 +3144,9 @@ body.menu-open{overflow:hidden}
     }
     if (ui.avatarGullButton) {
       ui.avatarGullButton.addEventListener("click", () => switchCharacter("gull"));
+    }
+    if (ui.avatarMaskButton) {
+      ui.avatarMaskButton.addEventListener("click", () => switchCharacter("mask"));
     }
   }
 
@@ -3865,6 +4028,13 @@ body.menu-open{overflow:hidden}
       music: "BreuerBeatz steht für Musik, Energie und natürlich eine ordentliche Portion Küstenchaos.",
       hello: "Moin! BreuerBeatz meldet sich.",
       feeling: "Läuft. Wind von vorne ist schließlich nur zusätzliches Tempo."
+    },
+    mask: {
+      name: "Ich bin der Mask Avatar. Dunkel, ruhig und schwer zu übersehen.",
+      skills: "Ich kann sprechen, schauen, blinzeln, meinen Kopf bewegen und mit den Armen gestikulieren.",
+      music: "Dunkle Sounds, harte Kanten und viel Atmosphäre passen ziemlich gut zu mir.",
+      hello: "Da bist du ja. Der Mask Avatar ist wach.",
+      feeling: "Still. Wach. Bereit."
     }
   };
 
@@ -4323,7 +4493,7 @@ body.menu-open{overflow:hidden}
     if (ui.menuButton) ui.menuButton.setAttribute("aria-expanded", open ? "true" : "false");
   }
 
-  // --- Figurenaufnahme v0.20 -------------------------------------------
+  // --- Figurenaufnahme v0.21 -------------------------------------------
   // Direkter Canvas-Renderer: keine langsame SVG->Bitmap-Konvertierung pro Frame.
   let avatarRecorder = null;
   let recorderChunks = [];
@@ -4766,6 +4936,141 @@ body.menu-open{overflow:hidden}
     ctx.restore();
   }
 
+  function drawRecordedMaskBody(ctx) {
+    const s=0.7857;
+    const x=360-210*s;
+    const y=900-620*s;
+
+    ctx.save();
+    ctx.translate(x,y);
+    ctx.scale(s,s);
+
+    const leftArmAngle=getEffectiveLeftArmAngle();
+    const rightArmAngle=getEffectiveRightArmAngle();
+
+    ctx.save();
+    ctx.translate(112,112);ctx.rotate(leftArmAngle*Math.PI/180);ctx.translate(-112,-112);
+    fillStrokePath(ctx,BODY_PATHS.leftArm,"#0d1015","#050608",9);
+    ctx.beginPath();ctx.ellipse(88,374,25,28,0,0,Math.PI*2);ctx.fillStyle="#6c5555";ctx.fill();ctx.strokeStyle="#171014";ctx.lineWidth=6;ctx.stroke();
+    strokeLine(ctx,[[68,170],[57,240],[63,316]],"#ff1739",7);
+    ctx.restore();
+
+    ctx.save();
+    ctx.translate(308,112);ctx.rotate(rightArmAngle*Math.PI/180);ctx.translate(-308,-112);
+    fillStrokePath(ctx,BODY_PATHS.rightArm,"#0d1015","#050608",9);
+    ctx.beginPath();ctx.ellipse(332,374,25,28,0,0,Math.PI*2);ctx.fillStyle="#6c5555";ctx.fill();ctx.strokeStyle="#171014";ctx.lineWidth=6;ctx.stroke();
+    strokeLine(ctx,[[352,170],[363,240],[357,316]],"#ff1739",7);
+    ctx.restore();
+
+    fillStrokePath(ctx,BODY_PATHS.torso,"#0a0d12","#050608",10);
+    fillStrokePath(ctx,BODY_PATHS.collar,"#161b22","#050608",8);
+    fillStrokePath(ctx,BODY_PATHS.shirt,"#05070a",null,0);
+
+    strokeLine(ctx,[[100,126],[91,205],[94,330]],"#ff1739",8);
+    strokeLine(ctx,[[320,126],[329,205],[326,330]],"#ff1739",8);
+
+    ctx.beginPath();ctx.moveTo(151,152);ctx.quadraticCurveTo(164,211,210,226);ctx.quadraticCurveTo(256,211,269,152);
+    ctx.strokeStyle="#d6d9dd";ctx.lineWidth=6;ctx.lineCap="round";ctx.stroke();
+
+    fillStrokePath(ctx,BODY_PATHS.waist,"#080a0e","#050608",7);
+    fillStrokePath(ctx,BODY_PATHS.hips,"#11141a","#050608",8);
+    fillStrokePath(ctx,BODY_PATHS.leftLeg,"#101319","#050608",8);
+    fillStrokePath(ctx,BODY_PATHS.rightLeg,"#101319","#050608",8);
+    fillStrokePath(ctx,BODY_PATHS.leftShoe,"#171a20","#050608",7);
+    fillStrokePath(ctx,BODY_PATHS.rightShoe,"#171a20","#050608",7);
+    strokeLine(ctx,[[135,590],[193,595]],"#c51a30",4);
+    strokeLine(ctx,[[285,590],[227,595]],"#c51a30",4);
+
+    ctx.restore();
+  }
+
+  function drawRecordedMaskHead(ctx) {
+    const face=avatarState.face;
+    const head=avatarState.head;
+    const s=0.6548;
+    const anchorX=360;
+    const anchorY=550+(head.idleLift||0);
+    const lean=getEffectiveHeadLean();
+
+    ctx.save();
+    ctx.translate(anchorX,anchorY);
+    ctx.rotate(lean*Math.PI/180);
+    ctx.scale(s,s);
+    ctx.translate(-210,-360);
+
+    // face / mask
+    ctx.beginPath();ctx.ellipse(210,169,137,145,0,0,Math.PI*2);
+    ctx.fillStyle="#705b61";ctx.fill();ctx.strokeStyle="#120d10";ctx.lineWidth=8;ctx.stroke();
+    ctx.beginPath();ctx.ellipse(76,169,25,41,0,0,Math.PI*2);ctx.fillStyle="#725555";ctx.fill();ctx.strokeStyle="#160d11";ctx.lineWidth=7;ctx.stroke();
+    ctx.beginPath();ctx.ellipse(344,169,25,41,0,0,Math.PI*2);ctx.fill();ctx.stroke();
+
+    // cap + red trim
+    fillStrokePath(ctx,HEAD_PATHS.cap,"#090b0f","#020304",9);
+    fillStrokePath(ctx,HEAD_PATHS.brim,"#06070a","#020304",8);
+    ctx.strokeStyle="#ff1739";ctx.lineWidth=7;ctx.lineCap="round";
+    ctx.beginPath();ctx.moveTo(95,92);ctx.quadraticCurveTo(133,39,174,23);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(247,22);ctx.quadraticCurveTo(298,40,325,91);ctx.stroke();
+
+    // dark eye sockets
+    ctx.beginPath();ctx.ellipse(155,164,43,30,0,0,Math.PI*2);ctx.fillStyle="#111016";ctx.fill();
+    ctx.beginPath();ctx.ellipse(265,164,43,30,0,0,Math.PI*2);ctx.fill();
+
+    const pxOffset=getEffectiveLookX()*1.45+getEffectiveHeadLean()*0.10;
+    const pyOffset=getEffectiveLookY()*1.45;
+
+    // glow layers
+    ctx.save();
+    ctx.shadowColor="#dff8ff";ctx.shadowBlur=24;
+    ctx.beginPath();ctx.ellipse(155+pxOffset,164+pyOffset,29,16,0,0,Math.PI*2);ctx.fillStyle="#dff8ff";ctx.fill();
+    ctx.beginPath();ctx.ellipse(265+pxOffset,164+pyOffset,29,16,0,0,Math.PI*2);ctx.fill();
+    ctx.shadowBlur=10;
+    ctx.beginPath();ctx.arc(155+pxOffset,164+pyOffset,11,0,Math.PI*2);ctx.fillStyle="#fff";ctx.fill();
+    ctx.beginPath();ctx.arc(265+pxOffset,164+pyOffset,11,0,Math.PI*2);ctx.fill();
+    ctx.restore();
+
+    // lids for blink
+    const maxLid=29;
+    const lc=Math.max(0,Math.min(100,face.blinkLeft||0))/100*maxLid;
+    const rc=Math.max(0,Math.min(100,face.blinkRight||0))/100*maxLid;
+    ctx.fillStyle="#705b61";
+    ctx.fillRect(112,133,86,lc);ctx.fillRect(112,195-lc,86,lc);
+    ctx.fillRect(222,133,86,rc);ctx.fillRect(222,195-rc,86,rc);
+
+    // cracks
+    ctx.strokeStyle="#21151a";ctx.lineWidth=4;ctx.lineCap="round";
+    const cracks=[
+      [[131,184],[118,206],[137,214],[124,235],[145,248]],
+      [[171,180],[163,205],[181,218],[171,239],[186,258]],
+      [[283,181],[296,203],[281,216],[300,230],[288,254]],
+      [[247,187],[255,208],[241,222],[252,241],[239,262]],
+      [[205,110],[198,133],[210,147],[201,164]]
+    ];
+    cracks.forEach(points=>strokeLine(ctx,points,"#21151a",4));
+
+    // nose
+    ctx.beginPath();ctx.moveTo(210,167);ctx.lineTo(199,207);ctx.quadraticCurveTo(210,216,221,207);
+    ctx.strokeStyle="#2a2024";ctx.lineWidth=6;ctx.stroke();
+
+    // mouth
+    const widthScale=(face.mouthWidth||100)/100;
+    const halfWidth=26*widthScale;
+    const openRy=(face.mouthOpen||0)/100*15;
+    const baseY=250;
+    if(openRy>0.25){
+      ctx.beginPath();ctx.ellipse(210,baseY+4,halfWidth*.82,openRy,0,0,Math.PI*2);ctx.fillStyle="#070407";ctx.fill();
+      if((face.mouthOpen||0)>20){
+        ctx.globalAlpha=.8;ctx.beginPath();ctx.ellipse(210,baseY+7+openRy*.25,halfWidth*.48,openRy*.34,0,0,Math.PI*2);ctx.fillStyle="#7b2632";ctx.fill();ctx.globalAlpha=1;
+      }
+    }
+    const leftY=baseY-(face.mouthCornerLeft||0)*.55;
+    const rightY=baseY-(face.mouthCornerRight||0)*.55;
+    const controlY=baseY-(((face.mouthCornerLeft||0)+(face.mouthCornerRight||0))/2)*.40;
+    ctx.beginPath();ctx.moveTo(210-halfWidth,leftY);ctx.quadraticCurveTo(210,controlY,210+halfWidth,rightY);
+    ctx.strokeStyle="#160b0f";ctx.lineWidth=7;ctx.lineCap="round";ctx.stroke();
+
+    ctx.restore();
+  }
+
   function drawRecordedBody(ctx) {
     if (avatarState.character === "bear") {
       drawRecordedBearBody(ctx);
@@ -4773,6 +5078,10 @@ body.menu-open{overflow:hidden}
     }
     if (avatarState.character === "gull") {
       drawRecordedGullBody(ctx);
+      return;
+    }
+    if (avatarState.character === "mask") {
+      drawRecordedMaskBody(ctx);
       return;
     }
 
@@ -4844,6 +5153,10 @@ body.menu-open{overflow:hidden}
     }
     if (avatarState.character === "gull") {
       drawRecordedGullHead(ctx);
+      return;
+    }
+    if (avatarState.character === "mask") {
+      drawRecordedMaskHead(ctx);
       return;
     }
 
