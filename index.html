@@ -860,14 +860,14 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.14.1: Touch-Fix – JS darf den Kopf transformieren */
+/* v0.14.2: Touch-Fix – JS darf den Kopf transformieren */
 .avatar-head-module{
   will-change:transform;
   transition:transform 70ms linear;
 }
 
 
-/* v0.14.1: Kopfneigung über festen Cutout-Anker */
+/* v0.14.2: Kopfneigung über festen Cutout-Anker */
 .head-anchor{
   transform-origin:0 0;
   will-change:transform;
@@ -944,7 +944,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.14.1: Aufnahme sichtbar unter den Touchfeldern */
+/* v0.14.2: Aufnahme sichtbar unter den Touchfeldern */
 .record-workspace{
   margin-top:14px;
   border:1px solid rgba(255,255,255,.07);
@@ -989,6 +989,19 @@ body.menu-open{overflow:hidden}
     padding:7px 5px;
     font-size:12px;
   }
+}
+
+
+/* v0.14.2: gleiche Figur auf Handy, Desktop und Aufnahme */
+.avatar-body{
+  width:min(330px,65vw)!important;
+  bottom:4px!important;
+}
+.head-anchor{
+  bottom:352px!important;
+}
+.avatar-head-module{
+  width:min(275px,58vw)!important;
 }
 
 </style>
@@ -1242,7 +1255,7 @@ body.menu-open{overflow:hidden}
         </div>
 
         <div class="stage-caption">
-          <strong>Schritt 14.1:</strong> Stabile Figurenaufnahme</div>
+          <strong>Schritt 14.2:</strong> Gleiche Figur in Live & Video</div>
       </div>
     </section>
 
@@ -1437,7 +1450,7 @@ body.menu-open{overflow:hidden}
       </article>
         </section>
 
-        <div class="menu-version">Version <strong>0.14.1</strong></div>
+        <div class="menu-version">Version <strong>0.14.2</strong></div>
       </div>
     </aside>
 
@@ -1447,7 +1460,7 @@ body.menu-open{overflow:hidden}
 (() => {
   "use strict";
 
-  const VERSION = "0.14.1";
+  const VERSION = "0.14.2";
 
   const avatarState = {
     version: VERSION,
@@ -2331,7 +2344,7 @@ body.menu-open{overflow:hidden}
     if (ui.menuButton) ui.menuButton.setAttribute("aria-expanded", open ? "true" : "false");
   }
 
-  // --- Figurenaufnahme v0.14.1 -------------------------------------------
+  // --- Figurenaufnahme v0.14.2 -------------------------------------------
   // Direkter Canvas-Renderer: keine langsame SVG->Bitmap-Konvertierung pro Frame.
   let avatarRecorder = null;
   let recorderChunks = [];
@@ -2415,7 +2428,8 @@ body.menu-open{overflow:hidden}
   }
 
   function drawRecordedBody(ctx) {
-    const s=0.79;
+    // entspricht ca. 330px Körperbreite im Live-Avatar
+    const s=0.7857;
     const x=360-210*s;
     const y=900-620*s;
 
@@ -2463,9 +2477,11 @@ body.menu-open{overflow:hidden}
   function drawRecordedHead(ctx) {
     const face=avatarState.face;
     const head=avatarState.head;
-    const s=0.72;
+    // entspricht ca. 275px Kopfbreite im Live-Avatar
+    const s=0.6548;
     const anchorX=360;
-    const anchorY=472 + (head.idleLift||0);
+    // Kopf bewusst tiefer: Bart überlappt den Hoodie wie in der Live-Ansicht.
+    const anchorY=550 + (head.idleLift||0);
     const lean=Math.max(-12,Math.min(12,(head.sideLean||0)+(head.idleLean||0)));
 
     ctx.save();
@@ -2490,6 +2506,10 @@ body.menu-open{overflow:hidden}
     fillStrokePath(ctx,HEAD_PATHS.beard,"#352821","#17120f",7);
     ctx.beginPath();ctx.moveTo(110,194);ctx.quadraticCurveTo(102,233,127,272);ctx.strokeStyle="#72645d";ctx.lineWidth=6;ctx.stroke();
     ctx.beginPath();ctx.moveTo(310,194);ctx.quadraticCurveTo(318,233,293,272);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(153,248);ctx.quadraticCurveTo(170,292,210,325);ctx.quadraticCurveTo(250,292,267,248);
+    ctx.strokeStyle="#6f625b";ctx.lineWidth=7;ctx.stroke();
+    ctx.beginPath();ctx.moveTo(176,269);ctx.quadraticCurveTo(191,303,210,317);ctx.quadraticCurveTo(229,303,244,269);
+    ctx.strokeStyle="#211914";ctx.lineWidth=7;ctx.stroke();
 
     // brows
     ctx.beginPath();ctx.moveTo(111,119);ctx.quadraticCurveTo(153,98,190,118);ctx.strokeStyle="#2b1c15";ctx.lineWidth=11;ctx.lineCap="round";ctx.stroke();
@@ -2517,9 +2537,16 @@ body.menu-open{overflow:hidden}
     ctx.fillStyle="#efad73";ctx.fillRect(224,129,82,rc);ctx.fillRect(224,198-rc,82,rc);
     ctx.restore();
 
-    // glasses
+    // glasses – gleiche runde Form wie im Live-SVG
     ctx.strokeStyle="#0a0b0d";ctx.lineWidth=9;
-    ctx.strokeRect(104,137,96,60);ctx.strokeRect(220,137,96,60);
+    ctx.beginPath();
+    if (ctx.roundRect) ctx.roundRect(99,132,106,70,28);
+    else { ctx.rect(99,132,106,70); }
+    ctx.stroke();
+    ctx.beginPath();
+    if (ctx.roundRect) ctx.roundRect(215,132,106,70,28);
+    else { ctx.rect(215,132,106,70); }
+    ctx.stroke();
     strokeLine(ctx,[[205,157],[210,151],[215,157]],"#0a0b0d",9);
     strokeLine(ctx,[[99,151],[69,143]],"#0a0b0d",9);
     strokeLine(ctx,[[321,151],[351,143]],"#0a0b0d",9);
