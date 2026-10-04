@@ -860,14 +860,14 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.28.1: Touch-Fix – JS darf den Kopf transformieren */
+/* v0.29.0: Touch-Fix – JS darf den Kopf transformieren */
 .avatar-head-module{
   will-change:transform;
   transition:transform 70ms linear;
 }
 
 
-/* v0.28.1: Kopfneigung über festen Cutout-Anker */
+/* v0.29.0: Kopfneigung über festen Cutout-Anker */
 .head-anchor{
   transform-origin:0 0;
   will-change:transform;
@@ -944,7 +944,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.28.1: Aufnahme sichtbar unter den Touchfeldern */
+/* v0.29.0: Aufnahme sichtbar unter den Touchfeldern */
 .record-workspace{
   margin-top:14px;
   border:1px solid rgba(255,255,255,.07);
@@ -992,7 +992,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.28.1: gleiche Figur auf Handy, Desktop und Aufnahme */
+/* v0.29.0: gleiche Figur auf Handy, Desktop und Aufnahme */
 .avatar-body{
   width:min(330px,65vw)!important;
   bottom:4px!important;
@@ -1018,7 +1018,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.28.1: sichtbare Arm-Regler auf der Hauptseite */
+/* v0.29.0: sichtbare Arm-Regler auf der Hauptseite */
 .arm-main-controls{
   margin-top:14px;
   border:1px solid rgba(39,200,255,.22);
@@ -1130,7 +1130,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.28.1: vier Charaktere */
+/* v0.29.0: vier Charaktere */
 .character-buttons{
   grid-template-columns:repeat(4,minmax(0,1fr));
 }
@@ -1520,7 +1520,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.28.1: Recorder-Format */
+/* v0.29.0: Recorder-Format */
 .record-format-choice{
   display:grid;
   grid-template-columns:auto minmax(150px,1fr);
@@ -1553,7 +1553,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.28.1: Avatar Designer */
+/* v0.29.0: Avatar Designer */
 .designer-panel{margin-top:10px;border:1px solid rgba(255,96,190,.22);background:linear-gradient(180deg,rgba(255,67,170,.045),rgba(0,0,0,.16));border-radius:18px;padding:12px}
 .designer-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.designer-head>div{display:grid;gap:2px}.designer-head strong{font-size:16px}
 #designerNotice{font-size:10px;color:var(--muted)}
@@ -1573,7 +1573,7 @@ body.menu-open{overflow:hidden}
 @media(max-width:620px){.designer-grid{grid-template-columns:1fr}.designer-colors{grid-template-columns:repeat(3,1fr)}}
 
 
-/* v0.28.1: Leg Control */
+/* v0.29.0: Leg Control */
 .leg-main-controls{margin-top:10px;border:1px solid rgba(122,220,255,.18);background:linear-gradient(180deg,rgba(64,182,255,.045),rgba(0,0,0,.14));border-radius:16px;padding:12px}
 .leg-main-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.leg-main-head>div{display:grid;gap:2px}.leg-main-head strong{font-size:14px}
 #legReset{min-height:40px;border:1px solid rgba(39,200,255,.32);background:var(--accent-soft);color:var(--text);border-radius:11px;padding:7px 10px;font-weight:850}
@@ -1586,7 +1586,7 @@ body.menu-open{overflow:hidden}
 @media(max-width:520px){.walk-row{grid-template-columns:1fr}}
 
 
-/* v0.28.1: Dance Mode */
+/* v0.29.0: Dance Mode */
 .dance-panel{margin-top:10px;border:1px solid rgba(255,92,193,.24);background:linear-gradient(180deg,rgba(255,66,178,.07),rgba(57,23,69,.12));border-radius:18px;padding:12px}
 .dance-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.dance-head>div{display:grid;gap:2px}.dance-head strong{font-size:15px}#danceStatus{font-size:10px;color:var(--muted)}
 #danceToggle{min-width:116px;min-height:48px;border-radius:13px;border:1px solid #75405f;background:#190f18;color:var(--text);font-weight:900;font-size:14px}
@@ -1600,7 +1600,7 @@ body.menu-open{overflow:hidden}
 @media(max-width:620px){.dance-controls{grid-template-columns:1fr}.dance-head{align-items:flex-start;flex-direction:column}#danceToggle{width:100%}}
 
 
-/* v0.28.1: App-Reiter + Avatar Catalog */
+/* v0.29.0: App-Reiter + Avatar Catalog */
 .app-tabs{
   position:sticky;top:0;z-index:40;
   display:grid;grid-template-columns:repeat(3,1fr);gap:6px;
@@ -1692,7 +1692,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.28.1: Antwort-MP3 Bibliothek */
+/* v0.29.0: Antwort-MP3 Bibliothek */
 .app-tabs{grid-template-columns:repeat(4,1fr)}
 .answer-library{
   border:1px solid rgba(123,103,255,.22);
@@ -1729,7 +1729,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.28.1: Live-Antworten + Reaktionen */
+/* v0.29.0: Live-Antworten + Reaktionen */
 .live-answer-bar{
   margin-top:9px;padding:11px;border:1px solid rgba(39,200,255,.16);
   border-radius:15px;background:linear-gradient(180deg,rgba(39,200,255,.045),rgba(0,0,0,.13))
@@ -2251,10 +2251,14 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
 
                 <!-- Augenbrauen -->
                 <g id="psBrowsGroup">
-                <path d="M112 121 Q151 102 190 119" fill="none" stroke="#2b1c15" stroke-width="9" stroke-linecap="round"/>
-                <path d="M230 119 Q269 102 308 121" fill="none" stroke="#2b1c15" stroke-width="9" stroke-linecap="round"/>
-                <path d="M120 117 Q151 108 182 118 M238 118 Q269 108 300 117"
-                      fill="none" stroke="#6a4837" stroke-width="2.5" opacity=".7"/>
+                  <g id="browLeft">
+                    <path d="M112 121 Q151 102 190 119" fill="none" stroke="#2b1c15" stroke-width="9" stroke-linecap="round"/>
+                    <path d="M120 117 Q151 108 182 118" fill="none" stroke="#6a4837" stroke-width="2.5" opacity=".7"/>
+                  </g>
+                  <g id="browRight">
+                    <path d="M230 119 Q269 102 308 121" fill="none" stroke="#2b1c15" stroke-width="9" stroke-linecap="round"/>
+                    <path d="M238 118 Q269 108 300 117" fill="none" stroke="#6a4837" stroke-width="2.5" opacity=".7"/>
+                  </g>
                 </g>
 
                 <!-- Augen -->
@@ -2263,6 +2267,8 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
                   <ellipse id="psEyeWhiteRight" cx="265" cy="164" rx="40" ry="33" fill="#fdfdfb"/>
                   <path d="M118 158 Q155 132 192 158 M228 158 Q265 132 302 158"
                         fill="none" stroke="#b36f4a" stroke-width="3" opacity=".42"/>
+                  <ellipse id="cheekLeft" cx="133" cy="210" rx="25" ry="12" fill="#e88078" opacity="0"/>
+                  <ellipse id="cheekRight" cx="287" cy="210" rx="25" ry="12" fill="#e88078" opacity="0"/>
 
                   <g id="psEyeClipLeft" clip-path="url(#eyeClipLeft)">
                     <circle id="pupilLeft" cx="155" cy="164" r="7.5" fill="#050607"/>
@@ -2307,6 +2313,8 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
                   <ellipse id="tongueShape" cx="210" cy="254" rx="0" ry="0" fill="#c9656c" opacity="0"/>
                   <path id="mouthLine" d="M184 247 Q210 247 236 247"
                         fill="none" stroke="#090909" stroke-width="6" stroke-linecap="round"/>
+                  <path id="mouthLowerLip" d="M190 253 Q210 260 230 253"
+                        fill="none" stroke="#b96f68" stroke-width="3.2" stroke-linecap="round" opacity=".42"/>
                 </g>
               </g>
             </svg>
@@ -2314,7 +2322,7 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
           </div>
         </div>
 
-        <div class="stage-caption"><strong>v0.28.1:</strong> Live Antworten</div>
+        <div class="stage-caption"><strong>v0.29.0:</strong> Live Antworten</div>
       </div>
 
       <div id="liveAnswerBar" class="live-answer-bar app-tab-section" data-app-view="studio">
@@ -2856,7 +2864,7 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
       </article>
         </section>
 
-        <div class="menu-version">Version <strong>0.28.1</strong></div>
+        <div class="menu-version">Version <strong>0.29.0</strong></div>
       </div>
     </aside>
 
@@ -2866,7 +2874,7 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
 (() => {
   "use strict";
 
-  const VERSION = "0.28.1";
+  const VERSION = "0.29.0";
 
   const avatarState = {
     version: VERSION,
@@ -2890,6 +2898,15 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
       mouthWidth: 100,
       mouthCornerLeft: 0,
       mouthCornerRight: 0,
+      expression: "neutral",
+      browLiftLeft: 0,
+      browLiftRight: 0,
+      browTiltLeft: 0,
+      browTiltRight: 0,
+      squintLeft: 0,
+      squintRight: 0,
+      cheekLift: 0,
+      mouthRound: 0,
       autoTalk: false
     },
 
@@ -3107,6 +3124,11 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
     lidBottomLeft: document.getElementById("lidBottomLeft"),
     lidTopRight: document.getElementById("lidTopRight"),
     lidBottomRight: document.getElementById("lidBottomRight"),
+    browLeft: document.getElementById("browLeft"),
+    browRight: document.getElementById("browRight"),
+    cheekLeft: document.getElementById("cheekLeft"),
+    cheekRight: document.getElementById("cheekRight"),
+    mouthLowerLip: document.getElementById("mouthLowerLip"),
     eyePad: document.getElementById("eyePad"),
     eyeKnob: document.getElementById("eyeKnob"),
     headPad: document.getElementById("headPad"),
@@ -4812,6 +4834,11 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
     ui.lidBottomLeft = document.getElementById("lidBottomLeft");
     ui.lidTopRight = document.getElementById("lidTopRight");
     ui.lidBottomRight = document.getElementById("lidBottomRight");
+    ui.browLeft = document.getElementById("browLeft");
+    ui.browRight = document.getElementById("browRight");
+    ui.cheekLeft = document.getElementById("cheekLeft");
+    ui.cheekRight = document.getElementById("cheekRight");
+    ui.mouthLowerLip = document.getElementById("mouthLowerLip");
     ui.mouthCover = document.getElementById("mouthCover");
     ui.mouthHole = document.getElementById("mouthHole");
     ui.tongueShape = document.getElementById("tongueShape");
@@ -5200,9 +5227,33 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
       ui.pupilRight.setAttribute("r", 7.5 * face.pupilScale);
     }
 
+    if(ui.browLeft){
+      ui.browLeft.setAttribute("transform",
+        "translate(0 "+(-Number(face.browLiftLeft||0)).toFixed(2)+") rotate("+
+        Number(face.browTiltLeft||0).toFixed(2)+" 151 116)");
+    }
+    if(ui.browRight){
+      ui.browRight.setAttribute("transform",
+        "translate(0 "+(-Number(face.browLiftRight||0)).toFixed(2)+") rotate("+
+        Number(face.browTiltRight||0).toFixed(2)+" 269 116)");
+    }
+
+    if(ui.cheekLeft && ui.cheekRight){
+      const cheek=Math.max(0,Math.min(100,Number(face.cheekLift||0)))/100;
+      const opacity=(cheek*.23).toFixed(3);
+      ui.cheekLeft.setAttribute("opacity",opacity);
+      ui.cheekRight.setAttribute("opacity",opacity);
+      ui.cheekLeft.setAttribute("transform","translate(0 "+(-cheek*5).toFixed(2)+")");
+      ui.cheekRight.setAttribute("transform","translate(0 "+(-cheek*5).toFixed(2)+")");
+    }
+
     const maxLid = 31;
-    const leftClose = Math.max(0, Math.min(100, face.blinkLeft)) / 100 * maxLid;
-    const rightClose = Math.max(0, Math.min(100, face.blinkRight)) / 100 * maxLid;
+    const leftBlink = Math.max(0, Math.min(100, face.blinkLeft)) / 100 * maxLid;
+    const rightBlink = Math.max(0, Math.min(100, face.blinkRight)) / 100 * maxLid;
+    const leftSquint=Math.max(0,Math.min(100,Number(face.squintLeft||0)))/100*8;
+    const rightSquint=Math.max(0,Math.min(100,Number(face.squintRight||0)))/100*8;
+    const leftClose = Math.min(maxLid,leftBlink+leftSquint);
+    const rightClose = Math.min(maxLid,rightBlink+rightSquint);
 
     if (ui.lidTopLeft && ui.lidBottomLeft) {
       ui.lidTopLeft.setAttribute("height", leftClose);
@@ -5227,12 +5278,13 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
       const baseY = 247;
       const widthScale = face.mouthWidth / 100;
       const halfWidth = 26 * widthScale;
-      const openRy = (face.mouthOpen / 100) * 15;
+      const roundness=Math.max(0,Math.min(100,Number(face.mouthRound||0)))/100;
+      const openRy = (face.mouthOpen / 100) * (15+roundness*8);
       const leftY = baseY - face.mouthCornerLeft * 0.55;
       const rightY = baseY - face.mouthCornerRight * 0.55;
-      const controlY = baseY - ((face.mouthCornerLeft + face.mouthCornerRight) / 2) * 0.40;
+      const controlY = baseY - ((face.mouthCornerLeft + face.mouthCornerRight) / 2) * 0.48;
 
-      ui.mouthHole.setAttribute("rx", halfWidth * 0.82);
+      ui.mouthHole.setAttribute("rx", halfWidth * (0.82-roundness*.25));
       ui.mouthHole.setAttribute("ry", openRy);
       ui.mouthHole.setAttribute("cy", baseY + 4);
 
@@ -5248,6 +5300,18 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
         " Q " + cx + " " + controlY +
         " " + (cx+halfWidth) + " " + rightY
       );
+
+      if(ui.mouthLowerLip){
+        const lipY=baseY+Math.max(5,openRy*.62);
+        ui.mouthLowerLip.setAttribute("d",
+          "M "+(cx-halfWidth*.62)+" "+lipY+
+          " Q "+cx+" "+(lipY+5+openRy*.12)+
+          " "+(cx+halfWidth*.62)+" "+lipY
+        );
+        ui.mouthLowerLip.setAttribute("opacity",
+          String(Math.min(.62,.28+(face.mouthOpen/100)*.34))
+        );
+      }
     }
 
     if (ui.eyeTouchValue) ui.eyeTouchValue.textContent = Math.round(face.lookX) + " / " + Math.round(face.lookY);
@@ -6612,15 +6676,42 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
       btn.classList.toggle("active", btn.dataset.mouth === mode);
     });
 
+    const face=avatarState.face;
+    face.expression=mode;
+
     if (mode === "smile") {
-      avatarState.face.mouthCornerLeft = 14;
-      avatarState.face.mouthCornerRight = 14;
+      face.mouthCornerLeft = 15;
+      face.mouthCornerRight = 15;
+      face.browLiftLeft = 3;
+      face.browLiftRight = 3;
+      face.browTiltLeft = -2;
+      face.browTiltRight = 2;
+      face.squintLeft = 22;
+      face.squintRight = 22;
+      face.cheekLift = 72;
+      face.mouthRound = 0;
     } else if (mode === "sad") {
-      avatarState.face.mouthCornerLeft = -14;
-      avatarState.face.mouthCornerRight = -14;
+      face.mouthCornerLeft = -15;
+      face.mouthCornerRight = -15;
+      face.browLiftLeft = 6;
+      face.browLiftRight = 6;
+      face.browTiltLeft = -10;
+      face.browTiltRight = 10;
+      face.squintLeft = 8;
+      face.squintRight = 8;
+      face.cheekLift = 10;
+      face.mouthRound = 8;
     } else {
-      avatarState.face.mouthCornerLeft = 0;
-      avatarState.face.mouthCornerRight = 0;
+      face.mouthCornerLeft = 0;
+      face.mouthCornerRight = 0;
+      face.browLiftLeft = 0;
+      face.browLiftRight = 0;
+      face.browTiltLeft = 0;
+      face.browTiltRight = 0;
+      face.squintLeft = 0;
+      face.squintRight = 0;
+      face.cheekLift = 0;
+      face.mouthRound = 0;
     }
     renderAvatar();
   }
@@ -6762,6 +6853,15 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
         avatarState.face.mouthWidth = 100;
         avatarState.face.mouthCornerLeft = 0;
         avatarState.face.mouthCornerRight = 0;
+        avatarState.face.expression = "neutral";
+        avatarState.face.browLiftLeft = 0;
+        avatarState.face.browLiftRight = 0;
+        avatarState.face.browTiltLeft = 0;
+        avatarState.face.browTiltRight = 0;
+        avatarState.face.squintLeft = 0;
+        avatarState.face.squintRight = 0;
+        avatarState.face.cheekLift = 0;
+        avatarState.face.mouthRound = 0;
         avatarState.head.rotation = 0;
         avatarState.head.tilt = 0;
         avatarState.head.sideLean = 0;
@@ -6812,7 +6912,7 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
     if (ui.menuButton) ui.menuButton.setAttribute("aria-expanded", open ? "true" : "false");
   }
 
-  // --- Figurenaufnahme v0.28.1 -------------------------------------------
+  // --- Figurenaufnahme v0.29.0 -------------------------------------------
   // Direkter Canvas-Renderer: keine langsame SVG->Bitmap-Konvertierung pro Frame.
   let avatarRecorder = null;
   let recorderChunks = [];
@@ -7134,7 +7234,8 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
     const widthScale=(face.mouthWidth||100)/100;
     const mouthScale=designer.mouthSize/100;
     const halfWidth=26*widthScale*mouthScale;
-    const openRy=(face.mouthOpen||0)/100*15*mouthScale;
+    const roundness=Math.max(0,Math.min(100,Number(face.mouthRound||0)))/100;
+    const openRy=(face.mouthOpen||0)/100*(15+roundness*8)*mouthScale;
     const baseY=247+designer.mouthY;
 
     if(openRy>0.25){
@@ -7687,9 +7788,17 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
 
     ctx.restore();
 
-    // brows
+    // premium brows
+    ctx.save();
+    ctx.translate(0,-Number(face.browLiftLeft||0));
+    ctx.translate(151,116);ctx.rotate(Number(face.browTiltLeft||0)*Math.PI/180);ctx.translate(-151,-116);
     ctx.beginPath();ctx.moveTo(112,121);ctx.quadraticCurveTo(151,102,190,119);ctx.strokeStyle="#2b1c15";ctx.lineWidth=9;ctx.lineCap="round";ctx.stroke();
-    ctx.beginPath();ctx.moveTo(230,119);ctx.quadraticCurveTo(269,102,308,121);ctx.stroke();
+    ctx.restore();
+    ctx.save();
+    ctx.translate(0,-Number(face.browLiftRight||0));
+    ctx.translate(269,116);ctx.rotate(Number(face.browTiltRight||0)*Math.PI/180);ctx.translate(-269,-116);
+    ctx.beginPath();ctx.moveTo(230,119);ctx.quadraticCurveTo(269,102,308,121);ctx.strokeStyle="#2b1c15";ctx.lineWidth=9;ctx.lineCap="round";ctx.stroke();
+    ctx.restore();
 
     // eyes
     const eyeScale=designer.eyeSize/100;
@@ -7701,9 +7810,24 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
     const pxOffset=getEffectiveLookX()*2+getEffectiveHeadLean()*0.12,pyOffset=getEffectiveLookY()*2;
     ctx.beginPath();ctx.arc(leftEyeX+pxOffset*eyeScale,eyeY+pyOffset*eyeScale,7.5*(face.pupilScale||1)*eyeScale,0,Math.PI*2);ctx.fillStyle="#050607";ctx.fill();
     ctx.beginPath();ctx.arc(rightEyeX+pxOffset*eyeScale,eyeY+pyOffset*eyeScale,7.5*(face.pupilScale||1)*eyeScale,0,Math.PI*2);ctx.fill();
-    const maxLid=31*eyeScale,lc=Math.max(0,Math.min(100,face.blinkLeft||0))/100*maxLid,rc=Math.max(0,Math.min(100,face.blinkRight||0))/100*maxLid;
+    const maxLid=31*eyeScale;
+    const lc=Math.min(maxLid,
+      Math.max(0,Math.min(100,face.blinkLeft||0))/100*maxLid+
+      Math.max(0,Math.min(100,face.squintLeft||0))/100*8*eyeScale);
+    const rc=Math.min(maxLid,
+      Math.max(0,Math.min(100,face.blinkRight||0))/100*maxLid+
+      Math.max(0,Math.min(100,face.squintRight||0))/100*8*eyeScale);
     ctx.save();ctx.beginPath();ctx.ellipse(leftEyeX,eyeY,eyeRx,eyeRy,0,0,Math.PI*2);ctx.clip();ctx.fillStyle=hexAdjust(designer.skinColor,-4);ctx.fillRect(leftEyeX-eyeRx-2,eyeY-eyeRy-2,eyeRx*2+4,lc);ctx.fillRect(leftEyeX-eyeRx-2,eyeY+eyeRy-lc,eyeRx*2+4,lc);ctx.restore();
     ctx.save();ctx.beginPath();ctx.ellipse(rightEyeX,eyeY,eyeRx,eyeRy,0,0,Math.PI*2);ctx.clip();ctx.fillStyle=hexAdjust(designer.skinColor,-4);ctx.fillRect(rightEyeX-eyeRx-2,eyeY-eyeRy-2,eyeRx*2+4,rc);ctx.fillRect(rightEyeX-eyeRx-2,eyeY+eyeRy-rc,eyeRx*2+4,rc);ctx.restore();
+
+    // cheek expression
+    const cheek=Math.max(0,Math.min(100,Number(face.cheekLift||0)))/100;
+    if(cheek>0){
+      ctx.save();ctx.globalAlpha=cheek*.23;ctx.fillStyle="#e88078";
+      ctx.beginPath();ctx.ellipse(133,210-cheek*5,25,12,0,0,Math.PI*2);ctx.fill();
+      ctx.beginPath();ctx.ellipse(287,210-cheek*5,25,12,0,0,Math.PI*2);ctx.fill();
+      ctx.restore();
+    }
 
     // glasses + lens tint
     ctx.save();ctx.translate(210,166+designer.glassesY);ctx.scale(designer.glassesSize/100,designer.glassesSize/100);ctx.translate(-210,-166);
