@@ -860,14 +860,14 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.21.2: Touch-Fix – JS darf den Kopf transformieren */
+/* v0.22: Touch-Fix – JS darf den Kopf transformieren */
 .avatar-head-module{
   will-change:transform;
   transition:transform 70ms linear;
 }
 
 
-/* v0.21.2: Kopfneigung über festen Cutout-Anker */
+/* v0.22: Kopfneigung über festen Cutout-Anker */
 .head-anchor{
   transform-origin:0 0;
   will-change:transform;
@@ -944,7 +944,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.21.2: Aufnahme sichtbar unter den Touchfeldern */
+/* v0.22: Aufnahme sichtbar unter den Touchfeldern */
 .record-workspace{
   margin-top:14px;
   border:1px solid rgba(255,255,255,.07);
@@ -992,7 +992,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.21.2: gleiche Figur auf Handy, Desktop und Aufnahme */
+/* v0.22: gleiche Figur auf Handy, Desktop und Aufnahme */
 .avatar-body{
   width:min(330px,65vw)!important;
   bottom:4px!important;
@@ -1018,7 +1018,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.21.2: sichtbare Arm-Regler auf der Hauptseite */
+/* v0.22: sichtbare Arm-Regler auf der Hauptseite */
 .arm-main-controls{
   margin-top:14px;
   border:1px solid rgba(39,200,255,.22);
@@ -1130,7 +1130,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.21.2: vier Charaktere */
+/* v0.22: vier Charaktere */
 .character-buttons{
   grid-template-columns:repeat(4,minmax(0,1fr));
 }
@@ -1520,7 +1520,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.21.2: Recorder-Format */
+/* v0.22: Recorder-Format */
 .record-format-choice{
   display:grid;
   grid-template-columns:auto minmax(150px,1fr);
@@ -1645,224 +1645,281 @@ body.menu-open{overflow:hidden}
 
           <!-- Kompletter Grundkörper: starr, Kopf bleibt eigenes Teil. -->
           <div id="torsoPart" class="avatar-body" aria-label="Avatar Körper">
-            <svg viewBox="0 0 420 620" role="img" aria-label="PS AI MUSIC Ganzkörper">
-              <!-- hintere Arme -->
+            <svg viewBox="0 0 420 620" role="img" aria-label="PS AI MUSIC Premium Ganzkörper">
+              <defs>
+                <linearGradient id="psHoodieGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#222933"/>
+                  <stop offset="48%" stop-color="#11161d"/>
+                  <stop offset="100%" stop-color="#070a0e"/>
+                </linearGradient>
+                <linearGradient id="psSleeveGrad" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="#080b10"/>
+                  <stop offset="52%" stop-color="#171d25"/>
+                  <stop offset="100%" stop-color="#07090d"/>
+                </linearGradient>
+                <linearGradient id="psJeanGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#557fc0"/>
+                  <stop offset="52%" stop-color="#3c639d"/>
+                  <stop offset="100%" stop-color="#294a78"/>
+                </linearGradient>
+                <linearGradient id="psShoeGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#ffffff"/>
+                  <stop offset="60%" stop-color="#e9edf2"/>
+                  <stop offset="100%" stop-color="#cdd4dc"/>
+                </linearGradient>
+                <linearGradient id="psSkinBodyGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#f4ba86"/>
+                  <stop offset="100%" stop-color="#d98d5d"/>
+                </linearGradient>
+                <linearGradient id="psMetalGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#f6fbff"/>
+                  <stop offset="40%" stop-color="#adb8c2"/>
+                  <stop offset="72%" stop-color="#eef3f7"/>
+                  <stop offset="100%" stop-color="#68727c"/>
+                </linearGradient>
+                <linearGradient id="psLogoGrad" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="#32dfff"/>
+                  <stop offset="50%" stop-color="#8e70ff"/>
+                  <stop offset="100%" stop-color="#ff52d8"/>
+                </linearGradient>
+              </defs>
+
+              <!-- Bodenschatten -->
+              <ellipse cx="210" cy="601" rx="126" ry="15" fill="#000" opacity=".28"/>
+
+              <!-- Arme: weiterhin starre Schulter-Cutouts -->
               <g id="leftArmBase">
-                <path d="M105 112
-                         Q76 124 61 168
-                         Q48 210 50 280
-                         Q52 335 73 365
-                         Q84 378 101 367
-                         Q116 356 111 335
-                         Q98 289 103 235
-                         Q108 179 132 153 Z"
-                      fill="#11161c" stroke="#05080c" stroke-width="9"/>
-                <ellipse cx="88" cy="374" rx="25" ry="28" fill="#efad73" stroke="#17110e" stroke-width="6"/>
+                <path d="M105 112 Q76 124 61 168 Q48 210 50 280 Q52 335 73 365
+                         Q84 378 101 367 Q116 356 111 335 Q98 289 103 235 Q108 179 132 153 Z"
+                      fill="url(#psSleeveGrad)" stroke="#05080c" stroke-width="9"/>
+                <path d="M76 155 Q62 214 67 294" fill="none" stroke="#343d49" stroke-width="4" opacity=".7" stroke-linecap="round"/>
+                <path d="M87 187 Q72 226 76 264" fill="none" stroke="#080b0f" stroke-width="3" opacity=".75"/>
+                <ellipse cx="88" cy="374" rx="25" ry="28" fill="url(#psSkinBodyGrad)" stroke="#17110e" stroke-width="6"/>
+                <path d="M72 369 Q88 381 104 369 M78 378 Q88 386 98 378"
+                      fill="none" stroke="#b96f48" stroke-width="3" stroke-linecap="round"/>
               </g>
 
               <g id="rightArmBase">
-                <path d="M315 112
-                         Q344 124 359 168
-                         Q372 210 370 280
-                         Q368 335 347 365
-                         Q336 378 319 367
-                         Q304 356 309 335
-                         Q322 289 317 235
-                         Q312 179 288 153 Z"
-                      fill="#11161c" stroke="#05080c" stroke-width="9"/>
-                <ellipse cx="332" cy="374" rx="25" ry="28" fill="#efad73" stroke="#17110e" stroke-width="6"/>
+                <path d="M315 112 Q344 124 359 168 Q372 210 370 280 Q368 335 347 365
+                         Q336 378 319 367 Q304 356 309 335 Q322 289 317 235 Q312 179 288 153 Z"
+                      fill="url(#psSleeveGrad)" stroke="#05080c" stroke-width="9"/>
+                <path d="M344 155 Q358 214 353 294" fill="none" stroke="#343d49" stroke-width="4" opacity=".7" stroke-linecap="round"/>
+                <path d="M333 187 Q348 226 344 264" fill="none" stroke="#080b0f" stroke-width="3" opacity=".75"/>
+                <ellipse cx="332" cy="374" rx="25" ry="28" fill="url(#psSkinBodyGrad)" stroke="#17110e" stroke-width="6"/>
+                <path d="M316 369 Q332 381 348 369 M322 378 Q332 386 342 378"
+                      fill="none" stroke="#b96f48" stroke-width="3" stroke-linecap="round"/>
               </g>
 
-              <!-- Oberkörper / Hoodie -->
-              <path d="M112 100
-                       Q150 64 210 62
-                       Q270 64 308 100
-                       Q332 123 339 171
-                       L330 344
-                       Q324 375 292 387
-                       L128 387
-                       Q96 375 90 344
-                       L81 171
+              <!-- Premium Hoodie -->
+              <path d="M112 100 Q150 64 210 62 Q270 64 308 100 Q332 123 339 171
+                       L330 344 Q324 375 292 387 L128 387 Q96 375 90 344 L81 171
                        Q88 123 112 100 Z"
-                    fill="#12171d" stroke="#05080c" stroke-width="10"/>
+                    fill="url(#psHoodieGrad)" stroke="#05080c" stroke-width="10"/>
+              <path d="M96 143 Q112 116 139 98 Q121 192 127 332"
+                    fill="#fff" opacity=".035"/>
+              <path d="M324 144 Q310 116 282 98 Q299 194 292 333"
+                    fill="#000" opacity=".22"/>
 
-              <!-- Hoodie-Kragen -->
-              <path d="M112 115
-                       Q145 75 210 79
-                       Q275 75 308 115
-                       Q276 104 253 116
-                       Q231 127 210 146
-                       Q189 127 167 116
+              <!-- Kapuzenkragen -->
+              <path d="M112 115 Q145 75 210 79 Q275 75 308 115
+                       Q276 104 253 116 Q231 127 210 146 Q189 127 167 116
                        Q144 104 112 115 Z"
-                    fill="#20262e" stroke="#070a0e" stroke-width="8"/>
+                    fill="#252c36" stroke="#070a0e" stroke-width="8"/>
+              <path d="M128 111 Q163 88 210 95 Q257 88 292 111"
+                    fill="none" stroke="#46515e" stroke-width="3" opacity=".65"/>
 
-              <!-- schwarzes Shirt -->
-              <path d="M158 129
-                       Q180 148 210 153
-                       Q240 148 262 129
-                       L273 377
-                       L147 377 Z"
-                    fill="#070910"/>
+              <!-- Shirt -->
+              <path d="M158 129 Q180 148 210 153 Q240 148 262 129 L273 377 L147 377 Z"
+                    fill="#06080c"/>
+              <path d="M169 151 Q210 165 251 151" fill="none" stroke="#1a2028" stroke-width="4"/>
+
+              <!-- Zipper / Hoodie-Nähte -->
+              <path d="M143 139 Q132 229 137 350 M277 139 Q288 229 283 350"
+                    fill="none" stroke="#343c47" stroke-width="3" opacity=".7"/>
+              <path d="M109 281 Q141 267 167 283 M311 281 Q279 267 253 283"
+                    fill="none" stroke="#303944" stroke-width="3" opacity=".7"/>
 
               <!-- Kette -->
-              <path d="M154 151
-                       Q164 204 210 217
-                       Q256 204 266 151"
-                    fill="none" stroke="#b8c0c8" stroke-width="5" stroke-linecap="round"/>
-              <path d="M158 156
-                       Q170 198 210 209
-                       Q250 198 262 156"
-                    fill="none" stroke="#6f7882" stroke-width="3" stroke-linecap="round"/>
+              <path d="M154 151 Q164 204 210 217 Q256 204 266 151"
+                    fill="none" stroke="url(#psMetalGrad)" stroke-width="5.5" stroke-linecap="round"/>
+              <path d="M158 156 Q170 198 210 209 Q250 198 262 156"
+                    fill="none" stroke="#68727c" stroke-width="2.5" stroke-linecap="round"/>
+              <g transform="translate(210 222)">
+                <circle r="10" fill="#0a0d12" stroke="url(#psMetalGrad)" stroke-width="4"/>
+                <path d="M-4 0 H4 M0 -4 V4" stroke="#e8edf2" stroke-width="2.2" stroke-linecap="round"/>
+              </g>
+
+              <!-- dezentes Branding -->
+              <g transform="translate(210 268)">
+                <path d="M-49 -8 Q-33 -27 -13 -15 Q0 -34 14 -15 Q34 -27 50 -8"
+                      fill="none" stroke="url(#psLogoGrad)" stroke-width="4.5" stroke-linecap="round"/>
+                <text x="0" y="27" text-anchor="middle" fill="#b9dbe8"
+                      font-size="20" font-weight="900" font-family="Arial, sans-serif">PS AI MUSIC</text>
+              </g>
 
               <!-- Bund -->
               <path d="M130 375 Q210 389 290 375 L298 407 Q210 420 122 407 Z"
                     fill="#0b0e12" stroke="#05080c" stroke-width="7"/>
+              <path d="M137 386 Q210 399 283 386" fill="none" stroke="#303741" stroke-width="3"/>
 
-              <!-- Jeans Hüfte -->
-              <path d="M130 405
-                       Q210 419 290 405
-                       L292 450
-                       Q210 463 128 450 Z"
-                    fill="#476fae" stroke="#27466f" stroke-width="8"/>
+              <!-- Jeans -->
+              <path d="M130 405 Q210 419 290 405 L292 450 Q210 463 128 450 Z"
+                    fill="url(#psJeanGrad)" stroke="#27466f" stroke-width="8"/>
+              <path d="M136 418 Q166 436 197 431 M284 418 Q254 436 223 431"
+                    fill="none" stroke="#87a3d0" stroke-width="3" opacity=".7"/>
 
-              <!-- linkes Jeansbein -->
-              <path d="M128 443
-                       L202 450
-                       L195 566
-                       Q194 583 177 587
-                       L142 587
-                       Q125 582 126 565 Z"
-                    fill="#4f79bc" stroke="#294b79" stroke-width="8"/>
-              <path d="M142 475 Q170 468 197 476" fill="none" stroke="#648bd0" stroke-width="5" opacity=".75"/>
+              <path d="M128 443 L202 450 L195 566 Q194 583 177 587 L142 587 Q125 582 126 565 Z"
+                    fill="url(#psJeanGrad)" stroke="#294b79" stroke-width="8"/>
+              <path d="M218 450 L292 443 L294 565 Q295 582 278 587 L243 587 Q226 583 225 566 Z"
+                    fill="url(#psJeanGrad)" stroke="#294b79" stroke-width="8"/>
 
-              <!-- rechtes Jeansbein -->
-              <path d="M218 450
-                       L292 443
-                       L294 565
-                       Q295 582 278 587
-                       L243 587
-                       Q226 583 225 566 Z"
-                    fill="#4f79bc" stroke="#294b79" stroke-width="8"/>
-              <path d="M223 476 Q250 468 278 475" fill="none" stroke="#648bd0" stroke-width="5" opacity=".75"/>
+              <!-- Jeans-Falten / Nähte -->
+              <path d="M142 475 Q170 468 197 476 M223 476 Q250 468 278 475"
+                    fill="none" stroke="#7898ca" stroke-width="4" opacity=".72"/>
+              <path d="M151 516 Q171 507 191 514 M229 514 Q249 507 269 516"
+                    fill="none" stroke="#315887" stroke-width="3"/>
+              <path d="M190 454 L184 566 M230 454 L236 566"
+                    fill="none" stroke="#88a3cb" stroke-width="2.5" opacity=".5" stroke-dasharray="7 7"/>
 
-              <!-- Schuhe links -->
-              <path d="M123 572
-                       Q143 560 188 565
-                       Q204 568 210 589
-                       L207 606
-                       Q164 614 118 604
-                       Q108 596 112 585
-                       Q115 578 123 572 Z"
-                    fill="#f5f7fb" stroke="#c8ced7" stroke-width="7"/>
-              <path d="M137 586 L190 590" stroke="#aeb5bf" stroke-width="4" stroke-linecap="round"/>
-              <path d="M132 597 L193 601" stroke="#aeb5bf" stroke-width="4" stroke-linecap="round"/>
-
-              <!-- Schuhe rechts -->
-              <path d="M297 572
-                       Q277 560 232 565
-                       Q216 568 210 589
-                       L213 606
-                       Q256 614 302 604
-                       Q312 596 308 585
-                       Q305 578 297 572 Z"
-                    fill="#f5f7fb" stroke="#c8ced7" stroke-width="7"/>
-              <path d="M283 586 L230 590" stroke="#aeb5bf" stroke-width="4" stroke-linecap="round"/>
-              <path d="M288 597 L227 601" stroke="#aeb5bf" stroke-width="4" stroke-linecap="round"/>
+              <!-- Premium Sneaker -->
+              <path d="M123 572 Q143 560 188 565 Q204 568 210 589 L207 606
+                       Q164 614 118 604 Q108 596 112 585 Q115 578 123 572 Z"
+                    fill="url(#psShoeGrad)" stroke="#b8c1ca" stroke-width="7"/>
+              <path d="M297 572 Q277 560 232 565 Q216 568 210 589 L213 606
+                       Q256 614 302 604 Q312 596 308 585 Q305 578 297 572 Z"
+                    fill="url(#psShoeGrad)" stroke="#b8c1ca" stroke-width="7"/>
+              <path d="M137 584 L190 590 M132 595 L193 601 M283 584 L230 590 M288 595 L227 601"
+                    fill="none" stroke="#8b98a5" stroke-width="3.5" stroke-linecap="round"/>
+              <path d="M120 603 Q163 612 206 604 M300 603 Q257 612 214 604"
+                    fill="none" stroke="#8f9ba7" stroke-width="4"/>
             </svg>
           </div>
 
           <!-- Kopf: eigenes transparentes Cutout-Teil. -->
           <div id="headAnchor" class="head-anchor">
           <div id="headPart" class="avatar-head-module" aria-label="Avatar Kopf">
-            <svg viewBox="0 0 420 360" role="img" aria-label="PS AI MUSIC Cartoon Kopf">
+            <svg viewBox="0 0 420 360" role="img" aria-label="PS AI MUSIC Premium Kopf">
               <defs>
-                <clipPath id="eyeClipLeft"><ellipse cx="155" cy="164" rx="38" ry="31"/></clipPath>
-                <clipPath id="eyeClipRight"><ellipse cx="265" cy="164" rx="38" ry="31"/></clipPath>
+                <clipPath id="eyeClipLeft"><ellipse cx="155" cy="164" rx="40" ry="33"/></clipPath>
+                <clipPath id="eyeClipRight"><ellipse cx="265" cy="164" rx="40" ry="33"/></clipPath>
+                <linearGradient id="psSkinHeadGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#f5bc88"/>
+                  <stop offset="52%" stop-color="#eca978"/>
+                  <stop offset="100%" stop-color="#d58a5c"/>
+                </linearGradient>
+                <linearGradient id="psCapGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#252b34"/>
+                  <stop offset="55%" stop-color="#12161c"/>
+                  <stop offset="100%" stop-color="#07090d"/>
+                </linearGradient>
+                <linearGradient id="psBeardGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#4a3931"/>
+                  <stop offset="48%" stop-color="#32251f"/>
+                  <stop offset="100%" stop-color="#18120f"/>
+                </linearGradient>
+                <linearGradient id="psLensGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#9dddf2" stop-opacity=".16"/>
+                  <stop offset="45%" stop-color="#ffffff" stop-opacity=".025"/>
+                  <stop offset="100%" stop-color="#55a4c6" stop-opacity=".10"/>
+                </linearGradient>
               </defs>
 
               <g id="headMotionGroup">
                 <!-- Ohren -->
-                <ellipse cx="76" cy="169" rx="27" ry="42" fill="#efad73" stroke="#18120f" stroke-width="7"/>
-                <ellipse cx="344" cy="169" rx="27" ry="42" fill="#efad73" stroke="#18120f" stroke-width="7"/>
-                <path d="M73 159 Q58 170 74 187" fill="none" stroke="#b8784d" stroke-width="5" stroke-linecap="round"/>
-                <path d="M347 159 Q362 170 346 187" fill="none" stroke="#b8784d" stroke-width="5" stroke-linecap="round"/>
+                <ellipse cx="76" cy="169" rx="27" ry="42" fill="url(#psSkinHeadGrad)" stroke="#4b3022" stroke-width="7"/>
+                <ellipse cx="344" cy="169" rx="27" ry="42" fill="url(#psSkinHeadGrad)" stroke="#4b3022" stroke-width="7"/>
+                <path d="M73 157 Q59 170 75 189" fill="none" stroke="#b66f49" stroke-width="4.5" stroke-linecap="round"/>
+                <path d="M347 157 Q361 170 345 189" fill="none" stroke="#b66f49" stroke-width="4.5" stroke-linecap="round"/>
 
-                <!-- Gesicht -->
-                <ellipse cx="210" cy="166" rx="137" ry="145" fill="#efad73" stroke="#17120f" stroke-width="8"/>
+                <!-- Gesicht mit etwas stärkerem Kiefer -->
+                <path d="M210 24
+                         C132 19 79 69 75 153
+                         C71 235 114 309 210 346
+                         C306 309 349 235 345 153
+                         C341 69 288 19 210 24 Z"
+                      fill="url(#psSkinHeadGrad)" stroke="#3b291f" stroke-width="8"/>
+
+                <!-- subtile Gesichtstiefe -->
+                <path d="M97 151 Q96 231 137 286" fill="none" stroke="#9b5b3e" stroke-width="15" opacity=".13" stroke-linecap="round"/>
+                <path d="M323 149 Q326 224 287 281" fill="none" stroke="#fff" stroke-width="11" opacity=".075" stroke-linecap="round"/>
+                <path d="M136 201 Q154 212 176 207 M284 201 Q266 212 244 207"
+                      fill="none" stroke="#a86445" stroke-width="3" opacity=".35" stroke-linecap="round"/>
 
                 <!-- Cap -->
-                <path d="M89 105
-                         Q91 37 145 19
-                         Q210 -2 275 19
-                         Q329 37 331 105
-                         Q289 80 210 80
-                         Q131 80 89 105 Z"
-                      fill="#20252c" stroke="#07090c" stroke-width="9"/>
+                <path d="M89 105 Q91 37 145 19 Q210 -2 275 19 Q329 37 331 105
+                         Q289 80 210 80 Q131 80 89 105 Z"
+                      fill="url(#psCapGrad)" stroke="#05070a" stroke-width="9"/>
                 <path d="M102 90 Q210 62 318 90 Q285 114 210 118 Q135 114 102 90 Z"
-                      fill="#101419" stroke="#07090c" stroke-width="8"/>
-                <path d="M210 12 L210 77" stroke="#0a0d11" stroke-width="5"/>
-                <path d="M143 25 Q133 55 135 83" fill="none" stroke="#0a0d11" stroke-width="5"/>
-                <path d="M277 25 Q287 55 285 83" fill="none" stroke="#0a0d11" stroke-width="5"/>
+                      fill="#090c11" stroke="#05070a" stroke-width="8"/>
+                <path d="M210 12 L210 77 M143 25 Q133 55 135 83 M277 25 Q287 55 285 83"
+                      fill="none" stroke="#070a0e" stroke-width="5"/>
+                <path d="M111 76 Q151 41 205 36 Q260 41 307 78"
+                      fill="none" stroke="#4a535e" stroke-width="3" opacity=".5" stroke-linecap="round"/>
+                <path d="M116 91 Q210 69 305 92" fill="none" stroke="#fff" stroke-width="2.5" opacity=".08"/>
 
                 <!-- Bart -->
-                <path d="M88 178
-                         Q97 236 122 280
-                         Q149 325 210 346
-                         Q271 325 298 280
-                         Q323 236 332 178
-                         Q309 207 279 220
-                         Q249 234 210 235
-                         Q171 234 141 220
-                         Q111 207 88 178 Z"
-                      fill="#352821" stroke="#17120f" stroke-width="7"/>
-                <path d="M110 194 Q102 233 127 272" fill="none" stroke="#72645d" stroke-width="6" stroke-linecap="round"/>
-                <path d="M310 194 Q318 233 293 272" fill="none" stroke="#72645d" stroke-width="6" stroke-linecap="round"/>
-                <path d="M153 248 Q170 292 210 325 Q250 292 267 248"
-                      fill="none" stroke="#6f625b" stroke-width="7" stroke-linecap="round"/>
-                <path d="M176 269 Q191 303 210 317 Q229 303 244 269"
-                      fill="none" stroke="#211914" stroke-width="7" stroke-linecap="round"/>
+                <path d="M88 178 Q97 236 122 280 Q149 325 210 346 Q271 325 298 280
+                         Q323 236 332 178 Q309 207 279 220 Q249 234 210 235
+                         Q171 234 141 220 Q111 207 88 178 Z"
+                      fill="url(#psBeardGrad)" stroke="#17120f" stroke-width="7"/>
+                <path d="M109 194 Q104 232 128 273 M311 194 Q316 232 292 273"
+                      fill="none" stroke="#796a62" stroke-width="5" opacity=".78" stroke-linecap="round"/>
+                <path d="M151 247 Q169 292 210 326 Q251 292 269 247"
+                      fill="none" stroke="#75675f" stroke-width="5.5" opacity=".85" stroke-linecap="round"/>
+                <path d="M177 267 Q191 301 210 317 Q229 301 243 267"
+                      fill="none" stroke="#211914" stroke-width="6" stroke-linecap="round"/>
+                <path d="M131 231 Q143 257 153 278 M289 231 Q277 257 267 278"
+                      fill="none" stroke="#5d4d46" stroke-width="3" opacity=".72" stroke-linecap="round"/>
 
                 <!-- Augenbrauen -->
-                <path d="M111 119 Q153 98 190 118" fill="none" stroke="#2b1c15" stroke-width="11" stroke-linecap="round"/>
-                <path d="M230 118 Q267 98 309 119" fill="none" stroke="#2b1c15" stroke-width="11" stroke-linecap="round"/>
+                <path d="M112 121 Q151 102 190 119" fill="none" stroke="#2b1c15" stroke-width="9" stroke-linecap="round"/>
+                <path d="M230 119 Q269 102 308 121" fill="none" stroke="#2b1c15" stroke-width="9" stroke-linecap="round"/>
+                <path d="M120 117 Q151 108 182 118 M238 118 Q269 108 300 117"
+                      fill="none" stroke="#6a4837" stroke-width="2.5" opacity=".7"/>
 
                 <!-- Augen -->
                 <g id="eyesModule">
-                  <ellipse cx="155" cy="164" rx="40" ry="33" fill="#fff"/>
-                  <ellipse cx="265" cy="164" rx="40" ry="33" fill="#fff"/>
+                  <ellipse cx="155" cy="164" rx="40" ry="33" fill="#fdfdfb"/>
+                  <ellipse cx="265" cy="164" rx="40" ry="33" fill="#fdfdfb"/>
+                  <path d="M118 158 Q155 132 192 158 M228 158 Q265 132 302 158"
+                        fill="none" stroke="#b36f4a" stroke-width="3" opacity=".42"/>
 
                   <g clip-path="url(#eyeClipLeft)">
-                    <circle id="pupilLeft" cx="155" cy="164" r="7.5" fill="#000"/>
-                    <rect id="lidTopLeft" x="114" y="129" width="82" height="0" fill="#efad73"/>
-                    <rect id="lidBottomLeft" x="114" y="198" width="82" height="0" fill="#efad73"/>
+                    <circle id="pupilLeft" cx="155" cy="164" r="7.5" fill="#050607"/>
+                    <rect id="lidTopLeft" x="114" y="129" width="82" height="0" fill="#e8a575"/>
+                    <rect id="lidBottomLeft" x="114" y="198" width="82" height="0" fill="#e8a575"/>
                   </g>
 
                   <g clip-path="url(#eyeClipRight)">
-                    <circle id="pupilRight" cx="265" cy="164" r="7.5" fill="#000"/>
-                    <rect id="lidTopRight" x="224" y="129" width="82" height="0" fill="#efad73"/>
-                    <rect id="lidBottomRight" x="224" y="198" width="82" height="0" fill="#efad73"/>
+                    <circle id="pupilRight" cx="265" cy="164" r="7.5" fill="#050607"/>
+                    <rect id="lidTopRight" x="224" y="129" width="82" height="0" fill="#e8a575"/>
+                    <rect id="lidBottomRight" x="224" y="198" width="82" height="0" fill="#e8a575"/>
                   </g>
                 </g>
 
-                <!-- Brille -->
-                <g fill="none" stroke="#0a0b0d" stroke-width="9">
-                  <rect x="99" y="132" width="106" height="70" rx="28"/>
-                  <rect x="215" y="132" width="106" height="70" rx="28"/>
-                  <path d="M205 157 Q210 151 215 157"/>
-                  <path d="M99 151 L69 143"/>
-                  <path d="M321 151 L351 143"/>
+                <!-- Brille mit leichtem Glas -->
+                <g stroke="#07090c" stroke-width="9">
+                  <rect x="99" y="132" width="106" height="70" rx="25" fill="url(#psLensGrad)"/>
+                  <rect x="215" y="132" width="106" height="70" rx="25" fill="url(#psLensGrad)"/>
+                  <path d="M205 157 Q210 151 215 157" fill="none"/>
+                  <path d="M99 151 L69 143 M321 151 L351 143" fill="none"/>
                 </g>
+                <path d="M112 142 L155 136 M229 142 L272 136"
+                      fill="none" stroke="#fff" stroke-width="3" opacity=".17" stroke-linecap="round"/>
 
                 <!-- Nase -->
                 <path d="M210 167 L199 205 Q210 214 221 205"
-                      fill="none" stroke="#b9794e" stroke-width="6" stroke-linecap="round"/>
+                      fill="none" stroke="#a96948" stroke-width="5.5" stroke-linecap="round"/>
+                <path d="M205 207 Q210 211 216 207" fill="none" stroke="#6f4430" stroke-width="2.5"/>
 
                 <!-- Schnurrbart -->
                 <path d="M163 226 Q184 205 210 219 Q236 205 257 226
                          Q236 237 210 233 Q184 237 163 226 Z"
                       fill="#211814"/>
+                <path d="M171 224 Q190 217 207 224 M213 224 Q230 217 249 224"
+                      fill="none" stroke="#66564e" stroke-width="2.5" opacity=".7"/>
 
-                <!-- Reaktiver Mund: kein alter Mund darunter -->
+                <!-- Dynamischer Mund -->
                 <g id="mouthModule">
                   <ellipse id="mouthHole" cx="210" cy="247" rx="0" ry="0" fill="#070707"/>
                   <ellipse id="tongueShape" cx="210" cy="254" rx="0" ry="0" fill="#c9656c" opacity="0"/>
@@ -1875,8 +1932,7 @@ body.menu-open{overflow:hidden}
           </div>
         </div>
 
-        <div class="stage-caption">
-          <strong>Schritt 20:</strong> Background-System v1</div>
+        <div class="stage-caption"><strong>v0.22:</strong> PS Avatar Premium</div>
       </div>
     </section>
 
@@ -2224,7 +2280,7 @@ body.menu-open{overflow:hidden}
       </article>
         </section>
 
-        <div class="menu-version">Version <strong>0.21.2</strong></div>
+        <div class="menu-version">Version <strong>0.22</strong></div>
       </div>
     </aside>
 
@@ -2234,7 +2290,7 @@ body.menu-open{overflow:hidden}
 (() => {
   "use strict";
 
-  const VERSION = "0.21.2";
+  const VERSION = "0.22";
 
   const avatarState = {
     version: VERSION,
@@ -4534,7 +4590,7 @@ body.menu-open{overflow:hidden}
     if (ui.menuButton) ui.menuButton.setAttribute("aria-expanded", open ? "true" : "false");
   }
 
-  // --- Figurenaufnahme v0.21.2 -------------------------------------------
+  // --- Figurenaufnahme v0.22 -------------------------------------------
   // Direkter Canvas-Renderer: keine langsame SVG->Bitmap-Konvertierung pro Frame.
   let avatarRecorder = null;
   let recorderChunks = [];
@@ -5125,7 +5181,6 @@ body.menu-open{overflow:hidden}
       return;
     }
 
-    // entspricht ca. 330px Körperbreite im Live-Avatar
     const s=0.7857;
     const x=360-210*s;
     const y=900-620*s;
@@ -5137,55 +5192,84 @@ body.menu-open{overflow:hidden}
     const leftArmAngle=getEffectiveLeftArmAngle();
     const rightArmAngle=getEffectiveRightArmAngle();
 
-    // Linker Arm + Hand als ein starres Cutout-Teil.
+    // floor shadow
+    ctx.beginPath();ctx.ellipse(210,601,126,15,0,0,Math.PI*2);
+    ctx.fillStyle="rgba(0,0,0,.28)";ctx.fill();
+
+    const sleeveGrad=ctx.createLinearGradient(55,0,130,0);
+    sleeveGrad.addColorStop(0,"#080b10");sleeveGrad.addColorStop(.52,"#171d25");sleeveGrad.addColorStop(1,"#07090d");
+
+    const skinGrad=ctx.createLinearGradient(65,340,110,395);
+    skinGrad.addColorStop(0,"#f4ba86");skinGrad.addColorStop(1,"#d98d5d");
+
+    // arms
     ctx.save();
-    ctx.translate(112,112);
-    ctx.rotate(leftArmAngle*Math.PI/180);
-    ctx.translate(-112,-112);
-    fillStrokePath(ctx,BODY_PATHS.leftArm,"#11161c","#05080c",9);
-    ctx.beginPath();ctx.ellipse(88,374,25,28,0,0,Math.PI*2);
-    ctx.fillStyle="#efad73";ctx.fill();ctx.strokeStyle="#17110e";ctx.lineWidth=6;ctx.stroke();
+    ctx.translate(112,112);ctx.rotate(leftArmAngle*Math.PI/180);ctx.translate(-112,-112);
+    fillStrokePath(ctx,BODY_PATHS.leftArm,sleeveGrad,"#05080c",9);
+    strokeLine(ctx,[[76,155],[64,216],[67,294]],"#343d49",4);
+    ctx.beginPath();ctx.ellipse(88,374,25,28,0,0,Math.PI*2);ctx.fillStyle=skinGrad;ctx.fill();ctx.strokeStyle="#17110e";ctx.lineWidth=6;ctx.stroke();
     ctx.restore();
 
-    // Rechter Arm + Hand als ein starres Cutout-Teil.
     ctx.save();
-    ctx.translate(308,112);
-    ctx.rotate(rightArmAngle*Math.PI/180);
-    ctx.translate(-308,-112);
-    fillStrokePath(ctx,BODY_PATHS.rightArm,"#11161c","#05080c",9);
-    ctx.beginPath();ctx.ellipse(332,374,25,28,0,0,Math.PI*2);
-    ctx.fillStyle="#efad73";ctx.fill();ctx.strokeStyle="#17110e";ctx.lineWidth=6;ctx.stroke();
+    ctx.translate(308,112);ctx.rotate(rightArmAngle*Math.PI/180);ctx.translate(-308,-112);
+    fillStrokePath(ctx,BODY_PATHS.rightArm,sleeveGrad,"#05080c",9);
+    strokeLine(ctx,[[344,155],[356,216],[353,294]],"#343d49",4);
+    ctx.beginPath();ctx.ellipse(332,374,25,28,0,0,Math.PI*2);ctx.fillStyle=skinGrad;ctx.fill();ctx.strokeStyle="#17110e";ctx.lineWidth=6;ctx.stroke();
     ctx.restore();
 
-    fillStrokePath(ctx,BODY_PATHS.torso,"#12171d","#05080c",10);
-    fillStrokePath(ctx,BODY_PATHS.collar,"#20262e","#070a0e",8);
-    fillStrokePath(ctx,BODY_PATHS.shirt,"#070910",null,0);
+    const hoodieGrad=ctx.createLinearGradient(95,90,320,380);
+    hoodieGrad.addColorStop(0,"#222933");hoodieGrad.addColorStop(.48,"#11161d");hoodieGrad.addColorStop(1,"#070a0e");
+    fillStrokePath(ctx,BODY_PATHS.torso,hoodieGrad,"#05080c",10);
+    fillStrokePath(ctx,BODY_PATHS.collar,"#252c36","#070a0e",8);
+    fillStrokePath(ctx,BODY_PATHS.shirt,"#06080c",null,0);
 
+    // hoodie seams + pockets
+    strokeLine(ctx,[[143,139],[137,245],[137,350]],"#343c47",3);
+    strokeLine(ctx,[[277,139],[283,245],[283,350]],"#343c47",3);
+    ctx.beginPath();ctx.moveTo(109,281);ctx.quadraticCurveTo(141,267,167,283);ctx.strokeStyle="#303944";ctx.lineWidth=3;ctx.stroke();
+    ctx.beginPath();ctx.moveTo(311,281);ctx.quadraticCurveTo(279,267,253,283);ctx.stroke();
+
+    // chain
+    const metal=ctx.createLinearGradient(150,150,270,220);
+    metal.addColorStop(0,"#f6fbff");metal.addColorStop(.42,"#adb8c2");metal.addColorStop(.72,"#eef3f7");metal.addColorStop(1,"#68727c");
     ctx.beginPath();ctx.moveTo(154,151);ctx.quadraticCurveTo(164,204,210,217);ctx.quadraticCurveTo(256,204,266,151);
-    ctx.strokeStyle="#b8c0c8";ctx.lineWidth=5;ctx.lineCap="round";ctx.stroke();
-    ctx.beginPath();ctx.moveTo(158,156);ctx.quadraticCurveTo(170,198,210,209);ctx.quadraticCurveTo(250,198,262,156);
-    ctx.strokeStyle="#6f7882";ctx.lineWidth=3;ctx.stroke();
+    ctx.strokeStyle=metal;ctx.lineWidth=5.5;ctx.lineCap="round";ctx.stroke();
+    ctx.beginPath();ctx.arc(210,222,10,0,Math.PI*2);ctx.fillStyle="#0a0d12";ctx.fill();ctx.strokeStyle="#d6dde3";ctx.lineWidth=3;ctx.stroke();
+
+    // subtle logo
+    const logoGrad=ctx.createLinearGradient(160,0,260,0);
+    logoGrad.addColorStop(0,"#32dfff");logoGrad.addColorStop(.5,"#8e70ff");logoGrad.addColorStop(1,"#ff52d8");
+    ctx.strokeStyle=logoGrad;ctx.lineWidth=4.5;ctx.beginPath();ctx.moveTo(161,260);ctx.quadraticCurveTo(177,241,197,253);ctx.quadraticCurveTo(210,234,224,253);ctx.quadraticCurveTo(244,241,260,260);ctx.stroke();
+    ctx.fillStyle="#b9dbe8";ctx.font="900 20px Arial";ctx.textAlign="center";ctx.fillText("PS AI MUSIC",210,295);
 
     fillStrokePath(ctx,BODY_PATHS.waist,"#0b0e12","#05080c",7);
-    fillStrokePath(ctx,BODY_PATHS.hips,"#476fae","#27466f",8);
-    fillStrokePath(ctx,BODY_PATHS.leftLeg,"#4f79bc","#294b79",8);
-    fillStrokePath(ctx,BODY_PATHS.rightLeg,"#4f79bc","#294b79",8);
 
-    ctx.beginPath();ctx.moveTo(142,475);ctx.quadraticCurveTo(170,468,197,476);
-    ctx.strokeStyle="#648bd0";ctx.globalAlpha=.75;ctx.lineWidth=5;ctx.stroke();
+    const jeanGrad=ctx.createLinearGradient(0,405,0,590);
+    jeanGrad.addColorStop(0,"#557fc0");jeanGrad.addColorStop(.52,"#3c639d");jeanGrad.addColorStop(1,"#294a78");
+    fillStrokePath(ctx,BODY_PATHS.hips,jeanGrad,"#27466f",8);
+    fillStrokePath(ctx,BODY_PATHS.leftLeg,jeanGrad,"#294b79",8);
+    fillStrokePath(ctx,BODY_PATHS.rightLeg,jeanGrad,"#294b79",8);
+
+    ctx.strokeStyle="#7898ca";ctx.lineWidth=4;ctx.globalAlpha=.72;
+    ctx.beginPath();ctx.moveTo(142,475);ctx.quadraticCurveTo(170,468,197,476);ctx.stroke();
     ctx.beginPath();ctx.moveTo(223,476);ctx.quadraticCurveTo(250,468,278,475);ctx.stroke();
     ctx.globalAlpha=1;
+    ctx.setLineDash([7,7]);ctx.strokeStyle="rgba(136,163,203,.5)";ctx.lineWidth=2.5;
+    ctx.beginPath();ctx.moveTo(190,454);ctx.lineTo(184,566);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(230,454);ctx.lineTo(236,566);ctx.stroke();
+    ctx.setLineDash([]);
 
-    fillStrokePath(ctx,BODY_PATHS.leftShoe,"#f5f7fb","#c8ced7",7);
-    fillStrokePath(ctx,BODY_PATHS.rightShoe,"#f5f7fb","#c8ced7",7);
-    strokeLine(ctx,[[137,586],[190,590]],"#aeb5bf",4);
-    strokeLine(ctx,[[132,597],[193,601]],"#aeb5bf",4);
-    strokeLine(ctx,[[283,586],[230,590]],"#aeb5bf",4);
-    strokeLine(ctx,[[288,597],[227,601]],"#aeb5bf",4);
+    const shoeGrad=ctx.createLinearGradient(0,565,0,608);
+    shoeGrad.addColorStop(0,"#fff");shoeGrad.addColorStop(.6,"#e9edf2");shoeGrad.addColorStop(1,"#cdd4dc");
+    fillStrokePath(ctx,BODY_PATHS.leftShoe,shoeGrad,"#b8c1ca",7);
+    fillStrokePath(ctx,BODY_PATHS.rightShoe,shoeGrad,"#b8c1ca",7);
+    strokeLine(ctx,[[137,584],[190,590]],"#8b98a5",3.5);
+    strokeLine(ctx,[[132,595],[193,601]],"#8b98a5",3.5);
+    strokeLine(ctx,[[283,584],[230,590]],"#8b98a5",3.5);
+    strokeLine(ctx,[[288,595],[227,601]],"#8b98a5",3.5);
 
     ctx.restore();
   }
-
   function drawRecordedHead(ctx) {
     if (avatarState.character === "bear") {
       drawRecordedBearHead(ctx);
@@ -5202,11 +5286,9 @@ body.menu-open{overflow:hidden}
 
     const face=avatarState.face;
     const head=avatarState.head;
-    // entspricht ca. 275px Kopfbreite im Live-Avatar
     const s=0.6548;
     const anchorX=360;
-    // Kopf bewusst tiefer: Bart überlappt den Hoodie wie in der Live-Ansicht.
-    const anchorY=550 + (head.idleLift||0);
+    const anchorY=550+(head.idleLift||0);
     const lean=getEffectiveHeadLean();
 
     ctx.save();
@@ -5215,70 +5297,75 @@ body.menu-open{overflow:hidden}
     ctx.scale(s,s);
     ctx.translate(-210,-360);
 
+    const skin=ctx.createLinearGradient(90,50,330,320);
+    skin.addColorStop(0,"#f5bc88");skin.addColorStop(.52,"#eca978");skin.addColorStop(1,"#d58a5c");
+
     // ears
-    ctx.beginPath();ctx.ellipse(76,169,27,42,0,0,Math.PI*2);ctx.fillStyle="#efad73";ctx.fill();ctx.strokeStyle="#18120f";ctx.lineWidth=7;ctx.stroke();
+    ctx.beginPath();ctx.ellipse(76,169,27,42,0,0,Math.PI*2);ctx.fillStyle=skin;ctx.fill();ctx.strokeStyle="#4b3022";ctx.lineWidth=7;ctx.stroke();
     ctx.beginPath();ctx.ellipse(344,169,27,42,0,0,Math.PI*2);ctx.fill();ctx.stroke();
 
-    // face
-    ctx.beginPath();ctx.ellipse(210,166,137,145,0,0,Math.PI*2);ctx.fillStyle="#efad73";ctx.fill();ctx.strokeStyle="#17120f";ctx.lineWidth=8;ctx.stroke();
+    // face path
+    ctx.beginPath();
+    ctx.moveTo(210,24);
+    ctx.bezierCurveTo(132,19,79,69,75,153);
+    ctx.bezierCurveTo(71,235,114,309,210,346);
+    ctx.bezierCurveTo(306,309,349,235,345,153);
+    ctx.bezierCurveTo(341,69,288,19,210,24);
+    ctx.closePath();
+    ctx.fillStyle=skin;ctx.fill();ctx.strokeStyle="#3b291f";ctx.lineWidth=8;ctx.stroke();
+
+    // subtle face depth
+    ctx.globalAlpha=.13;strokeLine(ctx,[[97,151],[99,220],[137,286]],"#9b5b3e",15);ctx.globalAlpha=1;
 
     // cap
-    fillStrokePath(ctx,HEAD_PATHS.cap,"#20252c","#07090c",9);
-    fillStrokePath(ctx,HEAD_PATHS.brim,"#101419","#07090c",8);
-    strokeLine(ctx,[[210,12],[210,77]],"#0a0d11",5);
+    const capGrad=ctx.createLinearGradient(0,10,0,120);
+    capGrad.addColorStop(0,"#252b34");capGrad.addColorStop(.55,"#12161c");capGrad.addColorStop(1,"#07090d");
+    fillStrokePath(ctx,HEAD_PATHS.cap,capGrad,"#05070a",9);
+    fillStrokePath(ctx,HEAD_PATHS.brim,"#090c11","#05070a",8);
+    strokeLine(ctx,[[210,12],[210,77]],"#070a0e",5);
+    ctx.globalAlpha=.5;ctx.strokeStyle="#4a535e";ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(111,76);ctx.quadraticCurveTo(151,41,205,36);ctx.quadraticCurveTo(260,41,307,78);ctx.stroke();ctx.globalAlpha=1;
 
     // beard
-    fillStrokePath(ctx,HEAD_PATHS.beard,"#352821","#17120f",7);
-    ctx.beginPath();ctx.moveTo(110,194);ctx.quadraticCurveTo(102,233,127,272);ctx.strokeStyle="#72645d";ctx.lineWidth=6;ctx.stroke();
-    ctx.beginPath();ctx.moveTo(310,194);ctx.quadraticCurveTo(318,233,293,272);ctx.stroke();
-    ctx.beginPath();ctx.moveTo(153,248);ctx.quadraticCurveTo(170,292,210,325);ctx.quadraticCurveTo(250,292,267,248);
-    ctx.strokeStyle="#6f625b";ctx.lineWidth=7;ctx.stroke();
-    ctx.beginPath();ctx.moveTo(176,269);ctx.quadraticCurveTo(191,303,210,317);ctx.quadraticCurveTo(229,303,244,269);
-    ctx.strokeStyle="#211914";ctx.lineWidth=7;ctx.stroke();
+    const beardGrad=ctx.createLinearGradient(105,185,300,340);
+    beardGrad.addColorStop(0,"#4a3931");beardGrad.addColorStop(.48,"#32251f");beardGrad.addColorStop(1,"#18120f");
+    fillStrokePath(ctx,HEAD_PATHS.beard,beardGrad,"#17120f",7);
+    ctx.globalAlpha=.78;strokeLine(ctx,[[109,194],[104,232],[128,273]],"#796a62",5);strokeLine(ctx,[[311,194],[316,232],[292,273]],"#796a62",5);ctx.globalAlpha=1;
+    ctx.beginPath();ctx.moveTo(151,247);ctx.quadraticCurveTo(169,292,210,326);ctx.quadraticCurveTo(251,292,269,247);ctx.strokeStyle="#75675f";ctx.lineWidth=5.5;ctx.stroke();
+    ctx.beginPath();ctx.moveTo(177,267);ctx.quadraticCurveTo(191,301,210,317);ctx.quadraticCurveTo(229,301,243,267);ctx.strokeStyle="#211914";ctx.lineWidth=6;ctx.stroke();
 
     // brows
-    ctx.beginPath();ctx.moveTo(111,119);ctx.quadraticCurveTo(153,98,190,118);ctx.strokeStyle="#2b1c15";ctx.lineWidth=11;ctx.lineCap="round";ctx.stroke();
-    ctx.beginPath();ctx.moveTo(230,118);ctx.quadraticCurveTo(267,98,309,119);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(112,121);ctx.quadraticCurveTo(151,102,190,119);ctx.strokeStyle="#2b1c15";ctx.lineWidth=9;ctx.lineCap="round";ctx.stroke();
+    ctx.beginPath();ctx.moveTo(230,119);ctx.quadraticCurveTo(269,102,308,121);ctx.stroke();
 
     // eyes
-    ctx.beginPath();ctx.ellipse(155,164,40,33,0,0,Math.PI*2);ctx.fillStyle="#fff";ctx.fill();
+    ctx.beginPath();ctx.ellipse(155,164,40,33,0,0,Math.PI*2);ctx.fillStyle="#fdfdfb";ctx.fill();
     ctx.beginPath();ctx.ellipse(265,164,40,33,0,0,Math.PI*2);ctx.fill();
 
-    const pxOffset=getEffectiveLookX()*2 + getEffectiveHeadLean()*0.12;
+    const pxOffset=getEffectiveLookX()*2+getEffectiveHeadLean()*0.12;
     const pyOffset=getEffectiveLookY()*2;
-    ctx.beginPath();ctx.arc(155+pxOffset,164+pyOffset,7.5*(face.pupilScale||1),0,Math.PI*2);ctx.fillStyle="#000";ctx.fill();
+    ctx.beginPath();ctx.arc(155+pxOffset,164+pyOffset,7.5*(face.pupilScale||1),0,Math.PI*2);ctx.fillStyle="#050607";ctx.fill();
     ctx.beginPath();ctx.arc(265+pxOffset,164+pyOffset,7.5*(face.pupilScale||1),0,Math.PI*2);ctx.fill();
 
     const maxLid=31;
     const lc=Math.max(0,Math.min(100,face.blinkLeft||0))/100*maxLid;
     const rc=Math.max(0,Math.min(100,face.blinkRight||0))/100*maxLid;
+    ctx.save();ctx.beginPath();ctx.ellipse(155,164,40,33,0,0,Math.PI*2);ctx.clip();
+    ctx.fillStyle="#e8a575";ctx.fillRect(114,129,82,lc);ctx.fillRect(114,198-lc,82,lc);ctx.restore();
+    ctx.save();ctx.beginPath();ctx.ellipse(265,164,40,33,0,0,Math.PI*2);ctx.clip();
+    ctx.fillStyle="#e8a575";ctx.fillRect(224,129,82,rc);ctx.fillRect(224,198-rc,82,rc);ctx.restore();
 
-    ctx.save();
-    ctx.beginPath();ctx.ellipse(155,164,40,33,0,0,Math.PI*2);ctx.clip();
-    ctx.fillStyle="#efad73";ctx.fillRect(114,129,82,lc);ctx.fillRect(114,198-lc,82,lc);
-    ctx.restore();
-    ctx.save();
-    ctx.beginPath();ctx.ellipse(265,164,40,33,0,0,Math.PI*2);ctx.clip();
-    ctx.fillStyle="#efad73";ctx.fillRect(224,129,82,rc);ctx.fillRect(224,198-rc,82,rc);
-    ctx.restore();
-
-    // glasses – gleiche runde Form wie im Live-SVG
-    ctx.strokeStyle="#0a0b0d";ctx.lineWidth=9;
-    ctx.beginPath();
-    if (ctx.roundRect) ctx.roundRect(99,132,106,70,28);
-    else { ctx.rect(99,132,106,70); }
-    ctx.stroke();
-    ctx.beginPath();
-    if (ctx.roundRect) ctx.roundRect(215,132,106,70,28);
-    else { ctx.rect(215,132,106,70); }
-    ctx.stroke();
-    strokeLine(ctx,[[205,157],[210,151],[215,157]],"#0a0b0d",9);
-    strokeLine(ctx,[[99,151],[69,143]],"#0a0b0d",9);
-    strokeLine(ctx,[[321,151],[351,143]],"#0a0b0d",9);
+    // glasses + lens tint
+    ctx.fillStyle="rgba(80,164,198,.08)";ctx.strokeStyle="#07090c";ctx.lineWidth=9;
+    ctx.beginPath();if(ctx.roundRect)ctx.roundRect(99,132,106,70,25);else ctx.rect(99,132,106,70);ctx.fill();ctx.stroke();
+    ctx.beginPath();if(ctx.roundRect)ctx.roundRect(215,132,106,70,25);else ctx.rect(215,132,106,70);ctx.fill();ctx.stroke();
+    strokeLine(ctx,[[205,157],[210,151],[215,157]],"#07090c",9);
+    strokeLine(ctx,[[99,151],[69,143]],"#07090c",9);
+    strokeLine(ctx,[[321,151],[351,143]],"#07090c",9);
+    ctx.globalAlpha=.17;strokeLine(ctx,[[112,142],[155,136]],"#ffffff",3);strokeLine(ctx,[[229,142],[272,136]],"#ffffff",3);ctx.globalAlpha=1;
 
     // nose + moustache
     ctx.beginPath();ctx.moveTo(210,167);ctx.lineTo(199,205);ctx.quadraticCurveTo(210,214,221,205);
-    ctx.strokeStyle="#b9794e";ctx.lineWidth=6;ctx.stroke();
+    ctx.strokeStyle="#a96948";ctx.lineWidth=5.5;ctx.stroke();
     fillStrokePath(ctx,HEAD_PATHS.moustache,"#211814",null,0);
 
     // mouth
@@ -5286,7 +5373,6 @@ body.menu-open{overflow:hidden}
     const halfWidth=26*widthScale;
     const openRy=(face.mouthOpen||0)/100*15;
     const baseY=247;
-
     if(openRy>0.25){
       ctx.beginPath();ctx.ellipse(210,baseY+4,halfWidth*.82,openRy,0,0,Math.PI*2);ctx.fillStyle="#070707";ctx.fill();
       if((face.mouthOpen||0)>20){
@@ -5304,7 +5390,6 @@ body.menu-open{overflow:hidden}
 
     ctx.restore();
   }
-
   function paintRecorderFrame() {
     if (!recorderCtx || !recorderCanvas) return;
     drawRecordingBackground(recorderCtx,recorderCanvas.width,recorderCanvas.height);
