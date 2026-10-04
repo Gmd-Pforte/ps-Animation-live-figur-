@@ -860,14 +860,14 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.32.0: Touch-Fix – JS darf den Kopf transformieren */
+/* v0.33.0: Touch-Fix – JS darf den Kopf transformieren */
 .avatar-head-module{
   will-change:transform;
   transition:transform 70ms linear;
 }
 
 
-/* v0.32.0: Kopfneigung über festen Cutout-Anker */
+/* v0.33.0: Kopfneigung über festen Cutout-Anker */
 .head-anchor{
   transform-origin:0 0;
   will-change:transform;
@@ -944,7 +944,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.32.0: Aufnahme sichtbar unter den Touchfeldern */
+/* v0.33.0: Aufnahme sichtbar unter den Touchfeldern */
 .record-workspace{
   margin-top:14px;
   border:1px solid rgba(255,255,255,.07);
@@ -992,7 +992,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.32.0: gleiche Figur auf Handy, Desktop und Aufnahme */
+/* v0.33.0: gleiche Figur auf Handy, Desktop und Aufnahme */
 .avatar-body{
   width:min(330px,65vw)!important;
   bottom:4px!important;
@@ -1018,7 +1018,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.32.0: sichtbare Arm-Regler auf der Hauptseite */
+/* v0.33.0: sichtbare Arm-Regler auf der Hauptseite */
 .arm-main-controls{
   margin-top:14px;
   border:1px solid rgba(39,200,255,.22);
@@ -1130,7 +1130,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.32.0: vier Charaktere */
+/* v0.33.0: vier Charaktere */
 .character-buttons{
   grid-template-columns:repeat(4,minmax(0,1fr));
 }
@@ -1520,7 +1520,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.32.0: Recorder-Format */
+/* v0.33.0: Recorder-Format */
 .record-format-choice{
   display:grid;
   grid-template-columns:auto minmax(150px,1fr);
@@ -1553,7 +1553,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.32.0: Avatar Designer */
+/* v0.33.0: Avatar Designer */
 .designer-panel{margin-top:10px;border:1px solid rgba(255,96,190,.22);background:linear-gradient(180deg,rgba(255,67,170,.045),rgba(0,0,0,.16));border-radius:18px;padding:12px}
 .designer-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.designer-head>div{display:grid;gap:2px}.designer-head strong{font-size:16px}
 #designerNotice{font-size:10px;color:var(--muted)}
@@ -1573,7 +1573,7 @@ body.menu-open{overflow:hidden}
 @media(max-width:620px){.designer-grid{grid-template-columns:1fr}.designer-colors{grid-template-columns:repeat(3,1fr)}}
 
 
-/* v0.32.0: Leg Control */
+/* v0.33.0: Leg Control */
 .leg-main-controls{margin-top:10px;border:1px solid rgba(122,220,255,.18);background:linear-gradient(180deg,rgba(64,182,255,.045),rgba(0,0,0,.14));border-radius:16px;padding:12px}
 .leg-main-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.leg-main-head>div{display:grid;gap:2px}.leg-main-head strong{font-size:14px}
 #legReset{min-height:40px;border:1px solid rgba(39,200,255,.32);background:var(--accent-soft);color:var(--text);border-radius:11px;padding:7px 10px;font-weight:850}
@@ -1586,7 +1586,7 @@ body.menu-open{overflow:hidden}
 @media(max-width:520px){.walk-row{grid-template-columns:1fr}}
 
 
-/* v0.32.0: Dance Mode */
+/* v0.33.0: Dance Mode */
 .dance-panel{margin-top:10px;border:1px solid rgba(255,92,193,.24);background:linear-gradient(180deg,rgba(255,66,178,.07),rgba(57,23,69,.12));border-radius:18px;padding:12px}
 .dance-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.dance-head>div{display:grid;gap:2px}.dance-head strong{font-size:15px}#danceStatus{font-size:10px;color:var(--muted)}
 #danceToggle{min-width:116px;min-height:48px;border-radius:13px;border:1px solid #75405f;background:#190f18;color:var(--text);font-weight:900;font-size:14px}
@@ -1600,7 +1600,7 @@ body.menu-open{overflow:hidden}
 @media(max-width:620px){.dance-controls{grid-template-columns:1fr}.dance-head{align-items:flex-start;flex-direction:column}#danceToggle{width:100%}}
 
 
-/* v0.32.0: App-Reiter + Avatar Catalog */
+/* v0.33.0: App-Reiter + Avatar Catalog */
 .app-tabs{
   position:sticky;top:0;z-index:40;
   display:grid;grid-template-columns:repeat(3,1fr);gap:6px;
@@ -1692,7 +1692,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.32.0: Antwort-MP3 Bibliothek */
+/* v0.33.0: Antwort-MP3 Bibliothek */
 .app-tabs{grid-template-columns:repeat(4,1fr)}
 .answer-library{
   border:1px solid rgba(123,103,255,.22);
@@ -1729,7 +1729,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.32.0: Live-Antworten + Reaktionen */
+/* v0.33.0: Live-Antworten + Reaktionen */
 .live-answer-bar{
   margin-top:9px;padding:11px;border:1px solid rgba(39,200,255,.16);
   border-radius:15px;background:linear-gradient(180deg,rgba(39,200,255,.045),rgba(0,0,0,.13))
@@ -2172,139 +2172,52 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
           <!-- Kopf: eigenes transparentes Cutout-Teil. -->
           <div id="headAnchor" class="head-anchor">
           <div id="headPart" class="avatar-head-module" aria-label="Avatar Kopf">
-            <svg viewBox="0 0 420 360" role="img" aria-label="PS AI MUSIC Referenz Kopf">
+            <svg viewBox="0 0 420 360" role="img" aria-label="PS AI MUSIC Original Referenzkopf">
   <defs>
-    <clipPath id="eyeClipLeft"><ellipse cx="153" cy="164" rx="42" ry="34"/></clipPath>
-    <clipPath id="eyeClipRight"><ellipse cx="267" cy="164" rx="42" ry="34"/></clipPath>
-    <linearGradient id="psSkinHeadGrad" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#efb07a"/>
-      <stop offset="100%" stop-color="#e6a06a"/>
-    </linearGradient>
-    <linearGradient id="psCapGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#2f3238"/>
-      <stop offset="100%" stop-color="#14161a"/>
-    </linearGradient>
-    <linearGradient id="psBeardGrad" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#4d392f"/>
-      <stop offset="100%" stop-color="#1d1511"/>
-    </linearGradient>
+    <clipPath id="psReferenceClip">
+      <path d="M84 130 Q78 43 120 14 Q210 -12 300 14 Q342 43 336 130
+               Q315 116 294 108 Q300 124 306 137
+               C326 130 350 139 359 158 C370 184 361 211 342 224
+               Q329 232 316 225 C310 275 289 318 252 343
+               Q231 357 210 360 Q189 357 168 343
+               C131 318 110 275 104 225 Q91 232 78 224
+               C59 211 50 184 61 158 C70 139 94 130 114 137
+               Q120 124 126 108 Q105 116 84 130 Z"/>
+    </clipPath>
+    <clipPath id="eyeClipLeft"><ellipse cx="165.7" cy="175.5" rx="29.1" ry="23.1"/></clipPath>
+    <clipPath id="eyeClipRight"><ellipse cx="253.8" cy="175.4" rx="29.3" ry="23.2"/></clipPath>
   </defs>
 
   <g id="headMotionGroup">
-    <ellipse cx="72" cy="176" rx="30" ry="46" fill="url(#psSkinHeadGrad)" stroke="#3e271d" stroke-width="6"/>
-    <ellipse cx="348" cy="176" rx="30" ry="46" fill="url(#psSkinHeadGrad)" stroke="#3e271d" stroke-width="6"/>
-    <path d="M67 158 Q57 177 72 194" fill="none" stroke="#be7750" stroke-width="4" stroke-linecap="round"/>
-    <path d="M353 158 Q363 177 348 194" fill="none" stroke="#be7750" stroke-width="4" stroke-linecap="round"/>
-
-    <path id="psFaceShape"
-      d="M210 38
-         C133 38 88 80 84 149
-         C79 228 111 289 210 335
-         C309 289 341 228 336 149
-         C332 80 287 38 210 38 Z"
-      fill="url(#psSkinHeadGrad)"
-      stroke="#38231a"
-      stroke-width="7"/>
-
-    <g id="psCapGroup">
-      <path d="M83 110 Q85 38 145 15 Q210 -10 275 15 Q335 38 337 110
-               Q288 82 210 82 Q132 82 83 110 Z"
-            fill="url(#psCapGrad)" stroke="#06080b" stroke-width="8"/>
-      <path d="M92 96 Q210 64 328 96 Q304 122 210 124 Q116 122 92 96 Z"
-            fill="#111317" stroke="#06080b" stroke-width="7"/>
-      <path d="M210 14 L210 81" stroke="#2d3138" stroke-width="4.5" stroke-linecap="round"/>
-      <path d="M140 26 Q132 56 136 86" fill="none" stroke="#0c0f13" stroke-width="4"/>
-      <path d="M280 26 Q288 56 284 86" fill="none" stroke="#0c0f13" stroke-width="4"/>
-    </g>
-
-    <g id="psBrowsGroup">
-      <g id="browLeft">
-        <path d="M109 122 Q148 101 192 118" fill="none" stroke="#2a1b14" stroke-width="11" stroke-linecap="round"/>
-      </g>
-      <g id="browRight">
-        <path d="M228 118 Q272 101 311 122" fill="none" stroke="#2a1b14" stroke-width="11" stroke-linecap="round"/>
-      </g>
+    <g clip-path="url(#psReferenceClip)">
+      <image href="assets/ps-avatar-face.webp" x="49" y="0" width="322" height="360" preserveAspectRatio="none"/>
     </g>
 
     <g id="eyesModule">
-      <ellipse id="psEyeWhiteLeft" cx="153" cy="164" rx="42" ry="34" fill="#ffffff"/>
-      <ellipse id="psEyeWhiteRight" cx="267" cy="164" rx="42" ry="34" fill="#ffffff"/>
-      <ellipse id="cheekLeft" cx="133" cy="210" rx="24" ry="11" fill="#e77f79" opacity="0"/>
-      <ellipse id="cheekRight" cx="287" cy="210" rx="24" ry="11" fill="#e77f79" opacity="0"/>
+      <ellipse id="cheekLeft" cx="157" cy="205" rx="20" ry="9" fill="#e88078" opacity="0"/>
+      <ellipse id="cheekRight" cx="263" cy="205" rx="20" ry="9" fill="#e88078" opacity="0"/>
       <g id="psEyeClipLeft" clip-path="url(#eyeClipLeft)">
-        <circle id="pupilLeft" cx="160" cy="164" r="7.5" fill="#000000"/>
-        <rect id="lidTopLeft" x="111" y="130" width="84" height="0" fill="#e6a06a"/>
-        <rect id="lidBottomLeft" x="111" y="198" width="84" height="0" fill="#e6a06a"/>
+        <circle id="pupilLeft" cx="165.7" cy="175.5" r="5.6" fill="#030303"/>
+        <rect id="lidTopLeft" x="136.5" y="152.3" width="58.5" height="0" fill="#efa66d"/>
+        <rect id="lidBottomLeft" x="136.5" y="198.7" width="58.5" height="0" fill="#efa66d"/>
       </g>
       <g id="psEyeClipRight" clip-path="url(#eyeClipRight)">
-        <circle id="pupilRight" cx="260" cy="164" r="7.5" fill="#000000"/>
-        <rect id="lidTopRight" x="225" y="130" width="84" height="0" fill="#e6a06a"/>
-        <rect id="lidBottomRight" x="225" y="198" width="84" height="0" fill="#e6a06a"/>
+        <circle id="pupilRight" cx="253.8" cy="175.4" r="5.6" fill="#030303"/>
+        <rect id="lidTopRight" x="224.5" y="152.2" width="58.7" height="0" fill="#efa66d"/>
+        <rect id="lidBottomRight" x="224.5" y="198.6" width="58.7" height="0" fill="#efa66d"/>
       </g>
     </g>
 
-    <g id="psGlassesGroup" stroke="#0a0b0d" stroke-width="8" fill="none" stroke-linejoin="round">
-      <rect x="94" y="129" width="116" height="76" rx="18"/>
-      <rect x="210" y="129" width="116" height="76" rx="18"/>
-      <path d="M210 159 Q210 153 210 159"/>
-      <path d="M94 150 L67 145"/>
-      <path d="M326 150 L353 145"/>
-    </g>
-
-    <g id="psNoseGroup">
-      <path d="M210 172 Q198 186 200 206 Q210 215 220 206 Q222 186 210 172 Z"
-            fill="none" stroke="#6a4330" stroke-width="4.5"
-            stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M199 207 Q210 214 221 207" fill="none" stroke="#6a4330" stroke-width="3"/>
-    </g>
-
-    <path id="psMoustache"
-      d="M154 225 Q180 202 210 217 Q240 202 266 225
-         Q242 238 210 233 Q178 238 154 225 Z"
-      fill="#2b1e18"/>
+    <g id="browLeft" opacity="0"><path d="M137 130 Q166 119 195 129"/></g>
+    <g id="browRight" opacity="0"><path d="M225 129 Q254 119 283 130"/></g>
 
     <g id="mouthModule">
-      <ellipse id="mouthHole" cx="210" cy="247" rx="0" ry="0" fill="#070707"/>
-      <ellipse id="tongueShape" cx="210" cy="254" rx="0" ry="0" fill="#c9656c" opacity="0"/>
-      <path id="mouthLine" d="M184 247 Q210 247 236 247"
-            fill="none" stroke="#090909" stroke-width="6" stroke-linecap="round"/>
-      <path id="mouthLowerLip" d="M190 253 Q210 260 230 253"
-            fill="none" stroke="#b96f68" stroke-width="3.2" stroke-linecap="round" opacity=".42"/>
-    </g>
-
-    <g id="psBeardGroup">
-      <path d="M93 182 Q102 216 123 250 Q138 274 154 298
-               Q145 270 145 238 Q145 206 157 183 Q124 184 93 182 Z"
-            fill="url(#psBeardGrad)" stroke="#1a130f" stroke-width="5.5"/>
-      <path d="M327 182 Q318 216 297 250 Q282 274 266 298
-               Q275 270 275 238 Q275 206 263 183 Q296 184 327 182 Z"
-            fill="url(#psBeardGrad)" stroke="#1a130f" stroke-width="5.5"/>
-
-      <path d="M108 194 Q104 230 126 272" fill="none" stroke="#9b9b9b" stroke-width="5" stroke-linecap="round"/>
-      <path d="M120 208 Q118 244 140 286" fill="none" stroke="#d0d0d0" stroke-width="3.8" stroke-linecap="round"/>
-      <path d="M130 225 Q134 251 148 281" fill="none" stroke="#7d7d7d" stroke-width="3.2" stroke-linecap="round"/>
-      <path d="M312 194 Q316 230 294 272" fill="none" stroke="#9b9b9b" stroke-width="5" stroke-linecap="round"/>
-      <path d="M300 208 Q302 244 280 286" fill="none" stroke="#d0d0d0" stroke-width="3.8" stroke-linecap="round"/>
-      <path d="M290 225 Q286 251 272 281" fill="none" stroke="#7d7d7d" stroke-width="3.2" stroke-linecap="round"/>
-
-      <path d="M148 242 Q167 228 210 231 Q253 228 272 242
-               Q288 255 291 279 Q296 313 270 334
-               Q245 353 210 354 Q175 353 150 334
-               Q124 313 129 279 Q132 255 148 242 Z"
-            fill="url(#psBeardGrad)" stroke="#1a130f" stroke-width="6"/>
-
-      <path d="M184 271 Q191 246 210 241 Q229 246 236 271
-               Q231 305 210 322 Q189 305 184 271 Z"
-            fill="#73503a" opacity=".95"/>
-
-      <path d="M195 260 Q201 292 210 312 Q219 292 225 260"
-            fill="none" stroke="#9b6a45" stroke-width="3.8" stroke-linecap="round" opacity=".72"/>
-      <path d="M170 252 Q182 286 197 312"
-            fill="none" stroke="#5b453b" stroke-width="3.2" stroke-linecap="round" opacity=".68"/>
-      <path d="M250 252 Q238 286 223 312"
-            fill="none" stroke="#5b453b" stroke-width="3.2" stroke-linecap="round" opacity=".68"/>
-      <path d="M188 283 Q198 307 210 321 Q222 307 232 283"
-            fill="none" stroke="#ad7a52" stroke-width="3.2" stroke-linecap="round" opacity=".72"/>
+      <ellipse id="mouthHole" cx="210" cy="239" rx="0" ry="0" fill="#100806"/>
+      <ellipse id="tongueShape" cx="210" cy="245" rx="0" ry="0" fill="#c9656c" opacity="0"/>
+      <path id="mouthLine" d="M194 239 Q210 239 226 239"
+            fill="none" stroke="#24130f" stroke-width="4.5" stroke-linecap="round"/>
+      <path id="mouthLowerLip" d="M198 245 Q210 249 222 245"
+            fill="none" stroke="#a95d57" stroke-width="2.2" stroke-linecap="round" opacity=".38"/>
     </g>
   </g>
 </svg>
@@ -2312,7 +2225,7 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
           </div>
         </div>
 
-        <div class="stage-caption"><strong>v0.32.0:</strong> Referenz-Face v2 · Live Antworten</div>
+        <div class="stage-caption"><strong>v0.33.0:</strong> Originalbild-Face · Live Antworten</div>
       </div>
 
       <div id="liveAnswerBar" class="live-answer-bar app-tab-section" data-app-view="studio">
@@ -3426,7 +3339,7 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
   }
 
   // --- Avatar Designer v1 -----------------------------------------------
-  const DESIGNER_STORAGE_KEY="ps-avatar-designer-v2-reference";
+  const DESIGNER_STORAGE_KEY="ps-avatar-designer-v3-image-head";
   const DESIGNER_DEFAULTS={
     headWidth:108,headHeight:100,faceRoundness:82,
     eyeSize:110,eyeSpacing:102,eyeY:0,
@@ -3497,22 +3410,13 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
   }
   function applyHumanDesigner(){
     if(avatarState.character!=="human")return;
-    const d=avatarState.designer||DESIGNER_DEFAULTS;
     refreshDesignerRefs();
-    if(ui.psFaceShape)ui.psFaceShape.setAttribute("d",getHumanFacePathD(d.faceRoundness));
-    setSvgTransform(ui.psCapGroup,svgAround(210,88,d.capSize/100,d.capSize/100,0,d.capY));
-    const beardT=svgAround(210,240,d.beardSize/100,d.beardSize/100,0,d.beardY);
-    setSvgTransform(ui.psBeardGroup,beardT); setSvgTransform(ui.psMoustache,beardT);
-    const e=d.eyeSize/100,delta=(d.eyeSpacing-100)*.45;
-    const lt=svgAround(155,164,e,e,-delta,d.eyeY),rt=svgAround(265,164,e,e,delta,d.eyeY);
-    setSvgTransform(ui.psEyeWhiteLeft,lt);setSvgTransform(ui.psEyeClipLeft,lt);setSvgTransform(ui.psEyeWhiteRight,rt);setSvgTransform(ui.psEyeClipRight,rt);
-    setSvgTransform(ui.psGlassesGroup,svgAround(210,166,d.glassesSize/100,d.glassesSize/100,0,d.glassesY));
-    setSvgTransform(ui.psNoseGroup,svgAround(210,190,d.noseSize/100,d.noseSize/100,0,d.noseY));
-    setSvgTransform(ui.mouthHole?.parentElement,svgAround(210,247,d.mouthSize/100,d.mouthSize/100,0,d.mouthY));
-    if(ui.psHumanBodySvg){ui.psHumanBodySvg.style.transformOrigin="50% 100%";ui.psHumanBodySvg.style.transform="scaleX("+(d.bodyWidth/100)+")";}
-    updateGradientStops(ui.headPart,"psSkinHeadGrad",d.skinColor);updateGradientStops(ui.headPart,"psBeardGrad",d.beardColor);updateGradientStops(ui.headPart,"psCapGrad",d.capColor);
-    updateGradientStops(ui.torsoPart,"psSkinBodyGrad",d.skinColor);updateGradientStops(ui.torsoPart,"psHoodieGrad",d.hoodieColor);updateGradientStops(ui.torsoPart,"psSleeveGrad",d.hoodieColor);updateGradientStops(ui.torsoPart,"psJeanGrad",d.jeansColor);
-    if(ui.psMoustache)ui.psMoustache.setAttribute("fill",hexAdjust(d.beardColor,-25));
+    const d=avatarState.designer||DESIGNER_DEFAULTS;
+    if(ui.psHumanBodySvg){
+      ui.psHumanBodySvg.style.transformOrigin="50% 100%";
+      ui.psHumanBodySvg.style.transform="scaleX("+(d.bodyWidth/100)+")";
+    }
+    // Originalbild-Kopf bleibt unverändert. Keine Gesichts-/Cap-/Bart-Skalierung.
   }
   function applyCurrentAvatarDesigner(){
     const d=avatarState.designer||DESIGNER_DEFAULTS;
@@ -5118,7 +5022,8 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
 
     // Einfache Cutout-Mechanik: Kopf bleibt starr und neigt sich nur seitlich.
     const manualTilt = Math.max(-5, Math.min(5, head.tilt));
-    const lean = getEffectiveHeadLean();
+    const rawLean = getEffectiveHeadLean();
+    const lean = avatarState.character==="human" ? Math.max(-3.2,Math.min(3.2,rawLean)) : rawLean;
     const nod = manualTilt + (head.idleTilt || 0);
     const lift = head.idleLift || 0;
 
@@ -5135,8 +5040,12 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
     }
 
     if (ui.headMotionGroup) {
-      const d=avatarState.designer || DESIGNER_DEFAULTS;
-      ui.headMotionGroup.setAttribute("transform",svgAround(210,180,d.headWidth/100,d.headHeight/100,0,0));
+      if(avatarState.character==="human"){
+        ui.headMotionGroup.removeAttribute("transform");
+      }else{
+        const d=avatarState.designer || DESIGNER_DEFAULTS;
+        ui.headMotionGroup.setAttribute("transform",svgAround(210,180,d.headWidth/100,d.headHeight/100,0,0));
+      }
     }
 
     applyCurrentAvatarDesigner();
@@ -5212,12 +5121,21 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
       const leanEyeOffset = lean * 0.12;
       const effectiveLookX = getEffectiveLookX();
       const effectiveLookY = getEffectiveLookY();
-      ui.pupilLeft.setAttribute("cx", 155 + effectiveLookX * 2.0 + leanEyeOffset);
-      ui.pupilRight.setAttribute("cx", 265 + effectiveLookX * 2.0 + leanEyeOffset);
-      ui.pupilLeft.setAttribute("cy", 164 + effectiveLookY * 2.0);
-      ui.pupilRight.setAttribute("cy", 164 + effectiveLookY * 2.0);
-      ui.pupilLeft.setAttribute("r", 7.5 * face.pupilScale);
-      ui.pupilRight.setAttribute("r", 7.5 * face.pupilScale);
+      if(avatarState.character==="human"){
+        ui.pupilLeft.setAttribute("cx", 165.7 + effectiveLookX * 1.35 + leanEyeOffset);
+        ui.pupilRight.setAttribute("cx", 253.8 + effectiveLookX * 1.35 + leanEyeOffset);
+        ui.pupilLeft.setAttribute("cy", 175.5 + effectiveLookY * 1.35);
+        ui.pupilRight.setAttribute("cy", 175.4 + effectiveLookY * 1.35);
+        ui.pupilLeft.setAttribute("r", 5.6 * face.pupilScale);
+        ui.pupilRight.setAttribute("r", 5.6 * face.pupilScale);
+      }else{
+        ui.pupilLeft.setAttribute("cx", 155 + effectiveLookX * 2.0 + leanEyeOffset);
+        ui.pupilRight.setAttribute("cx", 265 + effectiveLookX * 2.0 + leanEyeOffset);
+        ui.pupilLeft.setAttribute("cy", 164 + effectiveLookY * 2.0);
+        ui.pupilRight.setAttribute("cy", 164 + effectiveLookY * 2.0);
+        ui.pupilLeft.setAttribute("r", 7.5 * face.pupilScale);
+        ui.pupilRight.setAttribute("r", 7.5 * face.pupilScale);
+      }
     }
 
     if(ui.browLeft){
@@ -5240,7 +5158,7 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
       ui.cheekRight.setAttribute("transform","translate(0 "+(-cheek*5).toFixed(2)+")");
     }
 
-    const maxLid = 31;
+    const maxLid = avatarState.character==="human" ? 23 : 31;
     const leftBlink = Math.max(0, Math.min(100, face.blinkLeft)) / 100 * maxLid;
     const rightBlink = Math.max(0, Math.min(100, face.blinkRight)) / 100 * maxLid;
     const leftSquint=Math.max(0,Math.min(100,Number(face.squintLeft||0)))/100*8;
@@ -5251,13 +5169,13 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
     if (ui.lidTopLeft && ui.lidBottomLeft) {
       ui.lidTopLeft.setAttribute("height", leftClose);
       ui.lidBottomLeft.setAttribute("height", leftClose);
-      ui.lidBottomLeft.setAttribute("y", 198 - leftClose);
+      ui.lidBottomLeft.setAttribute("y", (avatarState.character==="human" ? 198.7 : 198) - leftClose);
     }
 
     if (ui.lidTopRight && ui.lidBottomRight) {
       ui.lidTopRight.setAttribute("height", rightClose);
       ui.lidBottomRight.setAttribute("height", rightClose);
-      ui.lidBottomRight.setAttribute("y", 198 - rightClose);
+      ui.lidBottomRight.setAttribute("y", (avatarState.character==="human" ? 198.6 : 198) - rightClose);
     }
 
     if (ui.lookXValue) ui.lookXValue.textContent = Math.round(face.lookX);
@@ -5268,7 +5186,7 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
 
     if (ui.mouthHole && ui.mouthLine) {
       const cx = 210;
-      const baseY = 247;
+      const baseY = avatarState.character==="human" ? 239 : 247;
       const widthScale = face.mouthWidth / 100;
       const halfWidth = 26 * widthScale;
       const roundness=Math.max(0,Math.min(100,Number(face.mouthRound||0)))/100;
@@ -6905,7 +6823,7 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
     if (ui.menuButton) ui.menuButton.setAttribute("aria-expanded", open ? "true" : "false");
   }
 
-  // --- Figurenaufnahme v0.32.0 -------------------------------------------
+  // --- Figurenaufnahme v0.33.0 -------------------------------------------
   // Direkter Canvas-Renderer: keine langsame SVG->Bitmap-Konvertierung pro Frame.
   let avatarRecorder = null;
   let recorderChunks = [];
