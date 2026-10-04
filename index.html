@@ -860,14 +860,14 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.14: Touch-Fix – JS darf den Kopf transformieren */
+/* v0.14.1: Touch-Fix – JS darf den Kopf transformieren */
 .avatar-head-module{
   will-change:transform;
   transition:transform 70ms linear;
 }
 
 
-/* v0.14: Kopfneigung über festen Cutout-Anker */
+/* v0.14.1: Kopfneigung über festen Cutout-Anker */
 .head-anchor{
   transform-origin:0 0;
   will-change:transform;
@@ -941,6 +941,54 @@ body.menu-open{overflow:hidden}
 .record-note{
   line-height:1.45;
   margin:10px 0 0;
+}
+
+
+/* v0.14.1: Aufnahme sichtbar unter den Touchfeldern */
+.record-workspace{
+  margin-top:14px;
+  border:1px solid rgba(255,255,255,.07);
+  background:rgba(8,14,20,.82);
+  border-radius:18px;
+  padding:13px;
+}
+.record-workspace-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:10px;
+}
+.record-workspace-head>div{
+  display:grid;
+  gap:2px;
+}
+.record-workspace-head strong{
+  font-size:15px;
+}
+.record-format{
+  color:var(--muted);
+  font-size:10px;
+  white-space:nowrap;
+}
+.recorder-capture-canvas{
+  position:fixed!important;
+  left:-10000px!important;
+  top:0!important;
+  width:720px!important;
+  height:920px!important;
+  pointer-events:none!important;
+  opacity:.001!important;
+}
+@media(max-width:760px){
+  .record-actions{
+    grid-template-columns:1fr 1fr 1fr;
+  }
+  .record-actions button{
+    min-height:52px;
+    padding:7px 5px;
+    font-size:12px;
+  }
 }
 
 </style>
@@ -1194,7 +1242,7 @@ body.menu-open{overflow:hidden}
         </div>
 
         <div class="stage-caption">
-          <strong>Schritt 14:</strong> Figurenaufnahme</div>
+          <strong>Schritt 14.1:</strong> Stabile Figurenaufnahme</div>
       </div>
     </section>
 
@@ -1246,6 +1294,34 @@ body.menu-open{overflow:hidden}
             </div>
           </section>
         </div>
+    </section>
+
+    <section class="record-workspace" aria-label="Avatar Aufnahme">
+      <div class="record-workspace-head">
+        <div>
+          <span class="mini-label">VIDEO</span>
+          <strong>Figur aufnehmen</strong>
+        </div>
+        <span id="recordTime" class="record-time">00:00</span>
+      </div>
+
+      <section class="avatar-recorder">
+        <div class="recorder-head">
+          <div>
+            <strong>🎥 Nur Figurenbereich</strong>
+            <span id="recordStatus">Bereit für Aufnahme</span>
+          </div>
+          <span class="record-format">720 × 920 · 30 FPS</span>
+        </div>
+
+        <div class="record-actions">
+          <button id="recordStart" type="button">● Aufnahme</button>
+          <button id="recordStop" type="button" disabled>■ Stop</button>
+          <button id="recordSave" type="button" disabled>⬇ Speichern</button>
+        </div>
+
+        <p class="record-note">Die Steuerfelder und das Menü werden nicht mit aufgenommen. Kopf, Augen, Mund und später die Arme erscheinen im Video.</p>
+      </section>
     </section>
   
     <div id="menuBackdrop" class="menu-backdrop" hidden></div>
@@ -1319,27 +1395,6 @@ body.menu-open{overflow:hidden}
         </section>
 
         <section class="menu-section">
-          <div class="menu-section-title">Aufnahme</div>
-          <section class="avatar-recorder">
-            <div class="recorder-head">
-              <div>
-                <strong>🎥 Figur aufnehmen</strong>
-                <span id="recordStatus">Bereit · nur Figurenbereich</span>
-              </div>
-              <span id="recordTime" class="record-time">00:00</span>
-            </div>
-
-            <div class="record-actions">
-              <button id="recordStart" type="button">● Aufnahme</button>
-              <button id="recordStop" type="button" disabled>■ Stop</button>
-              <button id="recordSave" type="button" disabled>⬇ Speichern</button>
-            </div>
-
-            <p class="record-note">Aufgenommen wird nur die Figur auf dunklem Hintergrund – keine Touch-Felder und kein Menü. Falls ein Audio-Lip-Sync läuft, wird dessen Ton mit aufgenommen.</p>
-          </section>
-        </section>
-
-        <section class="menu-section">
           <div class="menu-section-title">Engine</div>
           <article class="menu-inner-panel">
         <h2>Engine</h2>
@@ -1382,7 +1437,7 @@ body.menu-open{overflow:hidden}
       </article>
         </section>
 
-        <div class="menu-version">Version <strong>0.14</strong></div>
+        <div class="menu-version">Version <strong>0.14.1</strong></div>
       </div>
     </aside>
 
@@ -1392,7 +1447,7 @@ body.menu-open{overflow:hidden}
 (() => {
   "use strict";
 
-  const VERSION = "0.14";
+  const VERSION = "0.14.1";
 
   const avatarState = {
     version: VERSION,
@@ -2276,7 +2331,8 @@ body.menu-open{overflow:hidden}
     if (ui.menuButton) ui.menuButton.setAttribute("aria-expanded", open ? "true" : "false");
   }
 
-  // --- Figurenaufnahme -----------------------------------------------------
+  // --- Figurenaufnahme v0.14.1 -------------------------------------------
+  // Direkter Canvas-Renderer: keine langsame SVG->Bitmap-Konvertierung pro Frame.
   let avatarRecorder = null;
   let recorderChunks = [];
   let recorderBlob = null;
@@ -2284,12 +2340,32 @@ body.menu-open{overflow:hidden}
   let recorderCanvas = null;
   let recorderCtx = null;
   let recorderStream = null;
-  let recorderAnimationFrame = null;
-  let recorderBodyBitmap = null;
-  let recorderBusy = false;
+  let recorderPaintTimer = null;
+  let recorderClockTimer = null;
   let recorderStartedAt = 0;
-  let recorderLastPaint = 0;
   let recorderAudioDestination = null;
+  let recorderStopping = false;
+
+  const BODY_PATHS = {
+    leftArm: new Path2D("M105 112 Q76 124 61 168 Q48 210 50 280 Q52 335 73 365 Q84 378 101 367 Q116 356 111 335 Q98 289 103 235 Q108 179 132 153 Z"),
+    rightArm: new Path2D("M315 112 Q344 124 359 168 Q372 210 370 280 Q368 335 347 365 Q336 378 319 367 Q304 356 309 335 Q322 289 317 235 Q312 179 288 153 Z"),
+    torso: new Path2D("M112 100 Q150 64 210 62 Q270 64 308 100 Q332 123 339 171 L330 344 Q324 375 292 387 L128 387 Q96 375 90 344 L81 171 Q88 123 112 100 Z"),
+    collar: new Path2D("M112 115 Q145 75 210 79 Q275 75 308 115 Q276 104 253 116 Q231 127 210 146 Q189 127 167 116 Q144 104 112 115 Z"),
+    shirt: new Path2D("M158 129 Q180 148 210 153 Q240 148 262 129 L273 377 L147 377 Z"),
+    waist: new Path2D("M130 375 Q210 389 290 375 L298 407 Q210 420 122 407 Z"),
+    hips: new Path2D("M130 405 Q210 419 290 405 L292 450 Q210 463 128 450 Z"),
+    leftLeg: new Path2D("M128 443 L202 450 L195 566 Q194 583 177 587 L142 587 Q125 582 126 565 Z"),
+    rightLeg: new Path2D("M218 450 L292 443 L294 565 Q295 582 278 587 L243 587 Q226 583 225 566 Z"),
+    leftShoe: new Path2D("M123 572 Q143 560 188 565 Q204 568 210 589 L207 606 Q164 614 118 604 Q108 596 112 585 Q115 578 123 572 Z"),
+    rightShoe: new Path2D("M297 572 Q277 560 232 565 Q216 568 210 589 L213 606 Q256 614 302 604 Q312 596 308 585 Q305 578 297 572 Z")
+  };
+
+  const HEAD_PATHS = {
+    cap: new Path2D("M89 105 Q91 37 145 19 Q210 -2 275 19 Q329 37 331 105 Q289 80 210 80 Q131 80 89 105 Z"),
+    brim: new Path2D("M102 90 Q210 62 318 90 Q285 114 210 118 Q135 114 102 90 Z"),
+    beard: new Path2D("M88 178 Q97 236 122 280 Q149 325 210 346 Q271 325 298 280 Q323 236 332 178 Q309 207 279 220 Q249 234 210 235 Q171 234 141 220 Q111 207 88 178 Z"),
+    moustache: new Path2D("M163 226 Q184 205 210 219 Q236 205 257 226 Q236 237 210 233 Q184 237 163 226 Z")
+  };
 
   function setRecorderStatus(text) {
     if (ui.recordStatus) ui.recordStatus.textContent = text;
@@ -2302,276 +2378,356 @@ body.menu-open{overflow:hidden}
     return String(minutes).padStart(2,"0") + ":" + String(seconds).padStart(2,"0");
   }
 
-  async function svgToDrawable(svgElement) {
-    if (!svgElement) throw new Error("SVG fehlt");
-
-    const clone = svgElement.cloneNode(true);
-    clone.setAttribute("xmlns","http://www.w3.org/2000/svg");
-
-    const xml = new XMLSerializer().serializeToString(clone);
-    const blob = new Blob([xml], {type:"image/svg+xml;charset=utf-8"});
-
-    if ("createImageBitmap" in window) {
-      return await createImageBitmap(blob);
+  function fillStrokePath(ctx,path,fill,stroke,width) {
+    ctx.fillStyle = fill;
+    ctx.fill(path);
+    if (stroke && width) {
+      ctx.strokeStyle = stroke;
+      ctx.lineWidth = width;
+      ctx.stroke(path);
     }
+  }
 
-    const url = URL.createObjectURL(blob);
-    try {
-      const image = new Image();
-      await new Promise((resolve,reject) => {
-        image.onload = resolve;
-        image.onerror = reject;
-        image.src = url;
-      });
-      return image;
-    } finally {
-      URL.revokeObjectURL(url);
-    }
+  function strokeLine(ctx,points,color,width) {
+    ctx.beginPath();
+    ctx.moveTo(points[0][0],points[0][1]);
+    for (let i=1;i<points.length;i++) ctx.lineTo(points[i][0],points[i][1]);
+    ctx.strokeStyle=color;
+    ctx.lineWidth=width;
+    ctx.lineCap="round";
+    ctx.lineJoin="round";
+    ctx.stroke();
   }
 
   function drawRecordingBackground(ctx,w,h) {
-    ctx.fillStyle = "#0b0f14";
+    ctx.fillStyle="#0b0f14";
     ctx.fillRect(0,0,w,h);
 
-    const step = Math.max(38, Math.round(w / 16));
-    ctx.strokeStyle = "rgba(75,120,145,.08)";
-    ctx.lineWidth = 1;
-
-    for (let x=0; x<=w; x+=step) {
-      ctx.beginPath();
-      ctx.moveTo(x,0);
-      ctx.lineTo(x,h);
-      ctx.stroke();
+    const step=46;
+    ctx.strokeStyle="rgba(75,120,145,.075)";
+    ctx.lineWidth=1;
+    for(let x=0;x<=w;x+=step){
+      ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke();
     }
-    for (let y=0; y<=h; y+=step) {
-      ctx.beginPath();
-      ctx.moveTo(0,y);
-      ctx.lineTo(w,y);
-      ctx.stroke();
+    for(let y=0;y<=h;y+=step){
+      ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();
     }
   }
 
-  async function paintRecorderFrame(now) {
-    if (!avatarRecorder || avatarRecorder.state === "inactive") return;
-    if (recorderBusy) {
-      recorderAnimationFrame = requestAnimationFrame(paintRecorderFrame);
-      return;
-    }
+  function drawRecordedBody(ctx) {
+    const s=0.79;
+    const x=360-210*s;
+    const y=900-620*s;
 
-    // ca. 30 Zeichenframes pro Sekunde reichen für die Cutout-Animation.
-    if (now - recorderLastPaint < 32) {
-      recorderAnimationFrame = requestAnimationFrame(paintRecorderFrame);
-      return;
-    }
-    recorderLastPaint = now;
-    recorderBusy = true;
+    ctx.save();
+    ctx.translate(x,y);
+    ctx.scale(s,s);
 
-    try {
-      const figure = ui.avatarFigure;
-      const body = ui.torsoPart;
-      const head = ui.headPart;
-      const anchor = ui.headAnchor;
-      if (!figure || !body || !head || !anchor || !recorderCtx || !recorderCanvas) return;
+    fillStrokePath(ctx,BODY_PATHS.leftArm,"#11161c","#05080c",9);
+    fillStrokePath(ctx,BODY_PATHS.rightArm,"#11161c","#05080c",9);
 
-      const figureRect = figure.getBoundingClientRect();
-      const bodyRect = body.getBoundingClientRect();
-      const anchorRect = anchor.getBoundingClientRect();
-      if (!figureRect.width || !figureRect.height) return;
+    ctx.beginPath();ctx.ellipse(88,374,25,28,0,0,Math.PI*2);
+    ctx.fillStyle="#efad73";ctx.fill();ctx.strokeStyle="#17110e";ctx.lineWidth=6;ctx.stroke();
+    ctx.beginPath();ctx.ellipse(332,374,25,28,0,0,Math.PI*2);
+    ctx.fillStyle="#efad73";ctx.fill();ctx.strokeStyle="#17110e";ctx.lineWidth=6;ctx.stroke();
 
-      const sx = recorderCanvas.width / figureRect.width;
-      const sy = recorderCanvas.height / figureRect.height;
+    fillStrokePath(ctx,BODY_PATHS.torso,"#12171d","#05080c",10);
+    fillStrokePath(ctx,BODY_PATHS.collar,"#20262e","#070a0e",8);
+    fillStrokePath(ctx,BODY_PATHS.shirt,"#070910",null,0);
 
-      drawRecordingBackground(recorderCtx, recorderCanvas.width, recorderCanvas.height);
+    ctx.beginPath();ctx.moveTo(154,151);ctx.quadraticCurveTo(164,204,210,217);ctx.quadraticCurveTo(256,204,266,151);
+    ctx.strokeStyle="#b8c0c8";ctx.lineWidth=5;ctx.lineCap="round";ctx.stroke();
+    ctx.beginPath();ctx.moveTo(158,156);ctx.quadraticCurveTo(170,198,210,209);ctx.quadraticCurveTo(250,198,262,156);
+    ctx.strokeStyle="#6f7882";ctx.lineWidth=3;ctx.stroke();
 
-      // Körper ist statisch und wird einmal gecacht.
-      if (!recorderBodyBitmap) {
-        recorderBodyBitmap = await svgToDrawable(body.querySelector("svg"));
+    fillStrokePath(ctx,BODY_PATHS.waist,"#0b0e12","#05080c",7);
+    fillStrokePath(ctx,BODY_PATHS.hips,"#476fae","#27466f",8);
+    fillStrokePath(ctx,BODY_PATHS.leftLeg,"#4f79bc","#294b79",8);
+    fillStrokePath(ctx,BODY_PATHS.rightLeg,"#4f79bc","#294b79",8);
+
+    ctx.beginPath();ctx.moveTo(142,475);ctx.quadraticCurveTo(170,468,197,476);
+    ctx.strokeStyle="#648bd0";ctx.globalAlpha=.75;ctx.lineWidth=5;ctx.stroke();
+    ctx.beginPath();ctx.moveTo(223,476);ctx.quadraticCurveTo(250,468,278,475);ctx.stroke();
+    ctx.globalAlpha=1;
+
+    fillStrokePath(ctx,BODY_PATHS.leftShoe,"#f5f7fb","#c8ced7",7);
+    fillStrokePath(ctx,BODY_PATHS.rightShoe,"#f5f7fb","#c8ced7",7);
+    strokeLine(ctx,[[137,586],[190,590]],"#aeb5bf",4);
+    strokeLine(ctx,[[132,597],[193,601]],"#aeb5bf",4);
+    strokeLine(ctx,[[283,586],[230,590]],"#aeb5bf",4);
+    strokeLine(ctx,[[288,597],[227,601]],"#aeb5bf",4);
+
+    ctx.restore();
+  }
+
+  function drawRecordedHead(ctx) {
+    const face=avatarState.face;
+    const head=avatarState.head;
+    const s=0.72;
+    const anchorX=360;
+    const anchorY=472 + (head.idleLift||0);
+    const lean=Math.max(-12,Math.min(12,(head.sideLean||0)+(head.idleLean||0)));
+
+    ctx.save();
+    ctx.translate(anchorX,anchorY);
+    ctx.rotate(lean*Math.PI/180);
+    ctx.scale(s,s);
+    ctx.translate(-210,-360);
+
+    // ears
+    ctx.beginPath();ctx.ellipse(76,169,27,42,0,0,Math.PI*2);ctx.fillStyle="#efad73";ctx.fill();ctx.strokeStyle="#18120f";ctx.lineWidth=7;ctx.stroke();
+    ctx.beginPath();ctx.ellipse(344,169,27,42,0,0,Math.PI*2);ctx.fill();ctx.stroke();
+
+    // face
+    ctx.beginPath();ctx.ellipse(210,166,137,145,0,0,Math.PI*2);ctx.fillStyle="#efad73";ctx.fill();ctx.strokeStyle="#17120f";ctx.lineWidth=8;ctx.stroke();
+
+    // cap
+    fillStrokePath(ctx,HEAD_PATHS.cap,"#20252c","#07090c",9);
+    fillStrokePath(ctx,HEAD_PATHS.brim,"#101419","#07090c",8);
+    strokeLine(ctx,[[210,12],[210,77]],"#0a0d11",5);
+
+    // beard
+    fillStrokePath(ctx,HEAD_PATHS.beard,"#352821","#17120f",7);
+    ctx.beginPath();ctx.moveTo(110,194);ctx.quadraticCurveTo(102,233,127,272);ctx.strokeStyle="#72645d";ctx.lineWidth=6;ctx.stroke();
+    ctx.beginPath();ctx.moveTo(310,194);ctx.quadraticCurveTo(318,233,293,272);ctx.stroke();
+
+    // brows
+    ctx.beginPath();ctx.moveTo(111,119);ctx.quadraticCurveTo(153,98,190,118);ctx.strokeStyle="#2b1c15";ctx.lineWidth=11;ctx.lineCap="round";ctx.stroke();
+    ctx.beginPath();ctx.moveTo(230,118);ctx.quadraticCurveTo(267,98,309,119);ctx.stroke();
+
+    // eyes
+    ctx.beginPath();ctx.ellipse(155,164,40,33,0,0,Math.PI*2);ctx.fillStyle="#fff";ctx.fill();
+    ctx.beginPath();ctx.ellipse(265,164,40,33,0,0,Math.PI*2);ctx.fill();
+
+    const pxOffset=(face.lookX||0)*2 + (head.sideLean||0)*0.12;
+    const pyOffset=(face.lookY||0)*2;
+    ctx.beginPath();ctx.arc(155+pxOffset,164+pyOffset,7.5*(face.pupilScale||1),0,Math.PI*2);ctx.fillStyle="#000";ctx.fill();
+    ctx.beginPath();ctx.arc(265+pxOffset,164+pyOffset,7.5*(face.pupilScale||1),0,Math.PI*2);ctx.fill();
+
+    const maxLid=31;
+    const lc=Math.max(0,Math.min(100,face.blinkLeft||0))/100*maxLid;
+    const rc=Math.max(0,Math.min(100,face.blinkRight||0))/100*maxLid;
+
+    ctx.save();
+    ctx.beginPath();ctx.ellipse(155,164,40,33,0,0,Math.PI*2);ctx.clip();
+    ctx.fillStyle="#efad73";ctx.fillRect(114,129,82,lc);ctx.fillRect(114,198-lc,82,lc);
+    ctx.restore();
+    ctx.save();
+    ctx.beginPath();ctx.ellipse(265,164,40,33,0,0,Math.PI*2);ctx.clip();
+    ctx.fillStyle="#efad73";ctx.fillRect(224,129,82,rc);ctx.fillRect(224,198-rc,82,rc);
+    ctx.restore();
+
+    // glasses
+    ctx.strokeStyle="#0a0b0d";ctx.lineWidth=9;
+    ctx.strokeRect(104,137,96,60);ctx.strokeRect(220,137,96,60);
+    strokeLine(ctx,[[205,157],[210,151],[215,157]],"#0a0b0d",9);
+    strokeLine(ctx,[[99,151],[69,143]],"#0a0b0d",9);
+    strokeLine(ctx,[[321,151],[351,143]],"#0a0b0d",9);
+
+    // nose + moustache
+    ctx.beginPath();ctx.moveTo(210,167);ctx.lineTo(199,205);ctx.quadraticCurveTo(210,214,221,205);
+    ctx.strokeStyle="#b9794e";ctx.lineWidth=6;ctx.stroke();
+    fillStrokePath(ctx,HEAD_PATHS.moustache,"#211814",null,0);
+
+    // mouth
+    const widthScale=(face.mouthWidth||100)/100;
+    const halfWidth=26*widthScale;
+    const openRy=(face.mouthOpen||0)/100*15;
+    const baseY=247;
+
+    if(openRy>0.25){
+      ctx.beginPath();ctx.ellipse(210,baseY+4,halfWidth*.82,openRy,0,0,Math.PI*2);ctx.fillStyle="#070707";ctx.fill();
+      if((face.mouthOpen||0)>20){
+        ctx.globalAlpha=.86;
+        ctx.beginPath();ctx.ellipse(210,baseY+6+openRy*.25,halfWidth*.48,openRy*.34,0,0,Math.PI*2);ctx.fillStyle="#c9656c";ctx.fill();
+        ctx.globalAlpha=1;
       }
-
-      const bx = (bodyRect.left - figureRect.left) * sx;
-      const by = (bodyRect.top - figureRect.top) * sy;
-      const bw = bodyRect.width * sx;
-      const bh = bodyRect.height * sy;
-      recorderCtx.drawImage(recorderBodyBitmap,bx,by,bw,bh);
-
-      // Kopf wird pro Frame neu gerendert, damit Augen/Mund mit aufgenommen werden.
-      const headBitmap = await svgToDrawable(head.querySelector("svg"));
-      const headWidthCss = head.offsetWidth;
-      const headHeightCss = head.offsetHeight;
-      const hx = (anchorRect.left - figureRect.left) * sx;
-      const hy = (anchorRect.top - figureRect.top) * sy;
-      const hw = headWidthCss * sx;
-      const hh = headHeightCss * sy;
-
-      const lean = Math.max(-12, Math.min(12,
-        (avatarState.head.sideLean || 0) + (avatarState.head.idleLean || 0)
-      ));
-
-      recorderCtx.save();
-      recorderCtx.translate(hx,hy);
-      recorderCtx.rotate(lean * Math.PI / 180);
-      recorderCtx.drawImage(headBitmap,-hw/2,-hh,hw,hh);
-      recorderCtx.restore();
-
-      if (headBitmap && typeof headBitmap.close === "function") headBitmap.close();
-
-      if (ui.recordTime) {
-        ui.recordTime.textContent = formatRecordTime(performance.now() - recorderStartedAt);
-      }
-    } catch (error) {
-      console.error("Recorder frame error:", error);
-    } finally {
-      recorderBusy = false;
-      recorderAnimationFrame = requestAnimationFrame(paintRecorderFrame);
     }
+
+    const leftY=baseY-(face.mouthCornerLeft||0)*.55;
+    const rightY=baseY-(face.mouthCornerRight||0)*.55;
+    const controlY=baseY-(((face.mouthCornerLeft||0)+(face.mouthCornerRight||0))/2)*.40;
+    ctx.beginPath();ctx.moveTo(210-halfWidth,leftY);ctx.quadraticCurveTo(210,controlY,210+halfWidth,rightY);
+    ctx.strokeStyle="#090909";ctx.lineWidth=6;ctx.lineCap="round";ctx.stroke();
+
+    ctx.restore();
+  }
+
+  function paintRecorderFrame() {
+    if (!recorderCtx || !recorderCanvas) return;
+    drawRecordingBackground(recorderCtx,recorderCanvas.width,recorderCanvas.height);
+    drawRecordedBody(recorderCtx);
+    drawRecordedHead(recorderCtx);
   }
 
   function preferredRecorderMime() {
     if (!window.MediaRecorder) return "";
-    const options = [
-      "video/webm;codecs=vp9",
+    const options=[
+      "video/webm;codecs=vp8,opus",
       "video/webm;codecs=vp8",
       "video/webm"
     ];
-    return options.find(type => MediaRecorder.isTypeSupported(type)) || "";
+    return options.find(type=>MediaRecorder.isTypeSupported(type))||"";
   }
 
   async function startAvatarRecording() {
-    if (avatarRecorder && avatarRecorder.state !== "inactive") return;
-
+    if (avatarRecorder && avatarRecorder.state!=="inactive") return;
     if (!window.MediaRecorder || !HTMLCanvasElement.prototype.captureStream) {
-      setRecorderStatus("Dieser Browser unterstützt die Videoaufnahme leider nicht");
+      setRecorderStatus("Videoaufnahme wird von diesem Browser nicht unterstützt");
       return;
     }
 
     try {
-      recorderBlob = null;
-      if (recorderUrl) {
+      recorderStopping=false;
+      recorderChunks=[];
+      recorderBlob=null;
+
+      if(recorderUrl){
         URL.revokeObjectURL(recorderUrl);
-        recorderUrl = null;
+        recorderUrl=null;
       }
-      recorderChunks = [];
 
-      const figureRect = ui.avatarFigure.getBoundingClientRect();
-      const baseWidth = 720;
-      const ratio = figureRect.height / Math.max(1, figureRect.width);
-      const baseHeight = Math.max(720, Math.min(1280, Math.round(baseWidth * ratio)));
+      if(recorderCanvas) recorderCanvas.remove();
+      recorderCanvas=document.createElement("canvas");
+      recorderCanvas.width=720;
+      recorderCanvas.height=920;
+      recorderCanvas.className="recorder-capture-canvas";
+      document.body.appendChild(recorderCanvas);
 
-      recorderCanvas = document.createElement("canvas");
-      recorderCanvas.width = baseWidth;
-      recorderCanvas.height = baseHeight;
-      recorderCtx = recorderCanvas.getContext("2d", {alpha:false});
+      recorderCtx=recorderCanvas.getContext("2d",{alpha:false,desynchronized:true});
+      paintRecorderFrame();
 
-      if (recorderBodyBitmap && typeof recorderBodyBitmap.close === "function") {
-        recorderBodyBitmap.close();
-      }
-      recorderBodyBitmap = null;
+      const canvasStream=recorderCanvas.captureStream(30);
+      const tracks=[...canvasStream.getVideoTracks()];
 
-      const videoStream = recorderCanvas.captureStream(30);
-      const tracks = [...videoStream.getVideoTracks()];
-
-      // Wenn bereits Audio geladen ist, dessen Ton in die Aufnahme übernehmen.
-      if (ui.speechAudio && ui.speechAudio.src && ensureAudioGraph()) {
-        recorderAudioDestination = audioContext.createMediaStreamDestination();
+      // Audio nur anhängen, wenn eine Datei geladen wurde.
+      if(ui.speechAudio && ui.speechAudio.src && ensureAudioGraph()){
+        if(audioContext.state==="suspended"){
+          try{await audioContext.resume();}catch(_){}
+        }
+        recorderAudioDestination=audioContext.createMediaStreamDestination();
         audioAnalyser.connect(recorderAudioDestination);
         tracks.push(...recorderAudioDestination.stream.getAudioTracks());
       }
 
-      recorderStream = new MediaStream(tracks);
+      recorderStream=new MediaStream(tracks);
 
-      const mimeType = preferredRecorderMime();
-      avatarRecorder = new MediaRecorder(
-        recorderStream,
-        mimeType ? {mimeType, videoBitsPerSecond: 4500000} : {videoBitsPerSecond: 4500000}
-      );
+      const mimeType=preferredRecorderMime();
+      const options=mimeType
+        ? {mimeType,videoBitsPerSecond:5000000,audioBitsPerSecond:128000}
+        : {videoBitsPerSecond:5000000,audioBitsPerSecond:128000};
 
-      avatarRecorder.addEventListener("dataavailable", event => {
-        if (event.data && event.data.size > 0) recorderChunks.push(event.data);
-      });
+      avatarRecorder=new MediaRecorder(recorderStream,options);
 
-      avatarRecorder.addEventListener("stop", () => {
-        const type = avatarRecorder.mimeType || "video/webm";
-        recorderBlob = new Blob(recorderChunks,{type});
-        recorderUrl = URL.createObjectURL(recorderBlob);
+      avatarRecorder.ondataavailable=(event)=>{
+        if(event.data && event.data.size>0) recorderChunks.push(event.data);
+      };
 
-        if (ui.recordSave) ui.recordSave.disabled = false;
-        if (ui.recordStart) {
-          ui.recordStart.disabled = false;
+      avatarRecorder.onerror=(event)=>{
+        console.error("Recorder error",event);
+        setRecorderStatus("Aufnahmefehler");
+      };
+
+      avatarRecorder.onstop=()=>{
+        if(recorderPaintTimer){clearInterval(recorderPaintTimer);recorderPaintTimer=null;}
+        if(recorderClockTimer){clearInterval(recorderClockTimer);recorderClockTimer=null;}
+
+        if(recorderStream){
+          recorderStream.getTracks().forEach(track=>track.stop());
+          recorderStream=null;
+        }
+
+        if(recorderAudioDestination && audioAnalyser){
+          try{audioAnalyser.disconnect(recorderAudioDestination);}catch(_){}
+          recorderAudioDestination=null;
+        }
+
+        const type=avatarRecorder.mimeType||"video/webm";
+        recorderBlob=new Blob(recorderChunks,{type});
+        recorderUrl=URL.createObjectURL(recorderBlob);
+
+        if(ui.recordSave) ui.recordSave.disabled=recorderBlob.size===0;
+        if(ui.recordStart){
+          ui.recordStart.disabled=false;
           ui.recordStart.classList.remove("recording");
         }
-        if (ui.recordStop) ui.recordStop.disabled = true;
+        if(ui.recordStop) ui.recordStop.disabled=true;
 
-        setRecorderStatus("Aufnahme fertig · bereit zum Speichern");
-      });
+        const seconds=Math.max(1,Math.round((performance.now()-recorderStartedAt)/1000));
+        setRecorderStatus("Aufnahme fertig · "+seconds+" s · "+Math.round(recorderBlob.size/1024)+" KB");
+        recorderStopping=false;
+      };
 
-      recorderStartedAt = performance.now();
-      recorderLastPaint = 0;
-      if (ui.recordTime) ui.recordTime.textContent = "00:00";
-      if (ui.recordStart) {
-        ui.recordStart.disabled = true;
+      recorderStartedAt=performance.now();
+      if(ui.recordTime) ui.recordTime.textContent="00:00";
+      if(ui.recordStart){
+        ui.recordStart.disabled=true;
         ui.recordStart.classList.add("recording");
       }
-      if (ui.recordStop) ui.recordStop.disabled = false;
-      if (ui.recordSave) ui.recordSave.disabled = true;
+      if(ui.recordStop) ui.recordStop.disabled=false;
+      if(ui.recordSave) ui.recordSave.disabled=true;
 
-      setRecorderStatus("● Aufnahme läuft · nur Figur");
-      avatarRecorder.start(250);
-      recorderAnimationFrame = requestAnimationFrame(paintRecorderFrame);
-    } catch (error) {
-      console.error("Recorder start error:", error);
+      setRecorderStatus("● Aufnahme läuft");
+      avatarRecorder.start(1000);
+
+      // Feste Malfrequenz unabhängig vom Browser-UI.
+      recorderPaintTimer=setInterval(paintRecorderFrame,33);
+
+      // Timer läuft unabhängig vom Zeichnen.
+      recorderClockTimer=setInterval(()=>{
+        if(ui.recordTime){
+          ui.recordTime.textContent=formatRecordTime(performance.now()-recorderStartedAt);
+        }
+      },200);
+    } catch(error){
+      console.error("Recorder start error:",error);
       setRecorderStatus("Aufnahme konnte nicht gestartet werden");
-      if (ui.recordStart) {
-        ui.recordStart.disabled = false;
+      if(ui.recordStart){
+        ui.recordStart.disabled=false;
         ui.recordStart.classList.remove("recording");
       }
-      if (ui.recordStop) ui.recordStop.disabled = true;
+      if(ui.recordStop) ui.recordStop.disabled=true;
     }
   }
 
   function stopAvatarRecording() {
-    if (!avatarRecorder || avatarRecorder.state === "inactive") return;
+    if(!avatarRecorder || avatarRecorder.state==="inactive" || recorderStopping) return;
+    recorderStopping=true;
 
-    if (recorderAnimationFrame) {
-      cancelAnimationFrame(recorderAnimationFrame);
-      recorderAnimationFrame = null;
-    }
+    if(ui.recordStop) ui.recordStop.disabled=true;
+    setRecorderStatus("Aufnahme wird abgeschlossen …");
 
-    avatarRecorder.stop();
+    // Noch einen letzten vollständigen Frame + Datenblock anfordern.
+    paintRecorderFrame();
+    try{avatarRecorder.requestData();}catch(_){}
 
-    if (recorderStream) {
-      recorderStream.getTracks().forEach(track => track.stop());
-      recorderStream = null;
-    }
-
-    if (recorderAudioDestination && audioAnalyser) {
-      try { audioAnalyser.disconnect(recorderAudioDestination); } catch (_) {}
-      recorderAudioDestination = null;
-    }
-
-    if (recorderBodyBitmap && typeof recorderBodyBitmap.close === "function") {
-      recorderBodyBitmap.close();
-    }
-    recorderBodyBitmap = null;
+    // MediaRecorder erst sauber schließen; Tracks erst im onstop beenden.
+    setTimeout(()=>{
+      try{
+        if(avatarRecorder && avatarRecorder.state!=="inactive") avatarRecorder.stop();
+      }catch(error){
+        console.error("Recorder stop error:",error);
+        recorderStopping=false;
+        setRecorderStatus("Stoppen fehlgeschlagen");
+      }
+    },180);
   }
 
   function saveAvatarRecording() {
-    if (!recorderBlob || !recorderUrl) return;
+    if(!recorderBlob || !recorderUrl) return;
 
-    const extension = recorderBlob.type.includes("webm") ? "webm" : "mp4";
-    const link = document.createElement("a");
-    link.href = recorderUrl;
-    link.download = "PS_AI_MUSIC_Avatar_" +
-      new Date().toISOString().replace(/[:.]/g,"-") +
-      "." + extension;
+    const link=document.createElement("a");
+    link.href=recorderUrl;
+    link.download="PS_AI_MUSIC_Avatar_"+new Date().toISOString().replace(/[:.]/g,"-")+".webm";
     document.body.appendChild(link);
     link.click();
     link.remove();
   }
 
   function bindAvatarRecorder() {
-    if (ui.recordStart) ui.recordStart.addEventListener("click", startAvatarRecording);
-    if (ui.recordStop) ui.recordStop.addEventListener("click", stopAvatarRecording);
-    if (ui.recordSave) ui.recordSave.addEventListener("click", saveAvatarRecording);
+    if(ui.recordStart) ui.recordStart.addEventListener("click",startAvatarRecording);
+    if(ui.recordStop) ui.recordStop.addEventListener("click",stopAvatarRecording);
+    if(ui.recordSave) ui.recordSave.addEventListener("click",saveAvatarRecording);
   }
 
   function bindMenu() {
