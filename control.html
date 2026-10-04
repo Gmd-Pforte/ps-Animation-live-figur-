@@ -84,6 +84,31 @@ radial-gradient(circle at center,#0d2534,#071018 70%);background-size:25% 25%,25
 .answer-btn.empty{opacity:.55;border-style:dashed}.answer-btn small{display:block;font-size:8px;color:var(--muted);margin-top:2px;font-weight:700}
 @media(max-width:560px){.answer-manager-item{grid-template-columns:1fr}.answer-manager-actions{justify-content:stretch}.answer-manager-actions>*{flex:1}}
 
+
+.speech-remote-box{display:grid;gap:8px}
+.speech-remote-box textarea{
+  width:100%;min-height:86px;resize:vertical;border:1px solid #31566e;border-radius:12px;
+  background:#07131c;color:#fff;padding:11px;font:700 14px/1.4 system-ui,-apple-system,Segoe UI,sans-serif;
+  outline:none
+}
+.speech-remote-box textarea:focus{border-color:var(--cyan);box-shadow:0 0 0 2px rgba(39,200,255,.08)}
+.speech-remote-actions{display:grid;grid-template-columns:auto auto 1fr;gap:6px;align-items:center}
+.speech-remote-actions>span{font-size:9px;color:var(--muted);white-space:nowrap}
+.speech-remote-actions button{min-height:42px;border-radius:10px;font-weight:900}
+#speechClear{border:1px solid #5a3b43;background:#150b0e;color:#eacbd1;padding:7px 9px}
+.speech-send{border:1px solid #2d6c87;background:rgba(39,200,255,.12);color:#eaf9ff;font-size:13px}
+.speech-quick{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.speech-quick button,.speech-recent button{
+  min-height:36px;border:1px solid #324755;border-radius:9px;background:#0a151d;color:#dcebf4;font-weight:850;font-size:9px;padding:6px 8px
+}
+.speech-recent{display:flex;gap:5px;overflow-x:auto;padding-top:1px}
+.speech-recent:empty{display:none}
+.speech-recent button{flex:0 0 auto;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:470px){
+  .speech-remote-actions{grid-template-columns:auto 1fr}.speech-remote-actions>span{grid-column:1/-1}
+  .speech-quick{grid-template-columns:repeat(2,1fr)}
+}
+
 </style>
 </head>
 <body>
@@ -127,21 +152,24 @@ radial-gradient(circle at center,#0d2534,#071018 70%);background-size:25% 25%,25
       </div>
     </article>
 
-    <article class="card">
-      <div class="card-head"><strong>🔊 Schnellantworten</strong><span id="answerCountLabel">0 gespeichert</span></div>
-      <div id="quickAnswerGrid" class="answer-grid">
-        <span class="subtle">Antworten werden geladen …</span>
-      </div>
-    </article>
-
     <article class="card wide">
-      <div class="card-head"><strong>🗂️ Antworten verwalten</strong><span id="answerManagerAvatar">PS Avatar</span></div>
-      <div class="answer-create-row">
-        <input id="newAnswerLabel" type="text" maxlength="60" placeholder="Neue Antwort, z. B. Danke">
-        <button id="newAnswerAdd" type="button">＋ Anlegen</button>
+      <div class="card-head"><strong>💬 Avatar sprechen lassen</strong><span id="speechAvatarName">PS Avatar</span></div>
+      <div class="speech-remote-box">
+        <textarea id="speechText" maxlength="280" rows="3" placeholder="Text eingeben … z. B. Schön, dass ihr da seid ❤️"></textarea>
+        <div class="speech-remote-actions">
+          <span id="speechCounter">0 / 280</span>
+          <button id="speechClear" type="button">✕ Blase weg</button>
+          <button id="speechSend" class="speech-send" type="button">💬 Senden</button>
+        </div>
+        <div class="speech-quick">
+          <button type="button" data-speech-quick="Ja">Ja</button>
+          <button type="button" data-speech-quick="Nein">Nein</button>
+          <button type="button" data-speech-quick="Hallo ❤️">Hallo</button>
+          <button type="button" data-speech-quick="Danke ❤️">Danke</button>
+        </div>
+        <div id="speechRecent" class="speech-recent"></div>
       </div>
-      <div id="answerManagerList" class="answer-manager-list"></div>
-      <p class="subtle">Jede Figur hat ihre eigene Antwortbibliothek. Die MP3 liegt zentral in Supabase und funktioniert deshalb auch direkt auf der Tablet-Bühne.</p>
+      <p class="subtle">Der Text erscheint als Sprechblase auf dem Tablet. Der aktive Avatar bewegt dabei automatisch den Mund; Ja/Nein bekommen passende Kopfreaktionen.</p>
     </article>
 
     <article class="card">
@@ -294,8 +322,7 @@ const danceBtn=$("danceToggle"),walkBtn=$("walkToggle"),intensity=$("intensity")
 let channel=null,room="",connected=false,dance=false,walk=false,danceStyle="groove",lastStageSeen=0,lastStageSnapshot=null,lastSendAt=0;
 let currentBackgroundUrl="";
 let currentCharacter="human";
-let remoteAnswers=[];
-let lastAnswerLoadKey="";
+let recentSpeechTexts=[];
 
 function cleanRoom(value){return String(value||"").toUpperCase().replace(/[^A-Z0-9_-]/g,"").slice(0,24)}
 function generateRoom(){const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789",bytes=new Uint8Array(8);crypto.getRandomValues(bytes);let out="PS-";for(const b of bytes)out+=chars[b%chars.length];return out}
@@ -307,12 +334,10 @@ function avatarName(c){return c==="bear"?"PS Bär":c==="gull"?"BreuerBeatz":c===
 function setStageOnline(snapshot={}){
   lastStageSeen=Date.now();lastStageSnapshot=snapshot;stageEl.textContent="Tablet: ● ONLINE";stageEl.classList.add("online");
   if(snapshot.character){
-    const changed=currentCharacter!==snapshot.character;
     currentCharacter=snapshot.character;
     $("activeAvatar").textContent=avatarName(snapshot.character);
-    $("answerManagerAvatar").textContent=avatarName(snapshot.character);
+    $("speechAvatarName").textContent=avatarName(snapshot.character);
     document.querySelectorAll("[data-avatar]").forEach(b=>b.classList.toggle("active",b.dataset.avatar===snapshot.character));
-    if(changed) loadRemoteAnswers(true);
   }
   dance=!!snapshot.dance;walk=!!snapshot.walk;
   danceBtn.classList.toggle("active",dance);danceBtn.textContent=dance?"⏸ Tanz stoppen":"💃 Tanzen";
@@ -330,154 +355,6 @@ function setStageOnline(snapshot={}){
     $("audioUploadStatus").textContent=audio.playing?"Tablet: Audio läuft 🔊":"Tablet: Audio geladen";
   }
 }
-const DEFAULT_REMOTE_ANSWERS=[
-  {answer_id:"ja",label:"Ja",file_url:null,file_name:null,locked:true},
-  {answer_id:"nein",label:"Nein",file_url:null,file_name:null,locked:true}
-];
-
-function answerIdFromLabel(label){
-  return String(label||"antwort").toLowerCase()
-    .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
-    .replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")
-    .slice(0,44)||("antwort-"+Date.now());
-}
-
-function mergedAnswers(rows=[]){
-  const map=new Map();
-  DEFAULT_REMOTE_ANSWERS.forEach(x=>map.set(x.answer_id,{...x}));
-  rows.forEach(row=>{
-    const prev=map.get(row.answer_id)||{};
-    map.set(row.answer_id,{...prev,...row,locked:["ja","nein"].includes(row.answer_id)});
-  });
-  return [...map.values()];
-}
-
-async function loadRemoteAnswers(force=false){
-  if(!room)return;
-  const key=room+"::"+currentCharacter;
-  if(!force&&key===lastAnswerLoadKey&&remoteAnswers.length)return;
-  lastAnswerLoadKey=key;
-
-  $("answerManagerAvatar").textContent=avatarName(currentCharacter);
-  $("quickAnswerGrid").innerHTML='<span class="subtle">Antworten werden geladen …</span>';
-  $("answerManagerList").innerHTML="";
-
-  const {data,error}=await supabase.rpc("get_avatar_remote_answers",{p_room:room,p_character:currentCharacter});
-  if(error){
-    log("Antworten konnten nicht geladen werden: "+error.message);
-    remoteAnswers=mergedAnswers([]);
-  }else{
-    remoteAnswers=mergedAnswers(data||[]);
-  }
-  renderRemoteAnswers();
-}
-
-function renderRemoteAnswers(){
-  const quick=$("quickAnswerGrid"),manager=$("answerManagerList");
-  quick.innerHTML="";manager.innerHTML="";
-
-  let readyCount=0;
-  remoteAnswers.forEach(answer=>{
-    const ready=!!answer.file_url;
-    if(ready)readyCount++;
-
-    const q=document.createElement("button");
-    q.type="button";
-    q.className="answer-btn"+(answer.answer_id==="nein"?" no":"")+(ready?"":" empty");
-    q.innerHTML=(ready?"🔊 ":"＋ ")+escapeHtml(answer.label)+(ready?"":"<small>MP3 fehlt</small>");
-    q.addEventListener("click",()=>{
-      if(!answer.file_url){
-        log("Für „"+answer.label+"“ fehlt noch eine MP3.");
-        return;
-      }
-      sendCommand({action:"answer_remote",id:answer.answer_id,label:answer.label,url:answer.file_url});
-    });
-    quick.appendChild(q);
-
-    const row=document.createElement("div");
-    row.className="answer-manager-item";
-
-    const meta=document.createElement("div");
-    meta.className="answer-manager-meta";
-    meta.innerHTML="<strong>"+escapeHtml(answer.label)+"</strong><span>"+escapeHtml(answer.file_name||"Noch keine MP3")+"</span>";
-
-    const pill=document.createElement("span");
-    pill.className="answer-status-pill"+(ready?" ready":"");
-    pill.textContent=ready?"● gespeichert":"leer";
-
-    const actions=document.createElement("div");
-    actions.className="answer-manager-actions";
-
-    const play=document.createElement("button");
-    play.className="answer-play-small";play.type="button";play.textContent="▶ Test";play.disabled=!ready;
-    play.addEventListener("click",()=>ready&&sendCommand({action:"answer_remote",id:answer.answer_id,label:answer.label,url:answer.file_url}));
-
-    const upload=document.createElement("label");
-    upload.className="answer-file-label";
-    upload.innerHTML='<input type="file" accept="audio/mpeg,audio/mp3,audio/wav,audio/*"><span>＋ MP3</span>';
-    upload.querySelector("input").addEventListener("change",async e=>{
-      const file=e.target.files?.[0];if(!file)return;
-      pill.className="answer-status-pill";pill.textContent="Upload …";
-      const url=await uploadRemoteFile(file,"answers/"+currentCharacter+"/"+answer.answer_id,pill);
-      if(!url){pill.textContent="Fehler";return}
-      const {error}=await supabase.rpc("upsert_avatar_remote_answer",{
-        p_room:room,
-        p_character:currentCharacter,
-        p_answer_id:answer.answer_id,
-        p_label:answer.label,
-        p_file_url:url,
-        p_file_name:file.name
-      });
-      if(error){log("Antwort speichern fehlgeschlagen: "+error.message);return}
-      await loadRemoteAnswers(true);
-      log("✅ „"+answer.label+"“ gespeichert.");
-    });
-
-    const del=document.createElement("button");
-    del.className="answer-delete-small";del.type="button";del.textContent=answer.locked?"MP3 löschen":"✕ Löschen";
-    del.addEventListener("click",async()=>{
-      const {error}=await supabase.rpc("delete_avatar_remote_answer",{
-        p_room:room,p_character:currentCharacter,p_answer_id:answer.answer_id
-      });
-      if(error){log("Löschen fehlgeschlagen: "+error.message);return}
-      await loadRemoteAnswers(true);
-      log(answer.locked?"MP3 entfernt.":"Antwort gelöscht.");
-    });
-
-    actions.append(play,upload,del);
-    row.append(meta,pill,actions);
-    manager.appendChild(row);
-  });
-
-  $("answerCountLabel").textContent=readyCount+" gespeichert";
-}
-
-function escapeHtml(value){
-  return String(value??"").replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[ch]));
-}
-
-async function addRemoteAnswer(){
-  const input=$("newAnswerLabel");
-  const label=(input.value||"").trim();
-  if(!label)return;
-
-  let id=answerIdFromLabel(label);
-  if(remoteAnswers.some(x=>x.answer_id===id))id=id+"-"+Date.now().toString().slice(-4);
-
-  const {error}=await supabase.rpc("upsert_avatar_remote_answer",{
-    p_room:room,
-    p_character:currentCharacter,
-    p_answer_id:id,
-    p_label:label,
-    p_file_url:null,
-    p_file_name:null
-  });
-  if(error){log("Antwort konnte nicht angelegt werden: "+error.message);return}
-  input.value="";
-  await loadRemoteAnswers(true);
-  log("Neue Antwort „"+label+"“ angelegt. Jetzt MP3 hinzufügen.");
-}
-
 async function sendCommand(payload,quiet=false){
   if(!channel||!connected){if(!quiet)log("⚠️ Erst verbinden.");return false}
   try{
@@ -502,7 +379,6 @@ async function connect(value){
   channel.subscribe(async status=>{
     if(status==="SUBSCRIBED"){
       connected=true;setConnection("● verbunden · "+next,true);log("Remote v2 bereit.");
-      await loadRemoteAnswers(true);
       await channel.send({type:"broadcast",event:"ping",payload:{from:"control",at:Date.now()}});
       await sendCommand({action:"ping"},true)
     }
@@ -522,18 +398,62 @@ connectBtn.addEventListener("click",()=>connect(roomEl.value));
 roomEl.addEventListener("input",updateStageLink);
 roomEl.addEventListener("keydown",e=>{if(e.key==="Enter")connect(roomEl.value)});
 
-// Avatars + answers
+// Avatare + Live-Sprechblase
 document.querySelectorAll("[data-avatar]").forEach(btn=>btn.addEventListener("click",()=>{
   const character=btn.dataset.avatar;
   currentCharacter=character;
   sendCommand({action:"avatar",character});
   document.querySelectorAll("[data-avatar]").forEach(b=>b.classList.toggle("active",b===btn));
   $("activeAvatar").textContent=avatarName(character);
-  $("answerManagerAvatar").textContent=avatarName(character);
-  loadRemoteAnswers(true);
+  $("speechAvatarName").textContent=avatarName(character);
 }));
-$("newAnswerAdd").addEventListener("click",addRemoteAnswer);
-$("newAnswerLabel").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();addRemoteAnswer();}});
+
+function loadRecentSpeech(){
+  try{
+    const saved=JSON.parse(localStorage.getItem("ps-avatar-recent-speech")||"[]");
+    recentSpeechTexts=Array.isArray(saved)?saved.slice(0,6):[];
+  }catch(_){recentSpeechTexts=[]}
+  renderRecentSpeech();
+}
+function saveRecentSpeech(text){
+  const clean=String(text||"").trim();
+  if(!clean)return;
+  recentSpeechTexts=[clean,...recentSpeechTexts.filter(x=>x!==clean)].slice(0,6);
+  try{localStorage.setItem("ps-avatar-recent-speech",JSON.stringify(recentSpeechTexts))}catch(_){}
+  renderRecentSpeech();
+}
+function renderRecentSpeech(){
+  const box=$("speechRecent");
+  if(!box)return;
+  box.innerHTML="";
+  recentSpeechTexts.forEach(text=>{
+    const btn=document.createElement("button");
+    btn.type="button";btn.textContent=text;btn.title=text;
+    btn.addEventListener("click",()=>sendSpeechText(text));
+    box.appendChild(btn);
+  });
+}
+function sendSpeechText(value){
+  const text=String(value??$("speechText").value).replace(/\s+/g," ").trim().slice(0,280);
+  if(!text){log("Bitte zuerst Text eingeben.");return}
+  sendCommand({action:"speak_text",text});
+  saveRecentSpeech(text);
+  $("speechText").value="";
+  $("speechCounter").textContent="0 / 280";
+  log("💬 "+avatarName(currentCharacter)+": "+text);
+}
+$("speechText").addEventListener("input",()=>{
+  $("speechCounter").textContent=$("speechText").value.length+" / 280";
+});
+$("speechText").addEventListener("keydown",e=>{
+  if(e.key==="Enter"&&!e.shiftKey){
+    e.preventDefault();sendSpeechText();
+  }
+});
+$("speechSend").addEventListener("click",()=>sendSpeechText());
+$("speechClear").addEventListener("click",()=>sendCommand({action:"speech_clear"}));
+document.querySelectorAll("[data-speech-quick]").forEach(btn=>btn.addEventListener("click",()=>sendSpeechText(btn.dataset.speechQuick)));
+loadRecentSpeech();
 
 // Dance / walk
 danceBtn.addEventListener("click",()=>{dance=!dance;if(dance)walk=false;sendCommand({action:"dance",enabled:dance,style:danceStyle,intensity:Number(intensity.value)/100,speed:Number(speed.value)/100})});
