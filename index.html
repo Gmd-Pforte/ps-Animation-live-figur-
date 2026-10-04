@@ -860,14 +860,14 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.22: Touch-Fix – JS darf den Kopf transformieren */
+/* v0.23: Touch-Fix – JS darf den Kopf transformieren */
 .avatar-head-module{
   will-change:transform;
   transition:transform 70ms linear;
 }
 
 
-/* v0.22: Kopfneigung über festen Cutout-Anker */
+/* v0.23: Kopfneigung über festen Cutout-Anker */
 .head-anchor{
   transform-origin:0 0;
   will-change:transform;
@@ -944,7 +944,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.22: Aufnahme sichtbar unter den Touchfeldern */
+/* v0.23: Aufnahme sichtbar unter den Touchfeldern */
 .record-workspace{
   margin-top:14px;
   border:1px solid rgba(255,255,255,.07);
@@ -992,7 +992,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.22: gleiche Figur auf Handy, Desktop und Aufnahme */
+/* v0.23: gleiche Figur auf Handy, Desktop und Aufnahme */
 .avatar-body{
   width:min(330px,65vw)!important;
   bottom:4px!important;
@@ -1018,7 +1018,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.22: sichtbare Arm-Regler auf der Hauptseite */
+/* v0.23: sichtbare Arm-Regler auf der Hauptseite */
 .arm-main-controls{
   margin-top:14px;
   border:1px solid rgba(39,200,255,.22);
@@ -1130,7 +1130,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.22: vier Charaktere */
+/* v0.23: vier Charaktere */
 .character-buttons{
   grid-template-columns:repeat(4,minmax(0,1fr));
 }
@@ -1520,7 +1520,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.22: Recorder-Format */
+/* v0.23: Recorder-Format */
 .record-format-choice{
   display:grid;
   grid-template-columns:auto minmax(150px,1fr);
@@ -1550,6 +1550,51 @@ body.menu-open{overflow:hidden}
   grid-column:1/-1;
   color:var(--muted);
   font-size:10px;
+}
+
+
+/* v0.23: Avatar Designer */
+.designer-panel{
+  margin-top:10px;
+  border:1px solid rgba(255,96,190,.22);
+  background:linear-gradient(180deg,rgba(255,67,170,.045),rgba(0,0,0,.16));
+  border-radius:18px;
+  padding:12px;
+}
+.designer-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.designer-head>div{display:grid;gap:2px}
+.designer-head strong{font-size:16px}
+#designerNotice{font-size:10px;color:var(--muted)}
+#designerReset{
+  min-height:42px;border-radius:12px;border:1px solid #5a3853;background:#17101a;
+  color:var(--text);padding:8px 12px;font-weight:900
+}
+.designer-presets{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:11px 0}
+.designer-presets button{
+  min-height:44px;border-radius:11px;border:1px solid #493248;background:#120e16;
+  color:var(--text);font-weight:850
+}
+.designer-presets button.active{border-color:#ff62c3;background:rgba(255,70,175,.10)}
+.designer-panel fieldset{border:0;padding:0;margin:0;min-width:0}
+.designer-panel fieldset:disabled{opacity:.42}
+.designer-panel details{border-top:1px solid rgba(255,255,255,.06);padding:8px 0}
+.designer-panel details:last-of-type{border-bottom:1px solid rgba(255,255,255,.06)}
+.designer-panel summary{cursor:pointer;font-size:12px;font-weight:900;color:#f4edf4;padding:4px 1px}
+.designer-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px 12px;padding:9px 2px 3px}
+.designer-grid label{display:grid;gap:5px;font-size:10px;color:var(--muted)}
+.designer-grid label span{display:flex;justify-content:space-between;gap:8px}
+.designer-grid strong{color:#ff8bd0;font-variant-numeric:tabular-nums}
+.designer-grid input[type="range"]{width:100%;accent-color:#ff61c3}
+.designer-colors{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;padding:10px 2px 3px}
+.designer-colors label{
+  min-height:58px;display:grid;place-items:center;gap:4px;padding:5px;border:1px solid rgba(255,255,255,.07);
+  background:rgba(0,0,0,.14);border-radius:11px;color:var(--muted);font-size:9px
+}
+.designer-colors input[type="color"]{width:100%;height:28px;border:0;padding:0;background:transparent}
+.designer-note{margin:9px 0 0;color:#8e8090;font-size:10px;line-height:1.45}
+@media(max-width:620px){
+  .designer-grid{grid-template-columns:1fr}
+  .designer-colors{grid-template-columns:repeat(3,1fr)}
 }
 
 </style>
@@ -1645,7 +1690,7 @@ body.menu-open{overflow:hidden}
 
           <!-- Kompletter Grundkörper: starr, Kopf bleibt eigenes Teil. -->
           <div id="torsoPart" class="avatar-body" aria-label="Avatar Körper">
-            <svg viewBox="0 0 420 620" role="img" aria-label="PS AI MUSIC Premium Ganzkörper">
+            <svg id="psHumanBodySvg" viewBox="0 0 420 620" role="img" aria-label="PS AI MUSIC Premium Ganzkörper">
               <defs>
                 <linearGradient id="psHoodieGrad" x1="0" y1="0" x2="1" y2="1">
                   <stop offset="0%" stop-color="#222933"/>
@@ -1832,7 +1877,7 @@ body.menu-open{overflow:hidden}
                 <path d="M347 157 Q361 170 345 189" fill="none" stroke="#b66f49" stroke-width="4.5" stroke-linecap="round"/>
 
                 <!-- Gesicht mit etwas stärkerem Kiefer -->
-                <path d="M210 24
+                <path id="psFaceShape" d="M210 24
                          C132 19 79 69 75 153
                          C71 235 114 309 210 346
                          C306 309 349 235 345 153
@@ -1846,6 +1891,7 @@ body.menu-open{overflow:hidden}
                       fill="none" stroke="#a86445" stroke-width="3" opacity=".35" stroke-linecap="round"/>
 
                 <!-- Cap -->
+                <g id="psCapGroup">
                 <path d="M89 105 Q91 37 145 19 Q210 -2 275 19 Q329 37 331 105
                          Q289 80 210 80 Q131 80 89 105 Z"
                       fill="url(#psCapGrad)" stroke="#05070a" stroke-width="9"/>
@@ -1856,8 +1902,10 @@ body.menu-open{overflow:hidden}
                 <path d="M111 76 Q151 41 205 36 Q260 41 307 78"
                       fill="none" stroke="#4a535e" stroke-width="3" opacity=".5" stroke-linecap="round"/>
                 <path d="M116 91 Q210 69 305 92" fill="none" stroke="#fff" stroke-width="2.5" opacity=".08"/>
+                </g>
 
                 <!-- Bart -->
+                <g id="psBeardGroup">
                 <path d="M88 178 Q97 236 122 280 Q149 325 210 346 Q271 325 298 280
                          Q323 236 332 178 Q309 207 279 220 Q249 234 210 235
                          Q171 234 141 220 Q111 207 88 178 Z"
@@ -1870,27 +1918,30 @@ body.menu-open{overflow:hidden}
                       fill="none" stroke="#211914" stroke-width="6" stroke-linecap="round"/>
                 <path d="M131 231 Q143 257 153 278 M289 231 Q277 257 267 278"
                       fill="none" stroke="#5d4d46" stroke-width="3" opacity=".72" stroke-linecap="round"/>
+                </g>
 
                 <!-- Augenbrauen -->
+                <g id="psBrowsGroup">
                 <path d="M112 121 Q151 102 190 119" fill="none" stroke="#2b1c15" stroke-width="9" stroke-linecap="round"/>
                 <path d="M230 119 Q269 102 308 121" fill="none" stroke="#2b1c15" stroke-width="9" stroke-linecap="round"/>
                 <path d="M120 117 Q151 108 182 118 M238 118 Q269 108 300 117"
                       fill="none" stroke="#6a4837" stroke-width="2.5" opacity=".7"/>
+                </g>
 
                 <!-- Augen -->
                 <g id="eyesModule">
-                  <ellipse cx="155" cy="164" rx="40" ry="33" fill="#fdfdfb"/>
-                  <ellipse cx="265" cy="164" rx="40" ry="33" fill="#fdfdfb"/>
+                  <ellipse id="psEyeWhiteLeft" cx="155" cy="164" rx="40" ry="33" fill="#fdfdfb"/>
+                  <ellipse id="psEyeWhiteRight" cx="265" cy="164" rx="40" ry="33" fill="#fdfdfb"/>
                   <path d="M118 158 Q155 132 192 158 M228 158 Q265 132 302 158"
                         fill="none" stroke="#b36f4a" stroke-width="3" opacity=".42"/>
 
-                  <g clip-path="url(#eyeClipLeft)">
+                  <g id="psEyeClipLeft" clip-path="url(#eyeClipLeft)">
                     <circle id="pupilLeft" cx="155" cy="164" r="7.5" fill="#050607"/>
                     <rect id="lidTopLeft" x="114" y="129" width="82" height="0" fill="#e8a575"/>
                     <rect id="lidBottomLeft" x="114" y="198" width="82" height="0" fill="#e8a575"/>
                   </g>
 
-                  <g clip-path="url(#eyeClipRight)">
+                  <g id="psEyeClipRight" clip-path="url(#eyeClipRight)">
                     <circle id="pupilRight" cx="265" cy="164" r="7.5" fill="#050607"/>
                     <rect id="lidTopRight" x="224" y="129" width="82" height="0" fill="#e8a575"/>
                     <rect id="lidBottomRight" x="224" y="198" width="82" height="0" fill="#e8a575"/>
@@ -1898,7 +1949,7 @@ body.menu-open{overflow:hidden}
                 </g>
 
                 <!-- Brille mit leichtem Glas -->
-                <g stroke="#07090c" stroke-width="9">
+                <g id="psGlassesGroup" stroke="#07090c" stroke-width="9">
                   <rect x="99" y="132" width="106" height="70" rx="25" fill="url(#psLensGrad)"/>
                   <rect x="215" y="132" width="106" height="70" rx="25" fill="url(#psLensGrad)"/>
                   <path d="M205 157 Q210 151 215 157" fill="none"/>
@@ -1908,12 +1959,14 @@ body.menu-open{overflow:hidden}
                       fill="none" stroke="#fff" stroke-width="3" opacity=".17" stroke-linecap="round"/>
 
                 <!-- Nase -->
+                <g id="psNoseGroup">
                 <path d="M210 167 L199 205 Q210 214 221 205"
                       fill="none" stroke="#a96948" stroke-width="5.5" stroke-linecap="round"/>
                 <path d="M205 207 Q210 211 216 207" fill="none" stroke="#6f4430" stroke-width="2.5"/>
+                </g>
 
                 <!-- Schnurrbart -->
-                <path d="M163 226 Q184 205 210 219 Q236 205 257 226
+                <path id="psMoustache" d="M163 226 Q184 205 210 219 Q236 205 257 226
                          Q236 237 210 233 Q184 237 163 226 Z"
                       fill="#211814"/>
                 <path d="M171 224 Q190 217 207 224 M213 224 Q230 217 249 224"
@@ -1932,8 +1985,81 @@ body.menu-open{overflow:hidden}
           </div>
         </div>
 
-        <div class="stage-caption"><strong>v0.22:</strong> PS Avatar Premium</div>
+        <div class="stage-caption"><strong>v0.23:</strong> PS Avatar Premium</div>
       </div>
+    </section>
+
+    <section class="designer-panel" aria-label="Avatar Designer">
+      <div class="designer-head">
+        <div>
+          <span class="mini-label">AVATAR DESIGNER v1</span>
+          <strong>PS Avatar formen</strong>
+          <span id="designerNotice">Alle Bewegungen bleiben aktiv</span>
+        </div>
+        <button id="designerReset" type="button">↺ Standard</button>
+      </div>
+
+      <div class="designer-presets">
+        <button type="button" data-designer-preset="premium" class="active">✨ Premium</button>
+        <button type="button" data-designer-preset="cutout">✂️ Cutout</button>
+        <button type="button" data-designer-preset="random">🎲 Zufall</button>
+      </div>
+
+      <fieldset id="designerHumanOnly">
+        <details open>
+          <summary>🙂 Kopf & Gesicht</summary>
+          <div class="designer-grid">
+            <label><span>Kopfbreite <strong data-designer-value="headWidth">100%</strong></span><input type="range" min="82" max="122" value="100" data-designer-key="headWidth"></label>
+            <label><span>Kopfhöhe <strong data-designer-value="headHeight">100%</strong></span><input type="range" min="86" max="116" value="100" data-designer-key="headHeight"></label>
+            <label><span>Gesicht rund <strong data-designer-value="faceRoundness">55%</strong></span><input type="range" min="0" max="100" value="55" data-designer-key="faceRoundness"></label>
+          </div>
+        </details>
+
+        <details>
+          <summary>👀 Augen & Brille</summary>
+          <div class="designer-grid">
+            <label><span>Augengröße <strong data-designer-value="eyeSize">100%</strong></span><input type="range" min="75" max="125" value="100" data-designer-key="eyeSize"></label>
+            <label><span>Augenabstand <strong data-designer-value="eyeSpacing">100%</strong></span><input type="range" min="78" max="128" value="100" data-designer-key="eyeSpacing"></label>
+            <label><span>Augenhöhe <strong data-designer-value="eyeY">0</strong></span><input type="range" min="-16" max="16" value="0" data-designer-key="eyeY"></label>
+            <label><span>Brillengröße <strong data-designer-value="glassesSize">100%</strong></span><input type="range" min="78" max="125" value="100" data-designer-key="glassesSize"></label>
+            <label><span>Brille Höhe <strong data-designer-value="glassesY">0</strong></span><input type="range" min="-18" max="18" value="0" data-designer-key="glassesY"></label>
+          </div>
+        </details>
+
+        <details>
+          <summary>👃 Mund, Nase & Bart</summary>
+          <div class="designer-grid">
+            <label><span>Nase <strong data-designer-value="noseSize">100%</strong></span><input type="range" min="75" max="125" value="100" data-designer-key="noseSize"></label>
+            <label><span>Nase Höhe <strong data-designer-value="noseY">0</strong></span><input type="range" min="-12" max="14" value="0" data-designer-key="noseY"></label>
+            <label><span>Mundgröße <strong data-designer-value="mouthSize">100%</strong></span><input type="range" min="75" max="135" value="100" data-designer-key="mouthSize"></label>
+            <label><span>Mund Höhe <strong data-designer-value="mouthY">0</strong></span><input type="range" min="-14" max="18" value="0" data-designer-key="mouthY"></label>
+            <label><span>Bartgröße <strong data-designer-value="beardSize">100%</strong></span><input type="range" min="75" max="120" value="100" data-designer-key="beardSize"></label>
+            <label><span>Bart Höhe <strong data-designer-value="beardY">0</strong></span><input type="range" min="-14" max="18" value="0" data-designer-key="beardY"></label>
+          </div>
+        </details>
+
+        <details>
+          <summary>🧢 Cap & Körper</summary>
+          <div class="designer-grid">
+            <label><span>Cap-Größe <strong data-designer-value="capSize">100%</strong></span><input type="range" min="80" max="125" value="100" data-designer-key="capSize"></label>
+            <label><span>Cap Höhe <strong data-designer-value="capY">0</strong></span><input type="range" min="-18" max="18" value="0" data-designer-key="capY"></label>
+            <label><span>Körperbreite <strong data-designer-value="bodyWidth">100%</strong></span><input type="range" min="82" max="120" value="100" data-designer-key="bodyWidth"></label>
+          </div>
+        </details>
+
+        <details>
+          <summary>🎨 Farben</summary>
+          <div class="designer-colors">
+            <label><span>Haut</span><input type="color" value="#eca978" data-designer-color="skinColor"></label>
+            <label><span>Bart</span><input type="color" value="#32251f" data-designer-color="beardColor"></label>
+            <label><span>Cap</span><input type="color" value="#12161c" data-designer-color="capColor"></label>
+            <label><span>Hoodie</span><input type="color" value="#11161d" data-designer-color="hoodieColor"></label>
+            <label><span>Jeans</span><input type="color" value="#3c639d" data-designer-color="jeansColor"></label>
+          </div>
+        </details>
+      </fieldset>
+
+      <p class="designer-note">Die Regler verändern nur die Zeichnung. Blick, Blinzeln, Lip-Sync, Kopfbewegung, Arme und Avatar Brain laufen weiter.</p>
     </section>
 
     <section class="touch-workspace">
@@ -2280,7 +2406,7 @@ body.menu-open{overflow:hidden}
       </article>
         </section>
 
-        <div class="menu-version">Version <strong>0.22</strong></div>
+        <div class="menu-version">Version <strong>0.23</strong></div>
       </div>
     </aside>
 
@@ -2290,7 +2416,7 @@ body.menu-open{overflow:hidden}
 (() => {
   "use strict";
 
-  const VERSION = "0.22";
+  const VERSION = "0.23";
 
   const avatarState = {
     version: VERSION,
@@ -2386,6 +2512,31 @@ body.menu-open{overflow:hidden}
       fit: "cover",
       dim: 0,
       name: "Studio Grid"
+    },
+
+    designer: {
+      headWidth: 100,
+      headHeight: 100,
+      faceRoundness: 55,
+      eyeSize: 100,
+      eyeSpacing: 100,
+      eyeY: 0,
+      glassesSize: 100,
+      glassesY: 0,
+      noseSize: 100,
+      noseY: 0,
+      mouthSize: 100,
+      mouthY: 0,
+      beardSize: 100,
+      beardY: 0,
+      capSize: 100,
+      capY: 0,
+      bodyWidth: 100,
+      skinColor: "#eca978",
+      beardColor: "#32251f",
+      capColor: "#12161c",
+      hoodieColor: "#11161d",
+      jeansColor: "#3c639d"
     }
   };
 
@@ -2418,6 +2569,9 @@ body.menu-open{overflow:hidden}
     backgroundFit: document.getElementById("backgroundFit"),
     backgroundDim: document.getElementById("backgroundDim"),
     backgroundDimValue: document.getElementById("backgroundDimValue"),
+    designerHumanOnly: document.getElementById("designerHumanOnly"),
+    designerNotice: document.getElementById("designerNotice"),
+    designerReset: document.getElementById("designerReset"),
     headPart: document.getElementById("headPart"),
     headAnchor: document.getElementById("headAnchor"),
     headMotionGroup: document.getElementById("headMotionGroup"),
@@ -2695,6 +2849,267 @@ body.menu-open{overflow:hidden}
     }
 
     renderBackground();
+  }
+
+  // --- Avatar Designer v1 -----------------------------------------------
+  const DESIGNER_STORAGE_KEY = "ps-avatar-designer-v1";
+
+  const DESIGNER_DEFAULTS = {
+    headWidth:100, headHeight:100, faceRoundness:55,
+    eyeSize:100, eyeSpacing:100, eyeY:0,
+    glassesSize:100, glassesY:0,
+    noseSize:100, noseY:0,
+    mouthSize:100, mouthY:0,
+    beardSize:100, beardY:0,
+    capSize:100, capY:0,
+    bodyWidth:100,
+    skinColor:"#eca978", beardColor:"#32251f", capColor:"#12161c",
+    hoodieColor:"#11161d", jeansColor:"#3c639d"
+  };
+
+  const DESIGNER_PRESETS = {
+    premium: {...DESIGNER_DEFAULTS},
+    cutout: {
+      ...DESIGNER_DEFAULTS,
+      headWidth:110,
+      headHeight:94,
+      faceRoundness:88,
+      eyeSize:108,
+      eyeSpacing:96,
+      glassesSize:102,
+      noseSize:88,
+      mouthSize:106,
+      beardSize:94,
+      capSize:106,
+      bodyWidth:95
+    }
+  };
+
+  function clampNumber(v,min,max){
+    return Math.max(min,Math.min(max,Number(v)||0));
+  }
+
+  function hexAdjust(hex,amount){
+    const raw=String(hex||"#777777").replace("#","");
+    const value=raw.length===3 ? raw.split("").map(x=>x+x).join("") : raw.padEnd(6,"0").slice(0,6);
+    const n=parseInt(value,16);
+    const r=Math.max(0,Math.min(255,(n>>16)+amount));
+    const g=Math.max(0,Math.min(255,((n>>8)&255)+amount));
+    const b=Math.max(0,Math.min(255,(n&255)+amount));
+    return "#"+[r,g,b].map(x=>Math.round(x).toString(16).padStart(2,"0")).join("");
+  }
+
+  function getHumanFacePathD(roundness=55){
+    const r=clampNumber(roundness,0,100)/100;
+    const sideTop=76 + r*4;
+    const sideMid=69 + r*9;
+    const jawY=300 + r*12;
+    const chinY=346 - r*15;
+    const lowerX=112 - r*5;
+    return [
+      "M210 24",
+      "C132 19 79 69 "+sideTop+" 153",
+      "C"+sideMid+" 235 "+lowerX+" "+jawY+" 210 "+chinY,
+      "C"+(420-lowerX)+" "+jawY+" "+(420-sideMid)+" 235 "+(420-sideTop)+" 153",
+      "C341 69 288 19 210 24 Z"
+    ].join(" ");
+  }
+
+  function svgAround(cx,cy,sx=1,sy=1,dx=0,dy=0){
+    return "translate("+dx+" "+dy+") translate("+cx+" "+cy+") scale("+sx+" "+sy+") translate("+(-cx)+" "+(-cy)+")";
+  }
+
+  function setSvgTransform(el,transform){
+    if(!el) return;
+    if(transform) el.setAttribute("transform",transform);
+    else el.removeAttribute("transform");
+  }
+
+  function updateGradientStops(root,id,base){
+    if(!root) return;
+    const stops=root.querySelectorAll("#"+id+" stop");
+    if(!stops.length) return;
+    const colors=[
+      hexAdjust(base,38),
+      hexAdjust(base,0),
+      hexAdjust(base,-42)
+    ];
+    stops.forEach((stop,index)=>{
+      const ratio=stops.length<=1 ? 1 : index/(stops.length-1);
+      const slot=ratio<.34 ? 0 : ratio<.72 ? 1 : 2;
+      stop.setAttribute("stop-color",colors[slot]);
+    });
+  }
+
+  function refreshDesignerRefs(){
+    ui.psHumanBodySvg = ui.torsoPart?.querySelector("#psHumanBodySvg") || null;
+    ui.psFaceShape = ui.headPart?.querySelector("#psFaceShape") || null;
+    ui.psCapGroup = ui.headPart?.querySelector("#psCapGroup") || null;
+    ui.psBeardGroup = ui.headPart?.querySelector("#psBeardGroup") || null;
+    ui.psMoustache = ui.headPart?.querySelector("#psMoustache") || null;
+    ui.psBrowsGroup = ui.headPart?.querySelector("#psBrowsGroup") || null;
+    ui.psEyeWhiteLeft = ui.headPart?.querySelector("#psEyeWhiteLeft") || null;
+    ui.psEyeWhiteRight = ui.headPart?.querySelector("#psEyeWhiteRight") || null;
+    ui.psEyeClipLeft = ui.headPart?.querySelector("#psEyeClipLeft") || null;
+    ui.psEyeClipRight = ui.headPart?.querySelector("#psEyeClipRight") || null;
+    ui.psGlassesGroup = ui.headPart?.querySelector("#psGlassesGroup") || null;
+    ui.psNoseGroup = ui.headPart?.querySelector("#psNoseGroup") || null;
+  }
+
+  function updateDesignerAvailability(){
+    const human=avatarState.character==="human";
+    if(ui.designerHumanOnly) ui.designerHumanOnly.disabled=!human;
+    if(ui.designerNotice){
+      ui.designerNotice.textContent=human
+        ? "Alle Bewegungen bleiben aktiv"
+        : "Designer v1 ist aktuell für den PS Avatar";
+    }
+  }
+
+  function applyHumanDesigner(){
+    if(avatarState.character!=="human") return;
+    const d=avatarState.designer || DESIGNER_DEFAULTS;
+    refreshDesignerRefs();
+
+    if(ui.psFaceShape) ui.psFaceShape.setAttribute("d",getHumanFacePathD(d.faceRoundness));
+
+    const capScale=d.capSize/100;
+    setSvgTransform(ui.psCapGroup,svgAround(210,88,capScale,capScale,0,d.capY));
+
+    const beardScale=d.beardSize/100;
+    const beardT=svgAround(210,240,beardScale,beardScale,0,d.beardY);
+    setSvgTransform(ui.psBeardGroup,beardT);
+    setSvgTransform(ui.psMoustache,beardT);
+
+    const eyeScale=d.eyeSize/100;
+    const spacingDelta=(d.eyeSpacing-100)*0.45;
+    const leftEyeT=svgAround(155,164,eyeScale,eyeScale,-spacingDelta,d.eyeY);
+    const rightEyeT=svgAround(265,164,eyeScale,eyeScale,spacingDelta,d.eyeY);
+    setSvgTransform(ui.psEyeWhiteLeft,leftEyeT);
+    setSvgTransform(ui.psEyeClipLeft,leftEyeT);
+    setSvgTransform(ui.psEyeWhiteRight,rightEyeT);
+    setSvgTransform(ui.psEyeClipRight,rightEyeT);
+
+    const glassesScale=d.glassesSize/100;
+    setSvgTransform(ui.psGlassesGroup,svgAround(210,166,glassesScale,glassesScale,0,d.glassesY));
+
+    const noseScale=d.noseSize/100;
+    setSvgTransform(ui.psNoseGroup,svgAround(210,190,noseScale,noseScale,0,d.noseY));
+
+    const mouthScale=d.mouthSize/100;
+    setSvgTransform(ui.mouthHole?.parentElement,svgAround(210,247,mouthScale,mouthScale,0,d.mouthY));
+
+    if(ui.psHumanBodySvg){
+      ui.psHumanBodySvg.style.transformOrigin="50% 100%";
+      ui.psHumanBodySvg.style.transform="scaleX("+(d.bodyWidth/100)+")";
+    }
+
+    updateGradientStops(ui.headPart,"psSkinHeadGrad",d.skinColor);
+    updateGradientStops(ui.headPart,"psBeardGrad",d.beardColor);
+    updateGradientStops(ui.headPart,"psCapGrad",d.capColor);
+    updateGradientStops(ui.torsoPart,"psSkinBodyGrad",d.skinColor);
+    updateGradientStops(ui.torsoPart,"psHoodieGrad",d.hoodieColor);
+    updateGradientStops(ui.torsoPart,"psSleeveGrad",d.hoodieColor);
+    updateGradientStops(ui.torsoPart,"psJeanGrad",d.jeansColor);
+
+    if(ui.psMoustache) ui.psMoustache.setAttribute("fill",hexAdjust(d.beardColor,-25));
+  }
+
+  function syncDesignerControls(){
+    const d=avatarState.designer;
+    document.querySelectorAll("[data-designer-key]").forEach(input=>{
+      const key=input.dataset.designerKey;
+      if(key in d) input.value=String(d[key]);
+    });
+    document.querySelectorAll("[data-designer-color]").forEach(input=>{
+      const key=input.dataset.designerColor;
+      if(key in d) input.value=d[key];
+    });
+    document.querySelectorAll("[data-designer-value]").forEach(el=>{
+      const key=el.dataset.designerValue;
+      const value=d[key];
+      el.textContent=(key.endsWith("Y")) ? (value>0?"+":"")+value : Math.round(value)+"%";
+    });
+  }
+
+  function saveDesignerState(){
+    try{localStorage.setItem(DESIGNER_STORAGE_KEY,JSON.stringify(avatarState.designer));}catch(_){}
+  }
+
+  function loadDesignerState(){
+    try{
+      const saved=JSON.parse(localStorage.getItem(DESIGNER_STORAGE_KEY)||"null");
+      if(saved && typeof saved==="object"){
+        avatarState.designer={...DESIGNER_DEFAULTS,...saved};
+      }
+    }catch(_){}
+  }
+
+  function setDesignerPreset(name){
+    let next;
+    if(name==="random"){
+      next={
+        ...DESIGNER_DEFAULTS,
+        headWidth:Math.round(88+Math.random()*28),
+        headHeight:Math.round(90+Math.random()*20),
+        faceRoundness:Math.round(30+Math.random()*65),
+        eyeSize:Math.round(86+Math.random()*28),
+        eyeSpacing:Math.round(86+Math.random()*28),
+        eyeY:Math.round(-7+Math.random()*14),
+        glassesSize:Math.round(88+Math.random()*24),
+        glassesY:Math.round(-6+Math.random()*12),
+        noseSize:Math.round(86+Math.random()*28),
+        mouthSize:Math.round(88+Math.random()*28),
+        beardSize:Math.round(86+Math.random()*25),
+        capSize:Math.round(90+Math.random()*22),
+        bodyWidth:Math.round(88+Math.random()*24)
+      };
+    }else{
+      next={...(DESIGNER_PRESETS[name]||DESIGNER_PRESETS.premium)};
+    }
+    avatarState.designer={...DESIGNER_DEFAULTS,...next};
+    syncDesignerControls();
+    saveDesignerState();
+    document.querySelectorAll("[data-designer-preset]").forEach(btn=>{
+      btn.classList.toggle("active",btn.dataset.designerPreset===name && name!=="random");
+    });
+    renderAvatar();
+  }
+
+  function bindAvatarDesigner(){
+    loadDesignerState();
+    syncDesignerControls();
+    updateDesignerAvailability();
+
+    document.querySelectorAll("[data-designer-key]").forEach(input=>{
+      input.addEventListener("input",()=>{
+        const key=input.dataset.designerKey;
+        avatarState.designer[key]=Number(input.value);
+        const valueEl=document.querySelector('[data-designer-value="'+key+'"]');
+        if(valueEl){
+          const value=avatarState.designer[key];
+          valueEl.textContent=key.endsWith("Y") ? (value>0?"+":"")+value : Math.round(value)+"%";
+        }
+        document.querySelectorAll("[data-designer-preset]").forEach(btn=>btn.classList.remove("active"));
+        saveDesignerState();
+        renderAvatar();
+      });
+    });
+
+    document.querySelectorAll("[data-designer-color]").forEach(input=>{
+      input.addEventListener("input",()=>{
+        avatarState.designer[input.dataset.designerColor]=input.value;
+        document.querySelectorAll("[data-designer-preset]").forEach(btn=>btn.classList.remove("active"));
+        saveDesignerState();
+        renderAvatar();
+      });
+    });
+
+    document.querySelectorAll("[data-designer-preset]").forEach(btn=>{
+      btn.addEventListener("click",()=>setDesignerPreset(btn.dataset.designerPreset));
+    });
+
+    if(ui.designerReset) ui.designerReset.addEventListener("click",()=>setDesignerPreset("premium"));
   }
 
   // --- Charakter-System --------------------------------------------------
@@ -3191,6 +3606,7 @@ body.menu-open{overflow:hidden}
     ui.mouthHole = document.getElementById("mouthHole");
     ui.tongueShape = document.getElementById("tongueShape");
     ui.mouthLine = document.getElementById("mouthLine");
+    refreshDesignerRefs();
   }
 
   function switchCharacter(character) {
@@ -3229,6 +3645,7 @@ body.menu-open{overflow:hidden}
         "PS Avatar";
     }
 
+    updateDesignerAvailability();
     renderAvatar();
   }
 
@@ -3499,8 +3916,18 @@ body.menu-open{overflow:hidden}
     }
 
     if (ui.headMotionGroup) {
-      ui.headMotionGroup.removeAttribute("transform");
+      if (avatarState.character === "human") {
+        const d=avatarState.designer || DESIGNER_DEFAULTS;
+        ui.headMotionGroup.setAttribute(
+          "transform",
+          svgAround(210,180,d.headWidth/100,d.headHeight/100,0,0)
+        );
+      } else {
+        ui.headMotionGroup.removeAttribute("transform");
+      }
     }
+
+    applyHumanDesigner();
 
     // Starre Cutout-Arme: je Seite ein klarer Schulter-Drehpunkt.
     const leftArmAngle = getEffectiveLeftArmAngle();
@@ -4590,7 +5017,7 @@ body.menu-open{overflow:hidden}
     if (ui.menuButton) ui.menuButton.setAttribute("aria-expanded", open ? "true" : "false");
   }
 
-  // --- Figurenaufnahme v0.22 -------------------------------------------
+  // --- Figurenaufnahme v0.23 -------------------------------------------
   // Direkter Canvas-Renderer: keine langsame SVG->Bitmap-Konvertierung pro Frame.
   let avatarRecorder = null;
   let recorderChunks = [];
@@ -4740,6 +5167,11 @@ body.menu-open{overflow:hidden}
     ctx.translate(x,y);
     ctx.scale(s,s);
 
+    const designer=avatarState.designer || DESIGNER_DEFAULTS;
+    ctx.translate(210,620);
+    ctx.scale(designer.bodyWidth/100,1);
+    ctx.translate(-210,-620);
+
     const leftArmAngle=getEffectiveLeftArmAngle();
     const rightArmAngle=getEffectiveRightArmAngle();
 
@@ -4833,528 +5265,35 @@ body.menu-open{overflow:hidden}
     strokeLine(ctx,[[210,12],[210,77]],"#0a0d11",5);
 
     // eyes
-    ctx.beginPath();ctx.ellipse(155,164,40,33,0,0,Math.PI*2);ctx.fillStyle="#fff";ctx.fill();
-    ctx.beginPath();ctx.ellipse(265,164,40,33,0,0,Math.PI*2);ctx.fill();
+    const eyeScale=designer.eyeSize/100;
+    const eyeSpacingDelta=(designer.eyeSpacing-100)*0.45;
+    const leftEyeX=155-eyeSpacingDelta;
+    const rightEyeX=265+eyeSpacingDelta;
+    const eyeY=164+designer.eyeY;
+    const eyeRx=40*eyeScale;
+    const eyeRy=33*eyeScale;
+
+    ctx.beginPath();ctx.ellipse(leftEyeX,eyeY,eyeRx,eyeRy,0,0,Math.PI*2);ctx.fillStyle="#fdfdfb";ctx.fill();
+    ctx.beginPath();ctx.ellipse(rightEyeX,eyeY,eyeRx,eyeRy,0,0,Math.PI*2);ctx.fill();
 
     const pxOffset=getEffectiveLookX()*2+getEffectiveHeadLean()*0.12;
     const pyOffset=getEffectiveLookY()*2;
-    ctx.beginPath();ctx.arc(155+pxOffset,164+pyOffset,7.5*(face.pupilScale||1),0,Math.PI*2);ctx.fillStyle="#000";ctx.fill();
-    ctx.beginPath();ctx.arc(265+pxOffset,164+pyOffset,7.5*(face.pupilScale||1),0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.arc(leftEyeX+pxOffset*eyeScale,eyeY+pyOffset*eyeScale,7.5*(face.pupilScale||1)*eyeScale,0,Math.PI*2);ctx.fillStyle="#050607";ctx.fill();
+    ctx.beginPath();ctx.arc(rightEyeX+pxOffset*eyeScale,eyeY+pyOffset*eyeScale,7.5*(face.pupilScale||1)*eyeScale,0,Math.PI*2);ctx.fill();
 
-    const maxLid=31;
+    const maxLid=31*eyeScale;
     const lc=Math.max(0,Math.min(100,face.blinkLeft||0))/100*maxLid;
     const rc=Math.max(0,Math.min(100,face.blinkRight||0))/100*maxLid;
-    ctx.save();ctx.beginPath();ctx.ellipse(155,164,40,33,0,0,Math.PI*2);ctx.clip();
-    ctx.fillStyle="#a9652b";ctx.fillRect(114,129,82,lc);ctx.fillRect(114,198-lc,82,lc);ctx.restore();
-    ctx.save();ctx.beginPath();ctx.ellipse(265,164,40,33,0,0,Math.PI*2);ctx.clip();
-    ctx.fillStyle="#a9652b";ctx.fillRect(224,129,82,rc);ctx.fillRect(224,198-rc,82,rc);ctx.restore();
-
-    // glasses
-    ctx.strokeStyle="#090b0d";ctx.lineWidth=9;
-    ctx.beginPath(); if(ctx.roundRect) ctx.roundRect(99,132,106,70,28); else ctx.rect(99,132,106,70); ctx.stroke();
-    ctx.beginPath(); if(ctx.roundRect) ctx.roundRect(215,132,106,70,28); else ctx.rect(215,132,106,70); ctx.stroke();
-    strokeLine(ctx,[[205,157],[210,151],[215,157]],"#090b0d",9);
-    strokeLine(ctx,[[99,151],[69,143]],"#090b0d",9);
-    strokeLine(ctx,[[321,151],[351,143]],"#090b0d",9);
-
-    // muzzle + nose
-    ctx.beginPath();ctx.ellipse(210,230,72,58,0,0,Math.PI*2);
-    ctx.fillStyle="#d8954e";ctx.fill();ctx.strokeStyle="#6b3b1c";ctx.lineWidth=6;ctx.stroke();
-    ctx.beginPath();ctx.ellipse(210,207,29,22,0,0,Math.PI*2);ctx.fillStyle="#111318";ctx.fill();
-    ctx.beginPath();ctx.ellipse(202,200,8,5,0,0,Math.PI*2);ctx.fillStyle="#4b4f55";ctx.fill();
-    strokeLine(ctx,[[210,226],[210,239]],"#23150d",6);
-
-    // mouth
-    const widthScale=(face.mouthWidth||100)/100;
-    const halfWidth=26*widthScale;
-    const openRy=(face.mouthOpen||0)/100*15;
-    const baseY=247;
-
-    if(openRy>0.25){
-      ctx.beginPath();ctx.ellipse(210,baseY+4,halfWidth*.82,openRy,0,0,Math.PI*2);
-      ctx.fillStyle="#070707";ctx.fill();
-      if((face.mouthOpen||0)>20){
-        ctx.globalAlpha=.86;
-        ctx.beginPath();ctx.ellipse(210,baseY+6+openRy*.25,halfWidth*.48,openRy*.34,0,0,Math.PI*2);
-        ctx.fillStyle="#c9656c";ctx.fill();ctx.globalAlpha=1;
-      }
-    }
-
-    const leftY=baseY-(face.mouthCornerLeft||0)*.55;
-    const rightY=baseY-(face.mouthCornerRight||0)*.55;
-    const controlY=baseY-(((face.mouthCornerLeft||0)+(face.mouthCornerRight||0))/2)*.40;
-    ctx.beginPath();ctx.moveTo(210-halfWidth,leftY);ctx.quadraticCurveTo(210,controlY+10,210+halfWidth,rightY);
-    ctx.strokeStyle="#23150d";ctx.lineWidth=6;ctx.lineCap="round";ctx.stroke();
-
-    ctx.restore();
-  }
-
-  function drawRecordedGullBody(ctx) {
-    const s=0.7857;
-    const x=360-210*s;
-    const y=900-620*s;
-
-    ctx.save();
-    ctx.translate(x,y);
-    ctx.scale(s,s);
-
-    const leftArmAngle=getEffectiveLeftArmAngle();
-    const rightArmAngle=getEffectiveRightArmAngle();
-
-    ctx.save();
-    ctx.translate(112,112);
-    ctx.rotate(leftArmAngle*Math.PI/180);
-    ctx.translate(-112,-112);
-    fillStrokePath(ctx,BODY_PATHS.leftArm,"#0d2341","#06101e",9);
-    ctx.beginPath();ctx.ellipse(88,374,27,30,0,0,Math.PI*2);
-    ctx.fillStyle="#f2f4f6";ctx.fill();ctx.strokeStyle="#697681";ctx.lineWidth=6;ctx.stroke();
-    ctx.restore();
-
-    ctx.save();
-    ctx.translate(308,112);
-    ctx.rotate(rightArmAngle*Math.PI/180);
-    ctx.translate(-308,-112);
-    fillStrokePath(ctx,BODY_PATHS.rightArm,"#0d2341","#06101e",9);
-    ctx.beginPath();ctx.ellipse(332,374,27,30,0,0,Math.PI*2);
-    ctx.fillStyle="#f2f4f6";ctx.fill();ctx.strokeStyle="#697681";ctx.lineWidth=6;ctx.stroke();
-    ctx.restore();
-
-    fillStrokePath(ctx,BODY_PATHS.torso,"#0b1d36","#050b13",10);
-    fillStrokePath(ctx,BODY_PATHS.collar,"#e9edf1","#254a70",7);
-    fillStrokePath(ctx,BODY_PATHS.shirt,"#0a1730",null,0);
-
-    ctx.strokeStyle="#e4b43e";ctx.lineWidth=6;ctx.lineCap="round";
-    ctx.beginPath();ctx.arc(210,168,10,0,Math.PI*2);ctx.stroke();
-    ctx.beginPath();ctx.moveTo(210,178);ctx.lineTo(210,243);ctx.moveTo(190,198);ctx.lineTo(230,198);ctx.stroke();
-    ctx.beginPath();ctx.moveTo(171,226);ctx.quadraticCurveTo(190,252,210,243);ctx.quadraticCurveTo(230,252,249,226);ctx.stroke();
-
-    ctx.strokeStyle="#57a9ff";ctx.lineWidth=6;
-    ctx.beginPath();ctx.moveTo(122,270);ctx.quadraticCurveTo(170,290,210,277);ctx.quadraticCurveTo(250,290,298,270);ctx.stroke();
-    ctx.fillStyle="#bfe1ff";ctx.font="900 23px Arial";ctx.textAlign="center";ctx.fillText("BreuerBeatz",210,315);
-
-    fillStrokePath(ctx,BODY_PATHS.waist,"#081321","#050b13",7);
-    fillStrokePath(ctx,BODY_PATHS.hips,"#0d2341","#06101e",8);
-    fillStrokePath(ctx,BODY_PATHS.leftLeg,"#0d2341","#06101e",8);
-    fillStrokePath(ctx,BODY_PATHS.rightLeg,"#0d2341","#06101e",8);
-
-    ctx.strokeStyle="#edf2f5";ctx.lineWidth=6;
-    ctx.beginPath();ctx.moveTo(142,475);ctx.quadraticCurveTo(170,468,197,476);ctx.stroke();
-    ctx.beginPath();ctx.moveTo(223,476);ctx.quadraticCurveTo(250,468,278,475);ctx.stroke();
-
-    fillStrokePath(ctx,BODY_PATHS.leftShoe,"#f5f7fb","#aab5c0",7);
-    fillStrokePath(ctx,BODY_PATHS.rightShoe,"#f5f7fb","#aab5c0",7);
-    strokeLine(ctx,[[137,586],[190,590]],"#6d91b2",4);
-    strokeLine(ctx,[[132,597],[193,601]],"#6d91b2",4);
-    strokeLine(ctx,[[283,586],[230,590]],"#6d91b2",4);
-    strokeLine(ctx,[[288,597],[227,601]],"#6d91b2",4);
-
-    ctx.restore();
-  }
-
-  function drawRecordedGullHead(ctx) {
-    const face=avatarState.face;
-    const head=avatarState.head;
-    const s=0.6548;
-    const anchorX=360;
-    const anchorY=550+(head.idleLift||0);
-    const lean=getEffectiveHeadLean();
-
-    ctx.save();
-    ctx.translate(anchorX,anchorY);
-    ctx.rotate(lean*Math.PI/180);
-    ctx.scale(s,s);
-    ctx.translate(-210,-360);
-
-    // white head
-    ctx.beginPath();ctx.ellipse(210,174,142,146,0,0,Math.PI*2);
-    ctx.fillStyle="#f3f5f5";ctx.fill();ctx.strokeStyle="#59636d";ctx.lineWidth=8;ctx.stroke();
-
-    // cap/beanie
-    fillStrokePath(ctx,HEAD_PATHS.cap,"#15191f","#07090c",9);
-    fillStrokePath(ctx,HEAD_PATHS.brim,"#0c1015","#07090c",8);
-    ctx.fillStyle="#f0f4f7";ctx.font="900 22px Arial";ctx.textAlign="center";ctx.fillText("BreuerBeatz",210,66);
-
-    // eyes
-    ctx.beginPath();ctx.ellipse(155,164,40,33,0,0,Math.PI*2);ctx.fillStyle="#fff";ctx.fill();
-    ctx.beginPath();ctx.ellipse(265,164,40,33,0,0,Math.PI*2);ctx.fill();
-
-    const pxOffset=getEffectiveLookX()*2+getEffectiveHeadLean()*0.12;
-    const pyOffset=getEffectiveLookY()*2;
-    ctx.beginPath();ctx.arc(155+pxOffset,164+pyOffset,7.5*(face.pupilScale||1),0,Math.PI*2);ctx.fillStyle="#000";ctx.fill();
-    ctx.beginPath();ctx.arc(265+pxOffset,164+pyOffset,7.5*(face.pupilScale||1),0,Math.PI*2);ctx.fill();
-
-    const maxLid=31;
-    const lc=Math.max(0,Math.min(100,face.blinkLeft||0))/100*maxLid;
-    const rc=Math.max(0,Math.min(100,face.blinkRight||0))/100*maxLid;
-    ctx.save();ctx.beginPath();ctx.ellipse(155,164,40,33,0,0,Math.PI*2);ctx.clip();
-    ctx.fillStyle="#d9dde0";ctx.fillRect(114,129,82,lc);ctx.fillRect(114,198-lc,82,lc);ctx.restore();
-    ctx.save();ctx.beginPath();ctx.ellipse(265,164,40,33,0,0,Math.PI*2);ctx.clip();
-    ctx.fillStyle="#d9dde0";ctx.fillRect(224,129,82,rc);ctx.fillRect(224,198-rc,82,rc);ctx.restore();
-
-    // glasses
-    ctx.fillStyle="rgba(17,21,26,.22)";
-    ctx.strokeStyle="#080a0d";ctx.lineWidth=9;
-    ctx.beginPath();if(ctx.roundRect)ctx.roundRect(99,132,106,70,24);else ctx.rect(99,132,106,70);ctx.fill();ctx.stroke();
-    ctx.beginPath();if(ctx.roundRect)ctx.roundRect(215,132,106,70,24);else ctx.rect(215,132,106,70);ctx.fill();ctx.stroke();
-    strokeLine(ctx,[[205,157],[210,151],[215,157]],"#080a0d",9);
-    strokeLine(ctx,[[99,151],[69,143]],"#080a0d",9);
-    strokeLine(ctx,[[321,151],[351,143]],"#080a0d",9);
-
-    // beak
-    ctx.beginPath();
-    ctx.moveTo(164,209);ctx.quadraticCurveTo(210,184,256,209);
-    ctx.quadraticCurveTo(278,223,294,239);
-    ctx.quadraticCurveTo(258,247,226,252);
-    ctx.quadraticCurveTo(190,258,155,244);
-    ctx.quadraticCurveTo(143,238,149,226);
-    ctx.quadraticCurveTo(154,216,164,209);
-    ctx.fillStyle="#f4a619";ctx.fill();ctx.strokeStyle="#8e5700";ctx.lineWidth=7;ctx.stroke();
-
-    // animated mouth
-    const widthScale=(face.mouthWidth||100)/100;
-    const halfWidth=26*widthScale;
-    const openRy=(face.mouthOpen||0)/100*15;
-    const baseY=247;
-
-    if(openRy>0.25){
-      ctx.beginPath();ctx.ellipse(210,baseY+4,halfWidth*.82,openRy,0,0,Math.PI*2);
-      ctx.fillStyle="#5b2500";ctx.fill();
-      if((face.mouthOpen||0)>20){
-        ctx.globalAlpha=.86;
-        ctx.beginPath();ctx.ellipse(210,baseY+7+openRy*.25,halfWidth*.48,openRy*.34,0,0,Math.PI*2);
-        ctx.fillStyle="#d26c57";ctx.fill();ctx.globalAlpha=1;
-      }
-    }
-
-    const leftY=baseY-(face.mouthCornerLeft||0)*.55;
-    const rightY=baseY-(face.mouthCornerRight||0)*.55;
-    const controlY=baseY-(((face.mouthCornerLeft||0)+(face.mouthCornerRight||0))/2)*.40;
-    ctx.beginPath();ctx.moveTo(210-halfWidth,leftY);ctx.quadraticCurveTo(210,controlY+3,210+halfWidth,rightY);
-    ctx.strokeStyle="#6a3600";ctx.lineWidth=6;ctx.lineCap="round";ctx.stroke();
-
-    ctx.restore();
-  }
-
-  function drawRecordedMaskBody(ctx) {
-    const s=0.7857;
-    const x=360-210*s;
-    const y=900-620*s;
-
-    ctx.save();
-    ctx.translate(x,y);
-    ctx.scale(s,s);
-
-    const leftArmAngle=getEffectiveLeftArmAngle();
-    const rightArmAngle=getEffectiveRightArmAngle();
-
-    ctx.save();
-    ctx.translate(112,112);ctx.rotate(leftArmAngle*Math.PI/180);ctx.translate(-112,-112);
-    fillStrokePath(ctx,BODY_PATHS.leftArm,"#0d1015","#050608",9);
-    ctx.beginPath();ctx.ellipse(88,374,25,28,0,0,Math.PI*2);ctx.fillStyle="#6c5555";ctx.fill();ctx.strokeStyle="#171014";ctx.lineWidth=6;ctx.stroke();
-    strokeLine(ctx,[[68,170],[57,240],[63,316]],"#ff1739",7);
-    ctx.restore();
-
-    ctx.save();
-    ctx.translate(308,112);ctx.rotate(rightArmAngle*Math.PI/180);ctx.translate(-308,-112);
-    fillStrokePath(ctx,BODY_PATHS.rightArm,"#0d1015","#050608",9);
-    ctx.beginPath();ctx.ellipse(332,374,25,28,0,0,Math.PI*2);ctx.fillStyle="#6c5555";ctx.fill();ctx.strokeStyle="#171014";ctx.lineWidth=6;ctx.stroke();
-    strokeLine(ctx,[[352,170],[363,240],[357,316]],"#ff1739",7);
-    ctx.restore();
-
-    fillStrokePath(ctx,BODY_PATHS.torso,"#0a0d12","#050608",10);
-    fillStrokePath(ctx,BODY_PATHS.collar,"#161b22","#050608",8);
-    fillStrokePath(ctx,BODY_PATHS.shirt,"#05070a",null,0);
-
-    strokeLine(ctx,[[100,126],[91,205],[94,330]],"#ff1739",8);
-    strokeLine(ctx,[[320,126],[329,205],[326,330]],"#ff1739",8);
-
-    ctx.beginPath();ctx.moveTo(151,152);ctx.quadraticCurveTo(164,211,210,226);ctx.quadraticCurveTo(256,211,269,152);
-    ctx.strokeStyle="#d6d9dd";ctx.lineWidth=6;ctx.lineCap="round";ctx.stroke();
-
-    fillStrokePath(ctx,BODY_PATHS.waist,"#080a0e","#050608",7);
-    fillStrokePath(ctx,BODY_PATHS.hips,"#11141a","#050608",8);
-    fillStrokePath(ctx,BODY_PATHS.leftLeg,"#101319","#050608",8);
-    fillStrokePath(ctx,BODY_PATHS.rightLeg,"#101319","#050608",8);
-    fillStrokePath(ctx,BODY_PATHS.leftShoe,"#171a20","#050608",7);
-    fillStrokePath(ctx,BODY_PATHS.rightShoe,"#171a20","#050608",7);
-    strokeLine(ctx,[[135,590],[193,595]],"#c51a30",4);
-    strokeLine(ctx,[[285,590],[227,595]],"#c51a30",4);
-
-    ctx.restore();
-  }
-
-  function drawRecordedMaskHead(ctx) {
-    const face=avatarState.face;
-    const head=avatarState.head;
-    const s=0.6548;
-    const anchorX=360;
-    const anchorY=550+(head.idleLift||0);
-    const lean=getEffectiveHeadLean();
-
-    ctx.save();
-    ctx.translate(anchorX,anchorY);
-    ctx.rotate(lean*Math.PI/180);
-    ctx.scale(s,s);
-    ctx.translate(-210,-360);
-
-    // face / mask
-    ctx.beginPath();ctx.ellipse(210,169,137,145,0,0,Math.PI*2);
-    ctx.fillStyle="#705b61";ctx.fill();ctx.strokeStyle="#120d10";ctx.lineWidth=8;ctx.stroke();
-    ctx.beginPath();ctx.ellipse(76,169,25,41,0,0,Math.PI*2);ctx.fillStyle="#725555";ctx.fill();ctx.strokeStyle="#160d11";ctx.lineWidth=7;ctx.stroke();
-    ctx.beginPath();ctx.ellipse(344,169,25,41,0,0,Math.PI*2);ctx.fill();ctx.stroke();
-
-    // cap + red trim
-    fillStrokePath(ctx,HEAD_PATHS.cap,"#090b0f","#020304",9);
-    fillStrokePath(ctx,HEAD_PATHS.brim,"#06070a","#020304",8);
-    ctx.strokeStyle="#ff1739";ctx.lineWidth=7;ctx.lineCap="round";
-    ctx.beginPath();ctx.moveTo(95,92);ctx.quadraticCurveTo(133,39,174,23);ctx.stroke();
-    ctx.beginPath();ctx.moveTo(247,22);ctx.quadraticCurveTo(298,40,325,91);ctx.stroke();
-
-    // dark eye sockets
-    ctx.beginPath();ctx.ellipse(155,164,43,30,0,0,Math.PI*2);ctx.fillStyle="#111016";ctx.fill();
-    ctx.beginPath();ctx.ellipse(265,164,43,30,0,0,Math.PI*2);ctx.fill();
-
-    const pxOffset=getEffectiveLookX()*1.45+getEffectiveHeadLean()*0.10;
-    const pyOffset=getEffectiveLookY()*1.45;
-
-    // normale weiße Augen mit schwarzen Pupillen
-    ctx.beginPath();ctx.ellipse(155,164,36,21,0,0,Math.PI*2);ctx.fillStyle="#ffffff";ctx.fill();
-    ctx.beginPath();ctx.ellipse(265,164,36,21,0,0,Math.PI*2);ctx.fillStyle="#ffffff";ctx.fill();
-
-    ctx.beginPath();ctx.arc(155+pxOffset,164+pyOffset,7.5*(face.pupilScale||1),0,Math.PI*2);ctx.fillStyle="#000000";ctx.fill();
-    ctx.beginPath();ctx.arc(265+pxOffset,164+pyOffset,7.5*(face.pupilScale||1),0,Math.PI*2);ctx.fillStyle="#000000";ctx.fill();
-
-    // lids for blink
-    const maxLid=29;
-    const lc=Math.max(0,Math.min(100,face.blinkLeft||0))/100*maxLid;
-    const rc=Math.max(0,Math.min(100,face.blinkRight||0))/100*maxLid;
-    ctx.fillStyle="#705b61";
-    ctx.fillRect(112,133,86,lc);ctx.fillRect(112,195-lc,86,lc);
-    ctx.fillRect(222,133,86,rc);ctx.fillRect(222,195-rc,86,rc);
-
-    // cracks
-    ctx.strokeStyle="#21151a";ctx.lineWidth=4;ctx.lineCap="round";
-    const cracks=[
-      [[131,184],[118,206],[137,214],[124,235],[145,248]],
-      [[171,180],[163,205],[181,218],[171,239],[186,258]],
-      [[283,181],[296,203],[281,216],[300,230],[288,254]],
-      [[247,187],[255,208],[241,222],[252,241],[239,262]],
-      [[205,110],[198,133],[210,147],[201,164]]
-    ];
-    cracks.forEach(points=>strokeLine(ctx,points,"#21151a",4));
-
-    // nose
-    ctx.beginPath();ctx.moveTo(210,167);ctx.lineTo(199,207);ctx.quadraticCurveTo(210,216,221,207);
-    ctx.strokeStyle="#2a2024";ctx.lineWidth=6;ctx.stroke();
-
-    // mouth
-    const widthScale=(face.mouthWidth||100)/100;
-    const halfWidth=26*widthScale;
-    const openRy=(face.mouthOpen||0)/100*15;
-    const baseY=250;
-    if(openRy>0.25){
-      ctx.beginPath();ctx.ellipse(210,baseY+4,halfWidth*.82,openRy,0,0,Math.PI*2);ctx.fillStyle="#070407";ctx.fill();
-      if((face.mouthOpen||0)>20){
-        ctx.globalAlpha=.8;ctx.beginPath();ctx.ellipse(210,baseY+7+openRy*.25,halfWidth*.48,openRy*.34,0,0,Math.PI*2);ctx.fillStyle="#7b2632";ctx.fill();ctx.globalAlpha=1;
-      }
-    }
-    const leftY=baseY-(face.mouthCornerLeft||0)*.55;
-    const rightY=baseY-(face.mouthCornerRight||0)*.55;
-    const controlY=baseY-(((face.mouthCornerLeft||0)+(face.mouthCornerRight||0))/2)*.40;
-    ctx.beginPath();ctx.moveTo(210-halfWidth,leftY);ctx.quadraticCurveTo(210,controlY,210+halfWidth,rightY);
-    ctx.strokeStyle="#160b0f";ctx.lineWidth=7;ctx.lineCap="round";ctx.stroke();
-
-    ctx.restore();
-  }
-
-  function drawRecordedBody(ctx) {
-    if (avatarState.character === "bear") {
-      drawRecordedBearBody(ctx);
-      return;
-    }
-    if (avatarState.character === "gull") {
-      drawRecordedGullBody(ctx);
-      return;
-    }
-    if (avatarState.character === "mask") {
-      drawRecordedMaskBody(ctx);
-      return;
-    }
-
-    const s=0.7857;
-    const x=360-210*s;
-    const y=900-620*s;
-
-    ctx.save();
-    ctx.translate(x,y);
-    ctx.scale(s,s);
-
-    const leftArmAngle=getEffectiveLeftArmAngle();
-    const rightArmAngle=getEffectiveRightArmAngle();
-
-    // floor shadow
-    ctx.beginPath();ctx.ellipse(210,601,126,15,0,0,Math.PI*2);
-    ctx.fillStyle="rgba(0,0,0,.28)";ctx.fill();
-
-    const sleeveGrad=ctx.createLinearGradient(55,0,130,0);
-    sleeveGrad.addColorStop(0,"#080b10");sleeveGrad.addColorStop(.52,"#171d25");sleeveGrad.addColorStop(1,"#07090d");
-
-    const skinGrad=ctx.createLinearGradient(65,340,110,395);
-    skinGrad.addColorStop(0,"#f4ba86");skinGrad.addColorStop(1,"#d98d5d");
-
-    // arms
-    ctx.save();
-    ctx.translate(112,112);ctx.rotate(leftArmAngle*Math.PI/180);ctx.translate(-112,-112);
-    fillStrokePath(ctx,BODY_PATHS.leftArm,sleeveGrad,"#05080c",9);
-    strokeLine(ctx,[[76,155],[64,216],[67,294]],"#343d49",4);
-    ctx.beginPath();ctx.ellipse(88,374,25,28,0,0,Math.PI*2);ctx.fillStyle=skinGrad;ctx.fill();ctx.strokeStyle="#17110e";ctx.lineWidth=6;ctx.stroke();
-    ctx.restore();
-
-    ctx.save();
-    ctx.translate(308,112);ctx.rotate(rightArmAngle*Math.PI/180);ctx.translate(-308,-112);
-    fillStrokePath(ctx,BODY_PATHS.rightArm,sleeveGrad,"#05080c",9);
-    strokeLine(ctx,[[344,155],[356,216],[353,294]],"#343d49",4);
-    ctx.beginPath();ctx.ellipse(332,374,25,28,0,0,Math.PI*2);ctx.fillStyle=skinGrad;ctx.fill();ctx.strokeStyle="#17110e";ctx.lineWidth=6;ctx.stroke();
-    ctx.restore();
-
-    const hoodieGrad=ctx.createLinearGradient(95,90,320,380);
-    hoodieGrad.addColorStop(0,"#222933");hoodieGrad.addColorStop(.48,"#11161d");hoodieGrad.addColorStop(1,"#070a0e");
-    fillStrokePath(ctx,BODY_PATHS.torso,hoodieGrad,"#05080c",10);
-    fillStrokePath(ctx,BODY_PATHS.collar,"#252c36","#070a0e",8);
-    fillStrokePath(ctx,BODY_PATHS.shirt,"#06080c",null,0);
-
-    // hoodie seams + pockets
-    strokeLine(ctx,[[143,139],[137,245],[137,350]],"#343c47",3);
-    strokeLine(ctx,[[277,139],[283,245],[283,350]],"#343c47",3);
-    ctx.beginPath();ctx.moveTo(109,281);ctx.quadraticCurveTo(141,267,167,283);ctx.strokeStyle="#303944";ctx.lineWidth=3;ctx.stroke();
-    ctx.beginPath();ctx.moveTo(311,281);ctx.quadraticCurveTo(279,267,253,283);ctx.stroke();
-
-    // chain
-    const metal=ctx.createLinearGradient(150,150,270,220);
-    metal.addColorStop(0,"#f6fbff");metal.addColorStop(.42,"#adb8c2");metal.addColorStop(.72,"#eef3f7");metal.addColorStop(1,"#68727c");
-    ctx.beginPath();ctx.moveTo(154,151);ctx.quadraticCurveTo(164,204,210,217);ctx.quadraticCurveTo(256,204,266,151);
-    ctx.strokeStyle=metal;ctx.lineWidth=5.5;ctx.lineCap="round";ctx.stroke();
-    ctx.beginPath();ctx.arc(210,222,10,0,Math.PI*2);ctx.fillStyle="#0a0d12";ctx.fill();ctx.strokeStyle="#d6dde3";ctx.lineWidth=3;ctx.stroke();
-
-    // subtle logo
-    const logoGrad=ctx.createLinearGradient(160,0,260,0);
-    logoGrad.addColorStop(0,"#32dfff");logoGrad.addColorStop(.5,"#8e70ff");logoGrad.addColorStop(1,"#ff52d8");
-    ctx.strokeStyle=logoGrad;ctx.lineWidth=4.5;ctx.beginPath();ctx.moveTo(161,260);ctx.quadraticCurveTo(177,241,197,253);ctx.quadraticCurveTo(210,234,224,253);ctx.quadraticCurveTo(244,241,260,260);ctx.stroke();
-    ctx.fillStyle="#b9dbe8";ctx.font="900 20px Arial";ctx.textAlign="center";ctx.fillText("PS AI MUSIC",210,295);
-
-    fillStrokePath(ctx,BODY_PATHS.waist,"#0b0e12","#05080c",7);
-
-    const jeanGrad=ctx.createLinearGradient(0,405,0,590);
-    jeanGrad.addColorStop(0,"#557fc0");jeanGrad.addColorStop(.52,"#3c639d");jeanGrad.addColorStop(1,"#294a78");
-    fillStrokePath(ctx,BODY_PATHS.hips,jeanGrad,"#27466f",8);
-    fillStrokePath(ctx,BODY_PATHS.leftLeg,jeanGrad,"#294b79",8);
-    fillStrokePath(ctx,BODY_PATHS.rightLeg,jeanGrad,"#294b79",8);
-
-    ctx.strokeStyle="#7898ca";ctx.lineWidth=4;ctx.globalAlpha=.72;
-    ctx.beginPath();ctx.moveTo(142,475);ctx.quadraticCurveTo(170,468,197,476);ctx.stroke();
-    ctx.beginPath();ctx.moveTo(223,476);ctx.quadraticCurveTo(250,468,278,475);ctx.stroke();
-    ctx.globalAlpha=1;
-    ctx.setLineDash([7,7]);ctx.strokeStyle="rgba(136,163,203,.5)";ctx.lineWidth=2.5;
-    ctx.beginPath();ctx.moveTo(190,454);ctx.lineTo(184,566);ctx.stroke();
-    ctx.beginPath();ctx.moveTo(230,454);ctx.lineTo(236,566);ctx.stroke();
-    ctx.setLineDash([]);
-
-    const shoeGrad=ctx.createLinearGradient(0,565,0,608);
-    shoeGrad.addColorStop(0,"#fff");shoeGrad.addColorStop(.6,"#e9edf2");shoeGrad.addColorStop(1,"#cdd4dc");
-    fillStrokePath(ctx,BODY_PATHS.leftShoe,shoeGrad,"#b8c1ca",7);
-    fillStrokePath(ctx,BODY_PATHS.rightShoe,shoeGrad,"#b8c1ca",7);
-    strokeLine(ctx,[[137,584],[190,590]],"#8b98a5",3.5);
-    strokeLine(ctx,[[132,595],[193,601]],"#8b98a5",3.5);
-    strokeLine(ctx,[[283,584],[230,590]],"#8b98a5",3.5);
-    strokeLine(ctx,[[288,595],[227,601]],"#8b98a5",3.5);
-
-    ctx.restore();
-  }
-  function drawRecordedHead(ctx) {
-    if (avatarState.character === "bear") {
-      drawRecordedBearHead(ctx);
-      return;
-    }
-    if (avatarState.character === "gull") {
-      drawRecordedGullHead(ctx);
-      return;
-    }
-    if (avatarState.character === "mask") {
-      drawRecordedMaskHead(ctx);
-      return;
-    }
-
-    const face=avatarState.face;
-    const head=avatarState.head;
-    const s=0.6548;
-    const anchorX=360;
-    const anchorY=550+(head.idleLift||0);
-    const lean=getEffectiveHeadLean();
-
-    ctx.save();
-    ctx.translate(anchorX,anchorY);
-    ctx.rotate(lean*Math.PI/180);
-    ctx.scale(s,s);
-    ctx.translate(-210,-360);
-
-    const skin=ctx.createLinearGradient(90,50,330,320);
-    skin.addColorStop(0,"#f5bc88");skin.addColorStop(.52,"#eca978");skin.addColorStop(1,"#d58a5c");
-
-    // ears
-    ctx.beginPath();ctx.ellipse(76,169,27,42,0,0,Math.PI*2);ctx.fillStyle=skin;ctx.fill();ctx.strokeStyle="#4b3022";ctx.lineWidth=7;ctx.stroke();
-    ctx.beginPath();ctx.ellipse(344,169,27,42,0,0,Math.PI*2);ctx.fill();ctx.stroke();
-
-    // face path
-    ctx.beginPath();
-    ctx.moveTo(210,24);
-    ctx.bezierCurveTo(132,19,79,69,75,153);
-    ctx.bezierCurveTo(71,235,114,309,210,346);
-    ctx.bezierCurveTo(306,309,349,235,345,153);
-    ctx.bezierCurveTo(341,69,288,19,210,24);
-    ctx.closePath();
-    ctx.fillStyle=skin;ctx.fill();ctx.strokeStyle="#3b291f";ctx.lineWidth=8;ctx.stroke();
-
-    // subtle face depth
-    ctx.globalAlpha=.13;strokeLine(ctx,[[97,151],[99,220],[137,286]],"#9b5b3e",15);ctx.globalAlpha=1;
-
-    // cap
-    const capGrad=ctx.createLinearGradient(0,10,0,120);
-    capGrad.addColorStop(0,"#252b34");capGrad.addColorStop(.55,"#12161c");capGrad.addColorStop(1,"#07090d");
-    fillStrokePath(ctx,HEAD_PATHS.cap,capGrad,"#05070a",9);
-    fillStrokePath(ctx,HEAD_PATHS.brim,"#090c11","#05070a",8);
-    strokeLine(ctx,[[210,12],[210,77]],"#070a0e",5);
-    ctx.globalAlpha=.5;ctx.strokeStyle="#4a535e";ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(111,76);ctx.quadraticCurveTo(151,41,205,36);ctx.quadraticCurveTo(260,41,307,78);ctx.stroke();ctx.globalAlpha=1;
-
-    // beard
-    const beardGrad=ctx.createLinearGradient(105,185,300,340);
-    beardGrad.addColorStop(0,"#4a3931");beardGrad.addColorStop(.48,"#32251f");beardGrad.addColorStop(1,"#18120f");
-    fillStrokePath(ctx,HEAD_PATHS.beard,beardGrad,"#17120f",7);
-    ctx.globalAlpha=.78;strokeLine(ctx,[[109,194],[104,232],[128,273]],"#796a62",5);strokeLine(ctx,[[311,194],[316,232],[292,273]],"#796a62",5);ctx.globalAlpha=1;
-    ctx.beginPath();ctx.moveTo(151,247);ctx.quadraticCurveTo(169,292,210,326);ctx.quadraticCurveTo(251,292,269,247);ctx.strokeStyle="#75675f";ctx.lineWidth=5.5;ctx.stroke();
-    ctx.beginPath();ctx.moveTo(177,267);ctx.quadraticCurveTo(191,301,210,317);ctx.quadraticCurveTo(229,301,243,267);ctx.strokeStyle="#211914";ctx.lineWidth=6;ctx.stroke();
-
-    // brows
-    ctx.beginPath();ctx.moveTo(112,121);ctx.quadraticCurveTo(151,102,190,119);ctx.strokeStyle="#2b1c15";ctx.lineWidth=9;ctx.lineCap="round";ctx.stroke();
-    ctx.beginPath();ctx.moveTo(230,119);ctx.quadraticCurveTo(269,102,308,121);ctx.stroke();
-
-    // eyes
-    ctx.beginPath();ctx.ellipse(155,164,40,33,0,0,Math.PI*2);ctx.fillStyle="#fdfdfb";ctx.fill();
-    ctx.beginPath();ctx.ellipse(265,164,40,33,0,0,Math.PI*2);ctx.fill();
-
-    const pxOffset=getEffectiveLookX()*2+getEffectiveHeadLean()*0.12;
-    const pyOffset=getEffectiveLookY()*2;
-    ctx.beginPath();ctx.arc(155+pxOffset,164+pyOffset,7.5*(face.pupilScale||1),0,Math.PI*2);ctx.fillStyle="#050607";ctx.fill();
-    ctx.beginPath();ctx.arc(265+pxOffset,164+pyOffset,7.5*(face.pupilScale||1),0,Math.PI*2);ctx.fill();
-
-    const maxLid=31;
-    const lc=Math.max(0,Math.min(100,face.blinkLeft||0))/100*maxLid;
-    const rc=Math.max(0,Math.min(100,face.blinkRight||0))/100*maxLid;
-    ctx.save();ctx.beginPath();ctx.ellipse(155,164,40,33,0,0,Math.PI*2);ctx.clip();
-    ctx.fillStyle="#e8a575";ctx.fillRect(114,129,82,lc);ctx.fillRect(114,198-lc,82,lc);ctx.restore();
-    ctx.save();ctx.beginPath();ctx.ellipse(265,164,40,33,0,0,Math.PI*2);ctx.clip();
-    ctx.fillStyle="#e8a575";ctx.fillRect(224,129,82,rc);ctx.fillRect(224,198-rc,82,rc);ctx.restore();
+    ctx.save();ctx.beginPath();ctx.ellipse(leftEyeX,eyeY,eyeRx,eyeRy,0,0,Math.PI*2);ctx.clip();
+    ctx.fillStyle=hexAdjust(designer.skinColor,-4);ctx.fillRect(leftEyeX-eyeRx-2,eyeY-eyeRy-2,eyeRx*2+4,lc);ctx.fillRect(leftEyeX-eyeRx-2,eyeY+eyeRy-lc,eyeRx*2+4,lc);ctx.restore();
+    ctx.save();ctx.beginPath();ctx.ellipse(rightEyeX,eyeY,eyeRx,eyeRy,0,0,Math.PI*2);ctx.clip();
+    ctx.fillStyle=hexAdjust(designer.skinColor,-4);ctx.fillRect(rightEyeX-eyeRx-2,eyeY-eyeRy-2,eyeRx*2+4,rc);ctx.fillRect(rightEyeX-eyeRx-2,eyeY+eyeRy-rc,eyeRx*2+4,rc);ctx.restore();
 
     // glasses + lens tint
+    ctx.save();
+    ctx.translate(210,166+designer.glassesY);
+    ctx.scale(designer.glassesSize/100,designer.glassesSize/100);
+    ctx.translate(-210,-166);
     ctx.fillStyle="rgba(80,164,198,.08)";ctx.strokeStyle="#07090c";ctx.lineWidth=9;
     ctx.beginPath();if(ctx.roundRect)ctx.roundRect(99,132,106,70,25);else ctx.rect(99,132,106,70);ctx.fill();ctx.stroke();
     ctx.beginPath();if(ctx.roundRect)ctx.roundRect(215,132,106,70,25);else ctx.rect(215,132,106,70);ctx.fill();ctx.stroke();
@@ -5363,16 +5302,31 @@ body.menu-open{overflow:hidden}
     strokeLine(ctx,[[321,151],[351,143]],"#07090c",9);
     ctx.globalAlpha=.17;strokeLine(ctx,[[112,142],[155,136]],"#ffffff",3);strokeLine(ctx,[[229,142],[272,136]],"#ffffff",3);ctx.globalAlpha=1;
 
-    // nose + moustache
+    ctx.restore();
+
+    // nose
+    ctx.save();
+    ctx.translate(210,190+designer.noseY);
+    ctx.scale(designer.noseSize/100,designer.noseSize/100);
+    ctx.translate(-210,-190);
     ctx.beginPath();ctx.moveTo(210,167);ctx.lineTo(199,205);ctx.quadraticCurveTo(210,214,221,205);
     ctx.strokeStyle="#a96948";ctx.lineWidth=5.5;ctx.stroke();
-    fillStrokePath(ctx,HEAD_PATHS.moustache,"#211814",null,0);
+    ctx.restore();
+
+    // moustache follows beard size
+    ctx.save();
+    ctx.translate(210,240+designer.beardY);
+    ctx.scale(designer.beardSize/100,designer.beardSize/100);
+    ctx.translate(-210,-240);
+    fillStrokePath(ctx,HEAD_PATHS.moustache,hexAdjust(designer.beardColor,-25),null,0);
+    ctx.restore();
 
     // mouth
     const widthScale=(face.mouthWidth||100)/100;
-    const halfWidth=26*widthScale;
-    const openRy=(face.mouthOpen||0)/100*15;
-    const baseY=247;
+    const mouthScale=designer.mouthSize/100;
+    const halfWidth=26*widthScale*mouthScale;
+    const openRy=(face.mouthOpen||0)/100*15*mouthScale;
+    const baseY=247+designer.mouthY;
     if(openRy>0.25){
       ctx.beginPath();ctx.ellipse(210,baseY+4,halfWidth*.82,openRy,0,0,Math.PI*2);ctx.fillStyle="#070707";ctx.fill();
       if((face.mouthOpen||0)>20){
@@ -5795,6 +5749,7 @@ body.menu-open{overflow:hidden}
   bindAudioLipSync();
   bindAvatarBrain();
   bindAvatarTalk();
+  bindAvatarDesigner();
   bindBackgroundControls();
   bindCharacterSelector();
   bindAvatarRecorder();
