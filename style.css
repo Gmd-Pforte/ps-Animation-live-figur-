@@ -335,3 +335,46 @@ footer {
     gap: 7px;
   }
 }
+
+
+/* Schritt 3: Augen & Pupillen */
+.eye-controls {
+  grid-column: 1 / -1;
+}
+
+.eye-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+#blinkNow {
+  min-height: 44px;
+  border: 1px solid rgba(39, 200, 255, .35);
+  background: var(--accent-soft);
+  color: var(--text);
+  border-radius: 11px;
+  padding: 8px 12px;
+  font-weight: 700;
+}
+
+.auto-blink {
+  display: flex !important;
+  grid-template-columns: auto 1fr !important;
+  align-items: center;
+  gap: 8px !important;
+  margin: 0 !important;
+  color: var(--muted);
+}
+
+.auto-blink input {
+  width: 22px;
+  height: 22px;
+  accent-color: var(--accent);
+}
+
+#eyesModule {
+  pointer-events: none;
+}
