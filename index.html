@@ -860,14 +860,14 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.29.0: Touch-Fix – JS darf den Kopf transformieren */
+/* v0.30.0: Touch-Fix – JS darf den Kopf transformieren */
 .avatar-head-module{
   will-change:transform;
   transition:transform 70ms linear;
 }
 
 
-/* v0.29.0: Kopfneigung über festen Cutout-Anker */
+/* v0.30.0: Kopfneigung über festen Cutout-Anker */
 .head-anchor{
   transform-origin:0 0;
   will-change:transform;
@@ -944,7 +944,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.29.0: Aufnahme sichtbar unter den Touchfeldern */
+/* v0.30.0: Aufnahme sichtbar unter den Touchfeldern */
 .record-workspace{
   margin-top:14px;
   border:1px solid rgba(255,255,255,.07);
@@ -992,7 +992,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.29.0: gleiche Figur auf Handy, Desktop und Aufnahme */
+/* v0.30.0: gleiche Figur auf Handy, Desktop und Aufnahme */
 .avatar-body{
   width:min(330px,65vw)!important;
   bottom:4px!important;
@@ -1018,7 +1018,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.29.0: sichtbare Arm-Regler auf der Hauptseite */
+/* v0.30.0: sichtbare Arm-Regler auf der Hauptseite */
 .arm-main-controls{
   margin-top:14px;
   border:1px solid rgba(39,200,255,.22);
@@ -1130,7 +1130,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.29.0: vier Charaktere */
+/* v0.30.0: vier Charaktere */
 .character-buttons{
   grid-template-columns:repeat(4,minmax(0,1fr));
 }
@@ -1520,7 +1520,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.29.0: Recorder-Format */
+/* v0.30.0: Recorder-Format */
 .record-format-choice{
   display:grid;
   grid-template-columns:auto minmax(150px,1fr);
@@ -1553,7 +1553,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.29.0: Avatar Designer */
+/* v0.30.0: Avatar Designer */
 .designer-panel{margin-top:10px;border:1px solid rgba(255,96,190,.22);background:linear-gradient(180deg,rgba(255,67,170,.045),rgba(0,0,0,.16));border-radius:18px;padding:12px}
 .designer-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.designer-head>div{display:grid;gap:2px}.designer-head strong{font-size:16px}
 #designerNotice{font-size:10px;color:var(--muted)}
@@ -1573,7 +1573,7 @@ body.menu-open{overflow:hidden}
 @media(max-width:620px){.designer-grid{grid-template-columns:1fr}.designer-colors{grid-template-columns:repeat(3,1fr)}}
 
 
-/* v0.29.0: Leg Control */
+/* v0.30.0: Leg Control */
 .leg-main-controls{margin-top:10px;border:1px solid rgba(122,220,255,.18);background:linear-gradient(180deg,rgba(64,182,255,.045),rgba(0,0,0,.14));border-radius:16px;padding:12px}
 .leg-main-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.leg-main-head>div{display:grid;gap:2px}.leg-main-head strong{font-size:14px}
 #legReset{min-height:40px;border:1px solid rgba(39,200,255,.32);background:var(--accent-soft);color:var(--text);border-radius:11px;padding:7px 10px;font-weight:850}
@@ -1586,7 +1586,7 @@ body.menu-open{overflow:hidden}
 @media(max-width:520px){.walk-row{grid-template-columns:1fr}}
 
 
-/* v0.29.0: Dance Mode */
+/* v0.30.0: Dance Mode */
 .dance-panel{margin-top:10px;border:1px solid rgba(255,92,193,.24);background:linear-gradient(180deg,rgba(255,66,178,.07),rgba(57,23,69,.12));border-radius:18px;padding:12px}
 .dance-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.dance-head>div{display:grid;gap:2px}.dance-head strong{font-size:15px}#danceStatus{font-size:10px;color:var(--muted)}
 #danceToggle{min-width:116px;min-height:48px;border-radius:13px;border:1px solid #75405f;background:#190f18;color:var(--text);font-weight:900;font-size:14px}
@@ -1600,7 +1600,7 @@ body.menu-open{overflow:hidden}
 @media(max-width:620px){.dance-controls{grid-template-columns:1fr}.dance-head{align-items:flex-start;flex-direction:column}#danceToggle{width:100%}}
 
 
-/* v0.29.0: App-Reiter + Avatar Catalog */
+/* v0.30.0: App-Reiter + Avatar Catalog */
 .app-tabs{
   position:sticky;top:0;z-index:40;
   display:grid;grid-template-columns:repeat(3,1fr);gap:6px;
@@ -1692,7 +1692,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.29.0: Antwort-MP3 Bibliothek */
+/* v0.30.0: Antwort-MP3 Bibliothek */
 .app-tabs{grid-template-columns:repeat(4,1fr)}
 .answer-library{
   border:1px solid rgba(123,103,255,.22);
@@ -1729,7 +1729,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.29.0: Live-Antworten + Reaktionen */
+/* v0.30.0: Live-Antworten + Reaktionen */
 .live-answer-bar{
   margin-top:9px;padding:11px;border:1px solid rgba(39,200,255,.16);
   border-radius:15px;background:linear-gradient(180deg,rgba(39,200,255,.045),rgba(0,0,0,.13))
@@ -2045,137 +2045,142 @@ body.menu-open{overflow:hidden}
                 <clipPath id="eyeClipLeft"><ellipse cx="155" cy="164" rx="40" ry="33"/></clipPath>
                 <clipPath id="eyeClipRight"><ellipse cx="265" cy="164" rx="40" ry="33"/></clipPath>
                 <linearGradient id="psSkinHeadGrad" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stop-color="#f5bc88"/>
-                  <stop offset="52%" stop-color="#eca978"/>
-                  <stop offset="100%" stop-color="#d58a5c"/>
+                  <stop offset="0%" stop-color="#f7bd88"/>
+                  <stop offset="50%" stop-color="#eca471"/>
+                  <stop offset="100%" stop-color="#d88455"/>
                 </linearGradient>
                 <linearGradient id="psCapGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="#252b34"/>
-                  <stop offset="55%" stop-color="#12161c"/>
+                  <stop offset="0%" stop-color="#2b3038"/>
+                  <stop offset="55%" stop-color="#15191f"/>
                   <stop offset="100%" stop-color="#07090d"/>
                 </linearGradient>
                 <linearGradient id="psBeardGrad" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stop-color="#4a3931"/>
-                  <stop offset="48%" stop-color="#32251f"/>
-                  <stop offset="100%" stop-color="#18120f"/>
+                  <stop offset="0%" stop-color="#4d3b32"/>
+                  <stop offset="45%" stop-color="#2b211c"/>
+                  <stop offset="100%" stop-color="#15110e"/>
                 </linearGradient>
                 <linearGradient id="psLensGrad" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stop-color="#9dddf2" stop-opacity=".16"/>
-                  <stop offset="45%" stop-color="#ffffff" stop-opacity=".025"/>
-                  <stop offset="100%" stop-color="#55a4c6" stop-opacity=".10"/>
+                  <stop offset="0%" stop-color="#e7f7ff" stop-opacity=".13"/>
+                  <stop offset="48%" stop-color="#ffffff" stop-opacity=".025"/>
+                  <stop offset="100%" stop-color="#64b9df" stop-opacity=".08"/>
                 </linearGradient>
               </defs>
 
               <g id="headMotionGroup">
                 <!-- Ohren -->
-                <ellipse cx="76" cy="169" rx="27" ry="42" fill="url(#psSkinHeadGrad)" stroke="#4b3022" stroke-width="7"/>
-                <ellipse cx="344" cy="169" rx="27" ry="42" fill="url(#psSkinHeadGrad)" stroke="#4b3022" stroke-width="7"/>
-                <path d="M73 157 Q59 170 75 189" fill="none" stroke="#b66f49" stroke-width="4.5" stroke-linecap="round"/>
-                <path d="M347 157 Q361 170 345 189" fill="none" stroke="#b66f49" stroke-width="4.5" stroke-linecap="round"/>
+                <ellipse cx="72" cy="176" rx="31" ry="47" fill="url(#psSkinHeadGrad)" stroke="#3e291f" stroke-width="7"/>
+                <ellipse cx="348" cy="176" rx="31" ry="47" fill="url(#psSkinHeadGrad)" stroke="#3e291f" stroke-width="7"/>
+                <path d="M70 158 Q53 176 72 198 Q85 187 77 173" fill="none" stroke="#b86f4c" stroke-width="5" stroke-linecap="round"/>
+                <path d="M350 158 Q367 176 348 198 Q335 187 343 173" fill="none" stroke="#b86f4c" stroke-width="5" stroke-linecap="round"/>
 
-                <!-- Gesicht mit etwas stärkerem Kiefer -->
-                <path id="psFaceShape" d="M210 24
-                         C132 19 79 69 75 153
-                         C71 235 114 309 210 346
-                         C306 309 349 235 345 153
-                         C341 69 288 19 210 24 Z"
-                      fill="url(#psSkinHeadGrad)" stroke="#3b291f" stroke-width="8"/>
-
-                <!-- subtile Gesichtstiefe -->
-                <path d="M97 151 Q96 231 137 286" fill="none" stroke="#9b5b3e" stroke-width="15" opacity=".13" stroke-linecap="round"/>
-                <path d="M323 149 Q326 224 287 281" fill="none" stroke="#fff" stroke-width="11" opacity=".075" stroke-linecap="round"/>
-                <path d="M136 201 Q154 212 176 207 M284 201 Q266 212 244 207"
-                      fill="none" stroke="#a86445" stroke-width="3" opacity=".35" stroke-linecap="round"/>
+                <!-- Gesicht: breiter, runder und näher am PS-Referenzlook -->
+                <path id="psFaceShape" d="M210 27
+                         C131 22 77 68 73 151
+                         C69 228 108 300 210 344
+                         C312 300 351 228 347 151
+                         C343 68 289 22 210 27 Z"
+                      fill="url(#psSkinHeadGrad)" stroke="#35231c" stroke-width="8"/>
+                <path d="M93 148 Q91 225 132 286" fill="none" stroke="#8f5339" stroke-width="16" opacity=".12" stroke-linecap="round"/>
+                <path d="M327 148 Q329 225 288 286" fill="none" stroke="#fff" stroke-width="12" opacity=".065" stroke-linecap="round"/>
+                <path d="M133 206 Q154 218 178 210 M287 206 Q266 218 242 210"
+                      fill="none" stroke="#a96345" stroke-width="3" opacity=".30" stroke-linecap="round"/>
 
                 <!-- Cap -->
                 <g id="psCapGroup">
-                <path d="M89 105 Q91 37 145 19 Q210 -2 275 19 Q329 37 331 105
-                         Q289 80 210 80 Q131 80 89 105 Z"
-                      fill="url(#psCapGrad)" stroke="#05070a" stroke-width="9"/>
-                <path d="M102 90 Q210 62 318 90 Q285 114 210 118 Q135 114 102 90 Z"
-                      fill="#090c11" stroke="#05070a" stroke-width="8"/>
-                <path d="M210 12 L210 77 M143 25 Q133 55 135 83 M277 25 Q287 55 285 83"
-                      fill="none" stroke="#070a0e" stroke-width="5"/>
-                <path d="M111 76 Q151 41 205 36 Q260 41 307 78"
-                      fill="none" stroke="#4a535e" stroke-width="3" opacity=".5" stroke-linecap="round"/>
-                <path d="M116 91 Q210 69 305 92" fill="none" stroke="#fff" stroke-width="2.5" opacity=".08"/>
+                  <path d="M84 112 Q88 37 143 18 Q210 -6 277 18 Q332 37 336 112
+                           Q288 83 210 82 Q132 83 84 112 Z"
+                        fill="url(#psCapGrad)" stroke="#05070a" stroke-width="9"/>
+                  <path d="M94 94 Q210 62 326 94 Q302 119 210 122 Q118 119 94 94 Z"
+                        fill="#090b0f" stroke="#05070a" stroke-width="8"/>
+                  <path d="M210 9 L210 79 M140 26 Q130 57 133 88 M280 26 Q290 57 287 88"
+                        fill="none" stroke="#06080b" stroke-width="5"/>
+                  <path d="M105 81 Q151 42 205 37 Q263 42 316 83"
+                        fill="none" stroke="#555d67" stroke-width="3" opacity=".46" stroke-linecap="round"/>
+                  <path d="M108 95 Q210 71 312 96" fill="none" stroke="#fff" stroke-width="2.4" opacity=".075"/>
                 </g>
 
-                <!-- Bart -->
+                <!-- Bart: dichter, markanter, graue Seitensträhnen -->
                 <g id="psBeardGroup">
-                <path d="M88 178 Q97 236 122 280 Q149 325 210 346 Q271 325 298 280
-                         Q323 236 332 178 Q309 207 279 220 Q249 234 210 235
-                         Q171 234 141 220 Q111 207 88 178 Z"
-                      fill="url(#psBeardGrad)" stroke="#17120f" stroke-width="7"/>
-                <path d="M109 194 Q104 232 128 273 M311 194 Q316 232 292 273"
-                      fill="none" stroke="#796a62" stroke-width="5" opacity=".78" stroke-linecap="round"/>
-                <path d="M151 247 Q169 292 210 326 Q251 292 269 247"
-                      fill="none" stroke="#75675f" stroke-width="5.5" opacity=".85" stroke-linecap="round"/>
-                <path d="M177 267 Q191 301 210 317 Q229 301 243 267"
-                      fill="none" stroke="#211914" stroke-width="6" stroke-linecap="round"/>
-                <path d="M131 231 Q143 257 153 278 M289 231 Q277 257 267 278"
-                      fill="none" stroke="#5d4d46" stroke-width="3" opacity=".72" stroke-linecap="round"/>
+                  <path d="M84 177 Q91 239 118 284 Q147 329 210 351 Q273 329 302 284
+                           Q329 239 336 177 Q313 205 282 221 Q249 239 210 239
+                           Q171 239 138 221 Q107 205 84 177 Z"
+                        fill="url(#psBeardGrad)" stroke="#15110e" stroke-width="7"/>
+                  <path d="M102 191 Q96 228 112 260 M113 199 Q108 244 128 278
+                           M318 191 Q324 228 308 260 M307 199 Q312 244 292 278"
+                        fill="none" stroke="#9b9a9b" stroke-width="5" opacity=".76" stroke-linecap="round"/>
+                  <path d="M123 221 Q126 257 147 289 M297 221 Q294 257 273 289"
+                        fill="none" stroke="#6f7072" stroke-width="4" opacity=".65" stroke-linecap="round"/>
+                  <path d="M145 249 Q165 302 210 333 Q255 302 275 249"
+                        fill="none" stroke="#77706c" stroke-width="5.5" opacity=".74" stroke-linecap="round"/>
+                  <path d="M172 267 Q190 309 210 326 Q230 309 248 267"
+                        fill="none" stroke="#201815" stroke-width="7" stroke-linecap="round"/>
+                  <path d="M186 279 Q196 315 210 329 Q224 315 234 279"
+                        fill="none" stroke="#86644e" stroke-width="4" opacity=".72" stroke-linecap="round"/>
+                  <path d="M112 214 l12 17 M104 231 l14 17 M128 240 l12 19
+                           M308 214 l-12 17 M316 231 l-14 17 M292 240 l-12 19"
+                        fill="none" stroke="#bab9b9" stroke-width="3.2" opacity=".52" stroke-linecap="round"/>
                 </g>
 
                 <!-- Augenbrauen -->
                 <g id="psBrowsGroup">
                   <g id="browLeft">
-                    <path d="M112 121 Q151 102 190 119" fill="none" stroke="#2b1c15" stroke-width="9" stroke-linecap="round"/>
-                    <path d="M120 117 Q151 108 182 118" fill="none" stroke="#6a4837" stroke-width="2.5" opacity=".7"/>
+                    <path d="M111 122 Q151 101 191 118" fill="none" stroke="#241914" stroke-width="11" stroke-linecap="round"/>
+                    <path d="M121 117 Q151 108 181 118" fill="none" stroke="#6d4939" stroke-width="2.6" opacity=".65"/>
                   </g>
                   <g id="browRight">
-                    <path d="M230 119 Q269 102 308 121" fill="none" stroke="#2b1c15" stroke-width="9" stroke-linecap="round"/>
-                    <path d="M238 118 Q269 108 300 117" fill="none" stroke="#6a4837" stroke-width="2.5" opacity=".7"/>
+                    <path d="M229 118 Q269 101 309 122" fill="none" stroke="#241914" stroke-width="11" stroke-linecap="round"/>
+                    <path d="M239 118 Q269 108 299 117" fill="none" stroke="#6d4939" stroke-width="2.6" opacity=".65"/>
                   </g>
                 </g>
 
-                <!-- Augen -->
+                <!-- Große klare Augen -->
                 <g id="eyesModule">
-                  <ellipse id="psEyeWhiteLeft" cx="155" cy="164" rx="40" ry="33" fill="#fdfdfb"/>
-                  <ellipse id="psEyeWhiteRight" cx="265" cy="164" rx="40" ry="33" fill="#fdfdfb"/>
-                  <path d="M118 158 Q155 132 192 158 M228 158 Q265 132 302 158"
-                        fill="none" stroke="#b36f4a" stroke-width="3" opacity=".42"/>
+                  <ellipse id="psEyeWhiteLeft" cx="155" cy="164" rx="40" ry="33" fill="#fff"/>
+                  <ellipse id="psEyeWhiteRight" cx="265" cy="164" rx="40" ry="33" fill="#fff"/>
+                  <path d="M117 157 Q155 132 193 157 M227 157 Q265 132 303 157"
+                        fill="none" stroke="#b56d49" stroke-width="3" opacity=".32"/>
                   <ellipse id="cheekLeft" cx="133" cy="210" rx="25" ry="12" fill="#e88078" opacity="0"/>
                   <ellipse id="cheekRight" cx="287" cy="210" rx="25" ry="12" fill="#e88078" opacity="0"/>
 
                   <g id="psEyeClipLeft" clip-path="url(#eyeClipLeft)">
-                    <circle id="pupilLeft" cx="155" cy="164" r="7.5" fill="#050607"/>
+                    <circle id="pupilLeft" cx="155" cy="164" r="7.5" fill="#030405"/>
+                    <circle cx="152.5" cy="161.5" r="1.8" fill="#fff" opacity=".75" pointer-events="none"/>
                     <rect id="lidTopLeft" x="114" y="129" width="82" height="0" fill="#e8a575"/>
                     <rect id="lidBottomLeft" x="114" y="198" width="82" height="0" fill="#e8a575"/>
                   </g>
-
                   <g id="psEyeClipRight" clip-path="url(#eyeClipRight)">
-                    <circle id="pupilRight" cx="265" cy="164" r="7.5" fill="#050607"/>
+                    <circle id="pupilRight" cx="265" cy="164" r="7.5" fill="#030405"/>
+                    <circle cx="262.5" cy="161.5" r="1.8" fill="#fff" opacity=".75" pointer-events="none"/>
                     <rect id="lidTopRight" x="224" y="129" width="82" height="0" fill="#e8a575"/>
                     <rect id="lidBottomRight" x="224" y="198" width="82" height="0" fill="#e8a575"/>
                   </g>
                 </g>
 
-                <!-- Brille mit leichtem Glas -->
-                <g id="psGlassesGroup" stroke="#07090c" stroke-width="9">
-                  <rect x="99" y="132" width="106" height="70" rx="25" fill="url(#psLensGrad)"/>
-                  <rect x="215" y="132" width="106" height="70" rx="25" fill="url(#psLensGrad)"/>
-                  <path d="M205 157 Q210 151 215 157" fill="none"/>
-                  <path d="M99 151 L69 143 M321 151 L351 143" fill="none"/>
+                <!-- Markante rechteckige Brille wie Referenz -->
+                <g id="psGlassesGroup" stroke="#07090c" stroke-width="9" stroke-linejoin="round">
+                  <rect x="98" y="131" width="108" height="72" rx="19" fill="url(#psLensGrad)"/>
+                  <rect x="214" y="131" width="108" height="72" rx="19" fill="url(#psLensGrad)"/>
+                  <path d="M206 156 Q210 151 214 156" fill="none"/>
+                  <path d="M98 149 L68 143 M322 149 L352 143" fill="none"/>
                 </g>
-                <path d="M112 142 L155 136 M229 142 L272 136"
-                      fill="none" stroke="#fff" stroke-width="3" opacity=".17" stroke-linecap="round"/>
+                <path d="M111 141 L154 136 M228 141 L271 136"
+                      fill="none" stroke="#fff" stroke-width="3" opacity=".16" stroke-linecap="round"/>
 
                 <!-- Nase -->
                 <g id="psNoseGroup">
-                <path d="M210 167 L199 205 Q210 214 221 205"
-                      fill="none" stroke="#a96948" stroke-width="5.5" stroke-linecap="round"/>
-                <path d="M205 207 Q210 211 216 207" fill="none" stroke="#6f4430" stroke-width="2.5"/>
+                  <path d="M210 167 L199 205 Q210 215 221 205"
+                        fill="none" stroke="#9f603f" stroke-width="5.5" stroke-linecap="round"/>
+                  <path d="M199 207 Q210 214 221 207" fill="none" stroke="#6b402d" stroke-width="3"/>
                 </g>
 
                 <!-- Schnurrbart -->
-                <path id="psMoustache" d="M163 226 Q184 205 210 219 Q236 205 257 226
-                         Q236 237 210 233 Q184 237 163 226 Z"
-                      fill="#211814"/>
-                <path d="M171 224 Q190 217 207 224 M213 224 Q230 217 249 224"
-                      fill="none" stroke="#66564e" stroke-width="2.5" opacity=".7"/>
+                <path id="psMoustache" d="M159 227 Q183 203 210 219 Q237 203 261 227
+                         Q237 241 210 234 Q183 241 159 227 Z"
+                      fill="#201714"/>
+                <path d="M169 224 Q189 216 207 224 M213 224 Q231 216 251 224"
+                      fill="none" stroke="#81736d" stroke-width="2.7" opacity=".68"/>
 
-                <!-- Dynamischer Mund -->
+                <!-- Dynamischer Mund: IDs/Koordinaten bleiben kompatibel -->
                 <g id="mouthModule">
                   <ellipse id="mouthHole" cx="210" cy="247" rx="0" ry="0" fill="#070707"/>
                   <ellipse id="tongueShape" cx="210" cy="254" rx="0" ry="0" fill="#c9656c" opacity="0"/>
@@ -2190,7 +2195,7 @@ body.menu-open{overflow:hidden}
           </div>
         </div>
 
-        <div class="stage-caption"><strong>v0.29.0:</strong> Live Antworten</div>
+        <div class="stage-caption"><strong>v0.30.0:</strong> Premium Face · Live Antworten</div>
       </div>
 
       <div id="liveAnswerBar" class="live-answer-bar app-tab-section" data-app-view="studio">
@@ -6616,7 +6621,7 @@ body.menu-open{overflow:hidden}
     if (ui.menuButton) ui.menuButton.setAttribute("aria-expanded", open ? "true" : "false");
   }
 
-  // --- Figurenaufnahme v0.29.0 -------------------------------------------
+  // --- Figurenaufnahme v0.30.0 -------------------------------------------
   // Direkter Canvas-Renderer: keine langsame SVG->Bitmap-Konvertierung pro Frame.
   let avatarRecorder = null;
   let recorderChunks = [];
