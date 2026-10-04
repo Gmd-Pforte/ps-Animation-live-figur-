@@ -860,10 +860,27 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.13.1: Touch-Fix – JS darf den Kopf transformieren */
+/* v0.13.2: Touch-Fix – JS darf den Kopf transformieren */
 .avatar-head-module{
   will-change:transform;
   transition:transform 70ms linear;
+}
+
+
+/* v0.13.2: Kopfneigung über festen Cutout-Anker */
+.head-anchor{
+  transform-origin:0 0;
+  will-change:transform;
+  transition:transform 55ms linear;
+}
+.avatar-head-module{
+  transition:none;
+}
+#headPad{
+  cursor:grab;
+}
+#headPad:active{
+  cursor:grabbing;
 }
 
 </style>
@@ -1283,7 +1300,7 @@ body.menu-open{overflow:hidden}
       </article>
         </section>
 
-        <div class="menu-version">Version <strong>0.13.1</strong></div>
+        <div class="menu-version">Version <strong>0.13.2</strong></div>
       </div>
     </aside>
 
@@ -1293,7 +1310,7 @@ body.menu-open{overflow:hidden}
 (() => {
   "use strict";
 
-  const VERSION = "0.13.1";
+  const VERSION = "0.13.2";
 
   const avatarState = {
     version: VERSION,
@@ -1471,15 +1488,15 @@ body.menu-open{overflow:hidden}
     const nod = manualTilt + (head.idleTilt || 0);
     const lift = head.idleLift || 0;
 
-    if (ui.headPart) {
-      const x = lean * 0.22;
+    // Der Kopf selbst bleibt unverformt. Gedreht wird nur sein fester Ankerpunkt.
+    if (ui.headAnchor) {
       const y = lift + nod * 0.08;
+      ui.headAnchor.style.transform =
+        "translateY(" + y.toFixed(2) + "px) rotate(" + lean.toFixed(2) + "deg)";
+    }
 
-      ui.headPart.style.transform =
-        "translateX(-50%) translate(" +
-        x.toFixed(2) + "px, " +
-        y.toFixed(2) + "px) rotate(" +
-        lean.toFixed(2) + "deg)";
+    if (ui.headPart) {
+      ui.headPart.style.transform = "translateX(-50%)";
     }
 
     if (ui.headMotionGroup) {
@@ -1570,8 +1587,8 @@ body.menu-open{overflow:hidden}
       ui.eyeKnob.style.top = (50 + face.lookY * 5.5) + "%";
     }
     if (ui.headKnob) {
-      ui.headKnob.style.left = (50 + (head.sideLean || 0) * 4.6) + "%";
-      ui.headKnob.style.top = (50 + head.tilt * 8.2) + "%";
+      ui.headKnob.style.left = Math.max(8, Math.min(92, 50 + (head.sideLean || 0) * 3.4)) + "%";
+      ui.headKnob.style.top = Math.max(8, Math.min(92, 50 + head.tilt * 8.2)) + "%";
     }
     if (ui.mouthKnob) {
       ui.mouthKnob.style.left = (8 + ((face.mouthWidth - 70) / 65) * 84) + "%";
@@ -1797,22 +1814,72 @@ body.menu-open{overflow:hidden}
   function bindTouchPad(element, callback) {
     if (!element) return;
 
-    const update = (event) => {
+    let activePointerId = null;
+    let mouseActive = false;
+
+    const updateFromPoint = (clientX, clientY) => {
       const rect = element.getBoundingClientRect();
-      const x = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
-      const y = Math.max(0, Math.min(1, (event.clientY - rect.top) / rect.height));
+      if (!rect.width || !rect.height) return;
+
+      const x = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+      const y = Math.max(0, Math.min(1, (clientY - rect.top) / rect.height));
+
       callback(x, y);
       renderAvatar();
     };
 
-    element.addEventListener("pointerdown", (event) => {
-      element.setPointerCapture(event.pointerId);
-      update(event);
-    });
+    if (window.PointerEvent) {
+      element.addEventListener("pointerdown", (event) => {
+        event.preventDefault();
+        activePointerId = event.pointerId;
+        try { element.setPointerCapture(event.pointerId); } catch (_) {}
+        updateFromPoint(event.clientX, event.clientY);
+      });
 
-    element.addEventListener("pointermove", (event) => {
-      if (element.hasPointerCapture(event.pointerId)) update(event);
-    });
+      element.addEventListener("pointermove", (event) => {
+        if (activePointerId !== event.pointerId) return;
+        event.preventDefault();
+        updateFromPoint(event.clientX, event.clientY);
+      });
+
+      const finishPointer = (event) => {
+        if (activePointerId !== event.pointerId) return;
+        try {
+          if (element.hasPointerCapture && element.hasPointerCapture(event.pointerId)) {
+            element.releasePointerCapture(event.pointerId);
+          }
+        } catch (_) {}
+        activePointerId = null;
+      };
+
+      element.addEventListener("pointerup", finishPointer);
+      element.addEventListener("pointercancel", finishPointer);
+    } else {
+      element.addEventListener("touchstart", (event) => {
+        event.preventDefault();
+        const touch = event.touches[0];
+        if (touch) updateFromPoint(touch.clientX, touch.clientY);
+      }, { passive:false });
+
+      element.addEventListener("touchmove", (event) => {
+        event.preventDefault();
+        const touch = event.touches[0];
+        if (touch) updateFromPoint(touch.clientX, touch.clientY);
+      }, { passive:false });
+
+      element.addEventListener("mousedown", (event) => {
+        mouseActive = true;
+        updateFromPoint(event.clientX, event.clientY);
+      });
+
+      window.addEventListener("mousemove", (event) => {
+        if (mouseActive) updateFromPoint(event.clientX, event.clientY);
+      });
+
+      window.addEventListener("mouseup", () => {
+        mouseActive = false;
+      });
+    }
   }
 
   let talkTimer = null;
@@ -2037,7 +2104,8 @@ body.menu-open{overflow:hidden}
     });
 
     bindTouchPad(ui.headPad, (x,y) => {
-      avatarState.head.sideLean = (x - 0.5) * 20;
+      // Links/rechts = echte Cutout-Neigung um den Kopf-Anker.
+      avatarState.head.sideLean = (x - 0.5) * 24;
       avatarState.head.tilt = (y - 0.5) * 6;
       avatarState.head.lastInteractionAt = performance.now();
     });
