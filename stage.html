@@ -6924,6 +6924,8 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
   let recorderFileExtension = "webm";
   let recorderFormatLabel = "WebM";
   let recorderStopping = false;
+  let recorderLastStatus = "inaktiv";
+  let recorderLastError = "";
   let recorderDataEvents = 0;
   let recorderBytes = 0;
 
@@ -6949,6 +6951,7 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
   };
 
   function setRecorderStatus(text) {
+    recorderLastStatus=String(text||"");
     if (ui.recordStatus) ui.recordStatus.textContent = text;
   }
 
@@ -8117,15 +8120,27 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
       recorderCanvas.className="recorder-capture-canvas";
       document.body.appendChild(recorderCanvas);
 
-      recorderCtx=recorderCanvas.getContext("2d",{alpha:false,desynchronized:true});
+      const transparentRecording=(avatarState.overlay?.mode||"normal")==="transparent";
+      recorderCtx=recorderCanvas.getContext("2d",{alpha:transparentRecording,desynchronized:true});
+      if(!recorderCtx) throw new Error("Canvas-Kontext konnte nicht erstellt werden");
       paintRecorderFrame();
 
       const canvasStream=recorderCanvas.captureStream(30);
+      // Manche Browser erzeugen den Track zuverlässiger, wenn nach captureStream
+      // noch mindestens ein frischer Frame gemalt wurde.
+      paintRecorderFrame();
       const tracks=[...canvasStream.getVideoTracks()];
 
-      // Audiotrack vorbereiten. Bei Android muss das Audioelement dafür
-      // teilweise einmal kurz tatsächlich abgespielt worden sein.
-      const preparedAudioTrack = await prepareRecorderAudioTrack();
+      // Nur dann eine Tonspur erzeugen, wenn tatsächlich Audio geladen ist.
+      // Ein künstlich stummer WebAudio-Track kann Remote-Aufnahmen auf manchen
+      // Chrome/Android-Versionen beim Start blockieren.
+      const hasAnyAudioSource=!!(
+        (ui.speechAudio && ui.speechAudio.src) ||
+        (ui.responseAudio && ui.responseAudio.src)
+      );
+      const preparedAudioTrack = hasAnyAudioSource
+        ? await prepareRecorderAudioTrack()
+        : null;
       const recorderHasAudio = !!preparedAudioTrack;
 
       if (preparedAudioTrack) {
@@ -8143,13 +8158,19 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
         });
       });
 
-      const requestedFormat = ui.recordFormatSelect?.value || "auto";
+      // Remote Stage: WebM ist in Chrome/Android deutlich stabiler als MP4.
+      // Die normale Studio-Seite behält weiterhin ihre Format-Auswahl.
+      const isRemoteStage=document.body.classList.contains("remote-stage-mode");
+      const requestedFormat = isRemoteStage
+        ? "webm"
+        : (ui.recordFormatSelect?.value || "auto");
       const mimeType=preferredRecorderMime(recorderHasAudio,requestedFormat);
       const options=mimeType
         ? {mimeType,videoBitsPerSecond:5000000,audioBitsPerSecond:160000}
         : {videoBitsPerSecond:5000000,audioBitsPerSecond:160000};
 
       avatarRecorder=new MediaRecorder(recorderStream,options);
+      recorderLastError="";
 
       const actualMime=(avatarRecorder.mimeType || mimeType || "").toLowerCase();
       recorderFileExtension=actualMime.includes("mp4") ? "mp4" : "webm";
@@ -8165,7 +8186,8 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
 
       avatarRecorder.onerror=(event)=>{
         console.error("Recorder error",event);
-        setRecorderStatus("Aufnahmefehler");
+        recorderLastError=event?.error?.message || event?.name || "MediaRecorder Fehler";
+        setRecorderStatus("Aufnahmefehler · "+recorderLastError);
       };
 
       avatarRecorder.onstop=()=>{
@@ -8247,6 +8269,15 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
         avatarRecorder.start(1000);
       }
 
+      if(avatarRecorder.state!=="recording"){
+        throw new Error("MediaRecorder ist nicht in den Aufnahmezustand gewechselt");
+      }
+
+      // Gleich zu Beginn mehrere Frames liefern, damit captureStream auf
+      // mobilen Browsern nicht als leerer Stream behandelt wird.
+      paintRecorderFrame();
+      requestAnimationFrame(()=>paintRecorderFrame());
+
       let audioStarted=false;
       if(audioTrackCount && ui.speechAudio?.src){
         audioStarted=await startRecorderAudioPlayback();
@@ -8272,7 +8303,18 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
       },200);
     } catch(error){
       console.error("Recorder start error:",error);
-      setRecorderStatus("Aufnahme konnte nicht gestartet werden");
+      recorderLastError=error?.message || String(error);
+      setRecorderStatus("Aufnahme konnte nicht gestartet werden · "+recorderLastError);
+
+      try{
+        if(recorderStream){
+          recorderStream.getTracks().forEach(track=>track.stop());
+          recorderStream=null;
+        }
+      }catch(_){}
+      if(recorderPaintTimer){clearInterval(recorderPaintTimer);recorderPaintTimer=null;}
+      if(recorderClockTimer){clearInterval(recorderClockTimer);recorderClockTimer=null;}
+
       if(ui.recordStart){
         ui.recordStart.disabled=false;
         ui.recordStart.classList.remove("recording");
@@ -8433,7 +8475,11 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
       seconds:recorderStartedAt && avatarRecorder?.state==="recording"
         ? Math.max(0,Math.round((performance.now()-recorderStartedAt)/1000))
         : 0,
-      format:recorderFormatLabel||""
+      format:recorderFormatLabel||"",
+      status:recorderLastStatus||"",
+      error:recorderLastError||"",
+      bytes:recorderBytes||0,
+      chunks:recorderDataEvents||0
     };
   }
 
@@ -8685,9 +8731,14 @@ function applyRemoteCommand(command={}){
   }else if(action==="overlay_bubble"){
     engine.setOverlayBubble(!!command.enabled);
   }else if(action==="record_start"){
-    engine.startRecording();
+    Promise.resolve(engine.startRecording()).finally(()=>{
+      setTimeout(announce,250);
+      setTimeout(announce,1200);
+    });
   }else if(action==="record_stop"){
     engine.stopRecording();
+    setTimeout(announce,500);
+    setTimeout(announce,1600);
   }else if(action==="record_save"){
     engine.saveRecording();
   }else if(action==="designer" && command.key && s.designer && Object.prototype.hasOwnProperty.call(s.designer,command.key)){
