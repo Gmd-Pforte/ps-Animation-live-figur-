@@ -248,3 +248,90 @@ footer {
     grid-template-columns: 1fr;
   }
 }
+
+
+/* Schritt 2: Kopf-Modul */
+.stage-grid {
+  position: absolute;
+  inset: 0;
+  opacity: .16;
+  background-image:
+    linear-gradient(rgba(39,200,255,.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(39,200,255,.12) 1px, transparent 1px);
+  background-size: 42px 42px;
+}
+
+.avatar-head-module {
+  position: relative;
+  z-index: 2;
+  width: min(310px, 72vw);
+  transform-origin: 50% 82%;
+  will-change: transform;
+  filter: drop-shadow(0 14px 22px rgba(0,0,0,.38));
+}
+
+.avatar-head-module svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.stage-caption {
+  position: absolute;
+  z-index: 3;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(5, 13, 21, .84);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 8px 12px;
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.stage-caption strong {
+  color: var(--accent);
+}
+
+.head-controls {
+  grid-column: 1 / -1;
+}
+
+.head-controls label {
+  display: grid;
+  grid-template-columns: 120px 1fr 58px;
+  gap: 10px;
+  align-items: center;
+  margin: 10px 0;
+  font-size: 13px;
+}
+
+.head-controls input[type="range"] {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+.head-controls label strong {
+  color: var(--accent);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#headReset {
+  min-height: 44px;
+  border: 1px solid rgba(39, 200, 255, .35);
+  background: var(--accent-soft);
+  color: var(--text);
+  border-radius: 11px;
+  padding: 8px 12px;
+  font-weight: 700;
+}
+
+@media (max-width: 520px) {
+  .head-controls label {
+    grid-template-columns: 94px 1fr 50px;
+    gap: 7px;
+  }
+}
