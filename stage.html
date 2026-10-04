@@ -1746,7 +1746,7 @@ body.menu-open{overflow:hidden}
 .live-answer-status{margin-top:6px;font-size:10px;color:#8093a1}
 
 
-/* REMOTE STAGE v1 */
+/* REMOTE STAGE v2 */
 body.remote-stage-mode{background:#03070b;overflow-x:hidden}
 body.remote-stage-mode .topbar,
 body.remote-stage-mode .app-tabs,
@@ -1799,7 +1799,7 @@ body.remote-stage-clean .remote-stage-open{display:block}
 <body class="remote-stage-mode">
 
   <div id="remoteStageDock" class="remote-stage-dock">
-    <strong>🎬 REMOTE STAGE</strong>
+    <strong>🎬 REMOTE STAGE v2</strong>
     <input id="remoteRoomInput" maxlength="24" aria-label="Raumcode" placeholder="PS-ROOM">
     <button id="remoteConnectButton" type="button">Verbinden</button>
     <span id="remoteStageStatus" class="remote-stage-status">nicht verbunden</span>
@@ -7555,6 +7555,127 @@ body.remote-stage-clean .remote-stage-open{display:block}
     link.remove();
   }
 
+  async function loadRemoteAudio(url,name="Remote Audio",autoplay=false){
+    if(!ui.speechAudio || !url) return false;
+    try{
+      ui.speechAudio.pause();
+      stopAudioLipSyncLoop(false);
+      ui.speechAudio.crossOrigin="anonymous";
+      ui.speechAudio.src=url;
+      ui.speechAudio.load();
+
+      if(ui.audioStatus) ui.audioStatus.textContent=name+" · remote geladen";
+      if(ui.audioPlay) ui.audioPlay.disabled=false;
+      if(ui.audioStop) ui.audioStop.disabled=false;
+      if(ui.audioLipSyncToggle) ui.audioLipSyncToggle.disabled=false;
+
+      if(autoplay){
+        await playRemoteAudio();
+      }
+      return true;
+    }catch(error){
+      console.warn("Remote audio load failed",error);
+      return false;
+    }
+  }
+
+  async function playRemoteAudio(){
+    if(!ui.speechAudio?.src) return false;
+    if(!ensureAudioGraph()) return false;
+    try{
+      if(audioContext.state==="suspended") await audioContext.resume();
+      if(ui.autoTalk?.checked){
+        ui.autoTalk.checked=false;
+        setAutoTalk(false);
+      }
+      await ui.speechAudio.play();
+      if(ui.audioPlay) ui.audioPlay.textContent="⏸ Pause";
+      if(ui.audioStatus) ui.audioStatus.textContent=(ui.audioStatus.textContent||"Remote Audio").replace(/ · (pausiert|gestoppt)$/,"")+" · läuft";
+      stopAudioLipSyncLoop(false);
+      audioLipSyncLoop();
+      return true;
+    }catch(error){
+      console.warn("Remote audio play failed",error);
+      return false;
+    }
+  }
+
+  function pauseRemoteAudio(){
+    if(!ui.speechAudio) return;
+    ui.speechAudio.pause();
+    if(ui.audioPlay) ui.audioPlay.textContent="▶ Weiter";
+    stopAudioLipSyncLoop();
+  }
+
+  function stopRemoteAudio(){
+    if(!ui.speechAudio) return;
+    try{
+      ui.speechAudio.pause();
+      ui.speechAudio.currentTime=0;
+    }catch(_){}
+    if(ui.audioPlay) ui.audioPlay.textContent="▶ Abspielen";
+    stopAudioLipSyncLoop();
+  }
+
+  function setRemoteBackgroundMedia(url,type="image",name="Remote Hintergrund",fit="cover"){
+    if(!ui.stageBackgroundMedia || !url) return false;
+    clearBackgroundObjectUrl();
+    const media=ui.stageBackgroundMedia;
+    media.crossOrigin="anonymous";
+    media.onload=()=>{
+      avatarState.background.type=type==="gif"?"gif":"image";
+      avatarState.background.name=name;
+      avatarState.background.fit=fit||avatarState.background.fit||"cover";
+      renderBackground();
+    };
+    media.onerror=()=>{
+      avatarState.background.name="Remote-Hintergrund konnte nicht geladen werden";
+      updateBackgroundUi();
+    };
+    media.src=url;
+    return true;
+  }
+
+  function setRemoteBackgroundColor(color){
+    setColorBackground(color||"#0b2033");
+  }
+
+  function setRemoteBackgroundGrid(){
+    setGridBackground();
+  }
+
+  function setRemoteBackgroundFit(fit){
+    if(!["cover","contain","stretch"].includes(fit)) return;
+    avatarState.background.fit=fit;
+    renderBackground();
+  }
+
+  function setRemoteBackgroundDim(dim){
+    avatarState.background.dim=Math.max(0,Math.min(70,Number(dim)||0));
+    renderBackground();
+  }
+
+  function getRemoteRecordingState(){
+    return {
+      state: avatarRecorder?.state||"inactive",
+      stopping:!!recorderStopping,
+      ready:!!recorderBlob,
+      seconds:recorderStartedAt && avatarRecorder?.state==="recording"
+        ? Math.max(0,Math.round((performance.now()-recorderStartedAt)/1000))
+        : 0,
+      format:recorderFormatLabel||""
+    };
+  }
+
+  function getRemoteAudioState(){
+    return {
+      loaded:!!ui.speechAudio?.src,
+      playing:!!(ui.speechAudio && !ui.speechAudio.paused && !ui.speechAudio.ended),
+      currentTime:Number(ui.speechAudio?.currentTime||0),
+      duration:Number.isFinite(ui.speechAudio?.duration)?ui.speechAudio.duration:0
+    };
+  }
+
   function bindAvatarRecorder() {
     updateRecorderFormatSupport();
 
@@ -7613,6 +7734,21 @@ body.remote-stage-clean .remote-stage-open{display:block}
     switchCharacter,
     playAnswerClip,
     characterDisplayName,
+    loadRemoteAudio,
+    playRemoteAudio,
+    pauseRemoteAudio,
+    stopRemoteAudio,
+    setRemoteBackgroundMedia,
+    setRemoteBackgroundColor,
+    setRemoteBackgroundGrid,
+    setRemoteBackgroundFit,
+    setRemoteBackgroundDim,
+    startRecording: startAvatarRecording,
+    stopRecording: stopAvatarRecording,
+    saveRecording: saveAvatarRecording,
+    recordingState: getRemoteRecordingState,
+    audioState: getRemoteAudioState,
+    setAudioStrength,
     version: VERSION
   };
 
@@ -7668,6 +7804,9 @@ function snapshot(){
     character:s?.character||"human",
     dance:!!s?.dance?.enabled,
     walk:!!s?.walk?.enabled,
+    recording:e?.recordingState?.()||{state:"inactive"},
+    audio:e?.audioState?.()||{loaded:false,playing:false},
+    background:s?.background||{},
     version:e?.version||"",
     sentAt:Date.now()
   };
@@ -7697,10 +7836,31 @@ function applyRemoteCommand(command={}){
     s.walk.enabled=!!command.enabled;
     if(Number.isFinite(Number(command.speed))) s.walk.speed=Math.max(.6,Math.min(1.6,Number(command.speed)));
     engine.render();
+  }else if(action==="look"){
+    if(Number.isFinite(Number(command.x))) s.face.lookX=Math.max(-10,Math.min(10,Number(command.x)));
+    if(Number.isFinite(Number(command.y))) s.face.lookY=Math.max(-10,Math.min(10,Number(command.y)));
+    s.brain.manualHoldUntil=performance.now()+1200;
+    engine.render();
+  }else if(action==="blink"){
+    const side=command.side||"both";
+    if(side==="left"||side==="both") s.face.blinkLeft=100;
+    if(side==="right"||side==="both") s.face.blinkRight=100;
+    engine.render();
+    setTimeout(()=>{
+      if(side==="left"||side==="both") s.face.blinkLeft=0;
+      if(side==="right"||side==="both") s.face.blinkRight=0;
+      engine.render();
+    },130);
+  }else if(action==="mouth"){
+    if(Number.isFinite(Number(command.open))) s.face.mouthOpen=Math.max(0,Math.min(100,Number(command.open)));
+    if(Number.isFinite(Number(command.width))) s.face.mouthWidth=Math.max(65,Math.min(140,Number(command.width)));
+    s.brain.manualHoldUntil=performance.now()+900;
+    engine.render();
   }else if(action==="head"){
     if(Number.isFinite(Number(command.lean))) s.head.sideLean=Math.max(-12,Math.min(12,Number(command.lean)));
     if(Number.isFinite(Number(command.tilt))) s.head.tilt=Math.max(-5,Math.min(5,Number(command.tilt)));
     s.head.lastInteractionAt=performance.now();
+    s.brain.manualHoldUntil=performance.now()+1200;
     engine.render();
   }else if(action==="arms"){
     if(Number.isFinite(Number(command.left))) s.leftArm.shoulder=Math.max(0,Math.min(105,Number(command.left)));
@@ -7710,11 +7870,38 @@ function applyRemoteCommand(command={}){
     if(Number.isFinite(Number(command.left))) s.leftLeg.hip=Math.max(-24,Math.min(24,Number(command.left)));
     if(Number.isFinite(Number(command.right))) s.rightLeg.hip=Math.max(-24,Math.min(24,Number(command.right)));
     engine.render();
+  }else if(action==="audio_load"){
+    engine.loadRemoteAudio(String(command.url||""),String(command.name||"Remote Audio"),!!command.autoplay);
+  }else if(action==="audio_play"){
+    engine.playRemoteAudio();
+  }else if(action==="audio_pause"){
+    engine.pauseRemoteAudio();
+  }else if(action==="audio_stop"){
+    engine.stopRemoteAudio();
+  }else if(action==="audio_strength"){
+    engine.setAudioStrength(["soft","strong"].includes(command.mode)?command.mode:"normal");
+  }else if(action==="background_media"){
+    engine.setRemoteBackgroundMedia(String(command.url||""),String(command.type||"image"),String(command.name||"Remote Hintergrund"),String(command.fit||"cover"));
+  }else if(action==="background_color"){
+    engine.setRemoteBackgroundColor(String(command.color||"#0b2033"));
+  }else if(action==="background_grid"){
+    engine.setRemoteBackgroundGrid();
+  }else if(action==="background_fit"){
+    engine.setRemoteBackgroundFit(String(command.fit||"cover"));
+  }else if(action==="background_dim"){
+    engine.setRemoteBackgroundDim(Number(command.dim)||0);
+  }else if(action==="record_start"){
+    engine.startRecording();
+  }else if(action==="record_stop"){
+    engine.stopRecording();
+  }else if(action==="record_save"){
+    engine.saveRecording();
   }else if(action==="designer" && command.key && s.designer && Object.prototype.hasOwnProperty.call(s.designer,command.key)){
     s.designer[command.key]=command.value;
     engine.render();
   }else if(action==="reset"){
     s.head.sideLean=0;s.head.tilt=0;
+    s.face.lookX=0;s.face.lookY=0;s.face.mouthOpen=0;s.face.mouthWidth=100;
     s.leftArm.shoulder=0;s.rightArm.shoulder=0;
     s.leftLeg.hip=0;s.rightLeg.hip=0;
     s.walk.enabled=false;s.walk.left=0;s.walk.right=0;
