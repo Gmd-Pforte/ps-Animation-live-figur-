@@ -860,14 +860,14 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.19.2: Touch-Fix – JS darf den Kopf transformieren */
+/* v0.20: Touch-Fix – JS darf den Kopf transformieren */
 .avatar-head-module{
   will-change:transform;
   transition:transform 70ms linear;
 }
 
 
-/* v0.19.2: Kopfneigung über festen Cutout-Anker */
+/* v0.20: Kopfneigung über festen Cutout-Anker */
 .head-anchor{
   transform-origin:0 0;
   will-change:transform;
@@ -944,7 +944,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.19.2: Aufnahme sichtbar unter den Touchfeldern */
+/* v0.20: Aufnahme sichtbar unter den Touchfeldern */
 .record-workspace{
   margin-top:14px;
   border:1px solid rgba(255,255,255,.07);
@@ -992,7 +992,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.19.2: gleiche Figur auf Handy, Desktop und Aufnahme */
+/* v0.20: gleiche Figur auf Handy, Desktop und Aufnahme */
 .avatar-body{
   width:min(330px,65vw)!important;
   bottom:4px!important;
@@ -1018,7 +1018,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.19.2: sichtbare Arm-Regler auf der Hauptseite */
+/* v0.20: sichtbare Arm-Regler auf der Hauptseite */
 .arm-main-controls{
   margin-top:14px;
   border:1px solid rgba(39,200,255,.22);
@@ -1130,7 +1130,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.19.2: drei Charaktere */
+/* v0.20: drei Charaktere */
 .character-buttons{
   grid-template-columns:repeat(3,minmax(0,1fr));
 }
@@ -1384,6 +1384,141 @@ body.menu-open{overflow:hidden}
   .talk-voice-row{grid-template-columns:1fr}
 }
 
+
+/* Schritt 20: Background-System v1 */
+.background-panel{
+  margin:0 0 14px;
+  border:1px solid rgba(255,255,255,.075);
+  background:rgba(5,12,19,.72);
+  border-radius:18px;
+  padding:12px;
+}
+.background-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+.background-head>div{display:grid;gap:2px}
+.background-head strong{font-size:15px}
+#backgroundReset{
+  min-height:40px;
+  border:1px solid #315268;
+  border-radius:11px;
+  background:#091925;
+  color:var(--text);
+  padding:7px 12px;
+  font-weight:900;
+}
+.background-actions{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:7px;
+  margin-top:10px;
+}
+.background-actions button,
+.background-color-button,
+.background-file-button{
+  position:relative;
+  min-height:46px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid #2a4659;
+  background:#081722;
+  color:var(--text);
+  border-radius:12px;
+  font-size:12px;
+  font-weight:900;
+  overflow:hidden;
+}
+.background-actions button.active{
+  border-color:var(--accent);
+  background:var(--accent-soft);
+}
+.background-color-button input,
+.background-file-button input{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  opacity:0;
+  cursor:pointer;
+}
+.background-color-button{
+  background:linear-gradient(135deg,#0b2033,#173f5c);
+}
+.background-file-button.gif{
+  border-color:#584b85;
+  background:rgba(97,72,153,.13);
+}
+.background-options{
+  display:grid;
+  grid-template-columns:1fr 1.4fr;
+  gap:10px;
+  margin-top:10px;
+}
+.background-options label{
+  display:grid;
+  gap:5px;
+  color:var(--muted);
+  font-size:10px;
+}
+.background-options select{
+  width:100%;
+  min-height:39px;
+  border:1px solid #2d3d4e;
+  background:#07111b;
+  color:var(--text);
+  border-radius:10px;
+  padding:7px 9px;
+}
+.background-options input[type="range"]{
+  width:100%;
+  accent-color:var(--accent);
+}
+.stage-background-color,
+.stage-background-media,
+.stage-background-shade{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+}
+.stage-background-color{
+  z-index:0;
+  background:#0b2033;
+  opacity:0;
+}
+.stage-background-media{
+  z-index:0;
+  display:none;
+  object-fit:cover;
+}
+.stage-background-shade{
+  z-index:1;
+  background:#000;
+  opacity:0;
+}
+.stage-grid{
+  z-index:1;
+  pointer-events:none;
+}
+.stage-grid.bg-hidden{
+  opacity:0!important;
+}
+.avatar-figure{
+  z-index:2;
+}
+@media(max-width:620px){
+  .background-actions{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+  .background-actions button,
+  .background-color-button,
+  .background-file-button{min-height:48px;font-size:11px;padding:4px}
+  .background-options{grid-template-columns:1fr}
+}
+
 </style>
 </head>
 <body>
@@ -1420,9 +1555,54 @@ body.menu-open{overflow:hidden}
       </div>
     </section>
 
+    <section class="background-panel" aria-label="Hintergrund auswählen">
+      <div class="background-head">
+        <div>
+          <span class="mini-label">HINTERGRUND</span>
+          <strong id="backgroundStatus">Studio Grid</strong>
+        </div>
+        <button id="backgroundReset" type="button">↺ Grid</button>
+      </div>
+
+      <div class="background-actions">
+        <button id="backgroundGridButton" class="active" type="button">▦ Grid</button>
+        <label class="background-color-button">
+          <input id="backgroundColor" type="color" value="#0b2033">
+          <span>🎨 Farbe</span>
+        </label>
+        <label class="background-file-button">
+          <input id="backgroundImageFile" type="file" accept="image/png,image/jpeg,image/webp">
+          <span>🖼️ Bild</span>
+        </label>
+        <label class="background-file-button gif">
+          <input id="backgroundGifFile" type="file" accept="image/gif,.gif">
+          <span>✨ GIF</span>
+        </label>
+      </div>
+
+      <div class="background-options">
+        <label>
+          <span>Anpassung</span>
+          <select id="backgroundFit">
+            <option value="cover">Ausfüllen</option>
+            <option value="contain">Ganz zeigen</option>
+            <option value="stretch">Strecken</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Abdunkeln <strong id="backgroundDimValue">0%</strong></span>
+          <input id="backgroundDim" type="range" min="0" max="70" value="0" step="5">
+        </label>
+      </div>
+    </section>
+
     <section class="stage-card">
       <div id="avatarStage" class="avatar-stage" aria-label="Avatar Entwicklungsfläche">
-        <div class="stage-grid"></div>
+        <div id="stageBackgroundColor" class="stage-background-color"></div>
+        <img id="stageBackgroundMedia" class="stage-background-media" alt="" aria-hidden="true">
+        <div id="stageBackgroundShade" class="stage-background-shade"></div>
+        <div id="stageGrid" class="stage-grid"></div>
 
         <div id="avatarFigure" class="avatar-figure" aria-label="PS AI MUSIC Cutout Figur">
 
@@ -1659,7 +1839,7 @@ body.menu-open{overflow:hidden}
         </div>
 
         <div class="stage-caption">
-          <strong>Schritt 19:</strong> Avatar Talk v1</div>
+          <strong>Schritt 20:</strong> Background-System v1</div>
       </div>
     </section>
 
@@ -1992,11 +2172,12 @@ body.menu-open{overflow:hidden}
           <div class="progress-row done"><span>3 Charaktere</span><strong>✓</strong></div>
           <div class="progress-row done"><span>Avatar Brain v1</span><strong>✓</strong></div>
           <div class="progress-row done"><span>Avatar Talk v1</span><strong>✓</strong></div>
+          <div class="progress-row done"><span>Bild / GIF Hintergrund</span><strong>✓</strong></div>
         </div>
       </article>
         </section>
 
-        <div class="menu-version">Version <strong>0.19.2</strong></div>
+        <div class="menu-version">Version <strong>0.20</strong></div>
       </div>
     </aside>
 
@@ -2006,7 +2187,7 @@ body.menu-open{overflow:hidden}
 (() => {
   "use strict";
 
-  const VERSION = "0.19.2";
+  const VERSION = "0.20";
 
   const avatarState = {
     version: VERSION,
@@ -2094,6 +2275,14 @@ body.menu-open{overflow:hidden}
       gestureUntil: 0,
       manualHoldUntil: 0,
       lastPeakGestureAt: 0
+    },
+
+    background: {
+      type: "grid",
+      color: "#0b2033",
+      fit: "cover",
+      dim: 0,
+      name: "Studio Grid"
     }
   };
 
@@ -2111,6 +2300,20 @@ body.menu-open{overflow:hidden}
     avatarBearButton: document.getElementById("avatarBearButton"),
     avatarGullButton: document.getElementById("avatarGullButton"),
     activeCharacterName: document.getElementById("activeCharacterName"),
+    avatarStage: document.getElementById("avatarStage"),
+    stageGrid: document.getElementById("stageGrid"),
+    stageBackgroundColor: document.getElementById("stageBackgroundColor"),
+    stageBackgroundMedia: document.getElementById("stageBackgroundMedia"),
+    stageBackgroundShade: document.getElementById("stageBackgroundShade"),
+    backgroundStatus: document.getElementById("backgroundStatus"),
+    backgroundReset: document.getElementById("backgroundReset"),
+    backgroundGridButton: document.getElementById("backgroundGridButton"),
+    backgroundColor: document.getElementById("backgroundColor"),
+    backgroundImageFile: document.getElementById("backgroundImageFile"),
+    backgroundGifFile: document.getElementById("backgroundGifFile"),
+    backgroundFit: document.getElementById("backgroundFit"),
+    backgroundDim: document.getElementById("backgroundDim"),
+    backgroundDimValue: document.getElementById("backgroundDimValue"),
     headPart: document.getElementById("headPart"),
     headAnchor: document.getElementById("headAnchor"),
     headMotionGroup: document.getElementById("headMotionGroup"),
@@ -2230,6 +2433,162 @@ body.menu-open{overflow:hidden}
 
     target[finalKey] = value;
     return true;
+  }
+
+  // --- Background-System v1 ---------------------------------------------
+  let backgroundObjectUrl = null;
+
+  function backgroundFitToCss(fit) {
+    return fit === "contain" ? "contain" : fit === "stretch" ? "fill" : "cover";
+  }
+
+  function updateBackgroundUi() {
+    const bg = avatarState.background;
+
+    if (ui.backgroundStatus) {
+      ui.backgroundStatus.textContent = bg.name || (
+        bg.type === "grid" ? "Studio Grid" :
+        bg.type === "color" ? "Farbe" :
+        bg.type === "gif" ? "GIF" : "Bild"
+      );
+    }
+
+    if (ui.backgroundGridButton) {
+      ui.backgroundGridButton.classList.toggle("active",bg.type === "grid");
+    }
+
+    if (ui.backgroundColor && ui.backgroundColor.value !== bg.color) {
+      ui.backgroundColor.value = bg.color;
+    }
+
+    if (ui.backgroundFit) ui.backgroundFit.value = bg.fit;
+    if (ui.backgroundDim) ui.backgroundDim.value = String(bg.dim);
+    if (ui.backgroundDimValue) ui.backgroundDimValue.textContent = Math.round(bg.dim) + "%";
+  }
+
+  function renderBackground() {
+    const bg = avatarState.background;
+    const media = ui.stageBackgroundMedia;
+
+    if (ui.stageBackgroundColor) {
+      ui.stageBackgroundColor.style.background = bg.color;
+      ui.stageBackgroundColor.style.opacity = bg.type === "color" ? "1" : "0";
+    }
+
+    if (media) {
+      const showMedia = (bg.type === "image" || bg.type === "gif") && !!media.src;
+      media.style.display = showMedia ? "block" : "none";
+      media.style.objectFit = backgroundFitToCss(bg.fit);
+    }
+
+    if (ui.stageGrid) {
+      ui.stageGrid.classList.toggle("bg-hidden",bg.type !== "grid");
+    }
+
+    if (ui.stageBackgroundShade) {
+      ui.stageBackgroundShade.style.opacity = String(Math.max(0,Math.min(70,bg.dim))/100);
+    }
+
+    updateBackgroundUi();
+  }
+
+  function clearBackgroundObjectUrl() {
+    if (backgroundObjectUrl) {
+      try { URL.revokeObjectURL(backgroundObjectUrl); } catch (_) {}
+      backgroundObjectUrl = null;
+    }
+  }
+
+  function setGridBackground() {
+    avatarState.background.type = "grid";
+    avatarState.background.name = "Studio Grid";
+    avatarState.background.dim = 0;
+
+    if (ui.stageBackgroundMedia) {
+      ui.stageBackgroundMedia.removeAttribute("src");
+      ui.stageBackgroundMedia.style.display = "none";
+    }
+    clearBackgroundObjectUrl();
+    renderBackground();
+  }
+
+  function setColorBackground(color) {
+    avatarState.background.type = "color";
+    avatarState.background.color = color || "#0b2033";
+    avatarState.background.name = "Farbe";
+    renderBackground();
+  }
+
+  function loadBackgroundFile(file,forcedType) {
+    if (!file || !ui.stageBackgroundMedia) return;
+
+    const isGif = forcedType === "gif" ||
+      file.type === "image/gif" ||
+      /\.gif$/i.test(file.name || "");
+
+    clearBackgroundObjectUrl();
+    backgroundObjectUrl = URL.createObjectURL(file);
+
+    const media = ui.stageBackgroundMedia;
+    media.onload = () => {
+      avatarState.background.type = isGif ? "gif" : "image";
+      avatarState.background.name = (isGif ? "GIF · " : "Bild · ") + (file.name || "Hintergrund");
+      renderBackground();
+    };
+    media.onerror = () => {
+      avatarState.background.name = "Hintergrund konnte nicht geladen werden";
+      updateBackgroundUi();
+    };
+    media.src = backgroundObjectUrl;
+  }
+
+  function bindBackgroundControls() {
+    if (ui.backgroundGridButton) {
+      ui.backgroundGridButton.addEventListener("click",setGridBackground);
+    }
+
+    if (ui.backgroundReset) {
+      ui.backgroundReset.addEventListener("click",() => {
+        avatarState.background.fit = "cover";
+        setGridBackground();
+      });
+    }
+
+    if (ui.backgroundColor) {
+      const useColor = () => setColorBackground(ui.backgroundColor.value);
+      ui.backgroundColor.addEventListener("input",useColor);
+      ui.backgroundColor.addEventListener("change",useColor);
+    }
+
+    if (ui.backgroundImageFile) {
+      ui.backgroundImageFile.addEventListener("change",() => {
+        const file = ui.backgroundImageFile.files && ui.backgroundImageFile.files[0];
+        if (file) loadBackgroundFile(file,"image");
+      });
+    }
+
+    if (ui.backgroundGifFile) {
+      ui.backgroundGifFile.addEventListener("change",() => {
+        const file = ui.backgroundGifFile.files && ui.backgroundGifFile.files[0];
+        if (file) loadBackgroundFile(file,"gif");
+      });
+    }
+
+    if (ui.backgroundFit) {
+      ui.backgroundFit.addEventListener("change",() => {
+        avatarState.background.fit = ui.backgroundFit.value;
+        renderBackground();
+      });
+    }
+
+    if (ui.backgroundDim) {
+      ui.backgroundDim.addEventListener("input",() => {
+        avatarState.background.dim = Number(ui.backgroundDim.value);
+        renderBackground();
+      });
+    }
+
+    renderBackground();
   }
 
   // --- Charakter-System --------------------------------------------------
@@ -3964,7 +4323,7 @@ body.menu-open{overflow:hidden}
     if (ui.menuButton) ui.menuButton.setAttribute("aria-expanded", open ? "true" : "false");
   }
 
-  // --- Figurenaufnahme v0.19.2 -------------------------------------------
+  // --- Figurenaufnahme v0.20 -------------------------------------------
   // Direkter Canvas-Renderer: keine langsame SVG->Bitmap-Konvertierung pro Frame.
   let avatarRecorder = null;
   let recorderChunks = [];
@@ -4036,18 +4395,70 @@ body.menu-open{overflow:hidden}
     ctx.stroke();
   }
 
+  function drawImageWithFit(ctx,img,w,h,fit) {
+    const iw = img.naturalWidth || img.width || 1;
+    const ih = img.naturalHeight || img.height || 1;
+
+    if (fit === "stretch") {
+      ctx.drawImage(img,0,0,w,h);
+      return;
+    }
+
+    const scale = fit === "contain"
+      ? Math.min(w/iw,h/ih)
+      : Math.max(w/iw,h/ih);
+
+    const dw = iw*scale;
+    const dh = ih*scale;
+    const dx = (w-dw)/2;
+    const dy = (h-dh)/2;
+
+    ctx.drawImage(img,dx,dy,dw,dh);
+  }
+
   function drawRecordingBackground(ctx,w,h) {
-    ctx.fillStyle="#0b0f14";
+    const bg = avatarState.background || {type:"grid",color:"#0b0f14",fit:"cover",dim:0};
+
+    // Grundfläche verhindert Transparenz in der WebM-Datei.
+    ctx.fillStyle = bg.type === "color" ? bg.color : "#0b0f14";
     ctx.fillRect(0,0,w,h);
 
-    const step=46;
-    ctx.strokeStyle="rgba(75,120,145,.075)";
-    ctx.lineWidth=1;
-    for(let x=0;x<=w;x+=step){
-      ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke();
+    if ((bg.type === "image" || bg.type === "gif") &&
+        ui.stageBackgroundMedia &&
+        ui.stageBackgroundMedia.complete &&
+        ui.stageBackgroundMedia.naturalWidth > 0) {
+      try {
+        // Bei animierten GIFs liefert drawImage jeweils den aktuell
+        // dekodierten Frame des <img>-Elements.
+        drawImageWithFit(ctx,ui.stageBackgroundMedia,w,h,bg.fit);
+      } catch (error) {
+        console.warn("Recorder background draw failed:",error);
+      }
     }
-    for(let y=0;y<=h;y+=step){
-      ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();
+
+    if (bg.type === "grid") {
+      const grad=ctx.createRadialGradient(w*.5,h*.35,20,w*.5,h*.45,Math.max(w,h)*.7);
+      grad.addColorStop(0,"#0d3152");
+      grad.addColorStop(.5,"#081827");
+      grad.addColorStop(1,"#050a10");
+      ctx.fillStyle=grad;
+      ctx.fillRect(0,0,w,h);
+
+      const step=46;
+      ctx.strokeStyle="rgba(75,120,145,.075)";
+      ctx.lineWidth=1;
+      for(let x=0;x<=w;x+=step){
+        ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke();
+      }
+      for(let y=0;y<=h;y+=step){
+        ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();
+      }
+    }
+
+    const dim = Math.max(0,Math.min(70,Number(bg.dim)||0))/100;
+    if (dim > 0) {
+      ctx.fillStyle="rgba(0,0,0,"+dim+")";
+      ctx.fillRect(0,0,w,h);
     }
   }
 
@@ -4904,6 +5315,7 @@ body.menu-open{overflow:hidden}
   bindAudioLipSync();
   bindAvatarBrain();
   bindAvatarTalk();
+  bindBackgroundControls();
   bindCharacterSelector();
   bindAvatarRecorder();
   bindMenu();
