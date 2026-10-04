@@ -5608,6 +5608,41 @@ body.remote-stage-clean .remote-stage-open{display:block}
     return true;
   }
 
+  async function playRemoteAnswerUrl(url,id,label){
+    if(!url || !ui.responseAudio) return false;
+
+    try{
+      ui.responseAudio.pause();
+      ui.responseAudio.currentTime=0;
+    }catch(_){}
+    stopResponseLipSync(false);
+
+    ui.responseAudio.crossOrigin="anonymous";
+    ui.responseAudio.src=url;
+    ui.responseAudio.load();
+
+    if(!ensureResponseAudioGraph()) return false;
+    if(responseAudioContext.state==="suspended"){
+      try{await responseAudioContext.resume();}catch(_){}
+    }
+
+    try{
+      await ui.responseAudio.play();
+      responseAudioSpeaking=true;
+
+      const durationMs=Number.isFinite(ui.responseAudio.duration) && ui.responseAudio.duration>0
+        ? ui.responseAudio.duration*1000
+        : 950;
+
+      triggerResponseReaction(id,label,durationMs);
+      responseLipSyncLoop();
+      return true;
+    }catch(error){
+      console.warn("Remote answer play failed",error);
+      return false;
+    }
+  }
+
   function stopResponseLipSync(reset=true){
     responseAudioSpeaking=false;
     if(responseAudioFrame){
@@ -7733,6 +7768,7 @@ body.remote-stage-clean .remote-stage-open{display:block}
     render: renderAvatar,
     switchCharacter,
     playAnswerClip,
+    playRemoteAnswerUrl,
     characterDisplayName,
     loadRemoteAudio,
     playRemoteAudio,
@@ -7824,6 +7860,12 @@ function applyRemoteCommand(command={}){
     engine.switchCharacter(command.character);
   }else if(action==="answer"){
     engine.playAnswerClip(s.character,String(command.id||""),String(command.label||command.id||"Antwort"),true);
+  }else if(action==="answer_remote"){
+    engine.playRemoteAnswerUrl(
+      String(command.url||""),
+      String(command.id||"antwort"),
+      String(command.label||command.id||"Antwort")
+    );
   }else if(action==="dance"){
     s.walk.enabled=false;s.walk.left=0;s.walk.right=0;
     s.dance.enabled=!!command.enabled;
