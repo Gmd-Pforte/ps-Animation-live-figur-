@@ -860,14 +860,14 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.15: Touch-Fix – JS darf den Kopf transformieren */
+/* v0.15.1: Touch-Fix – JS darf den Kopf transformieren */
 .avatar-head-module{
   will-change:transform;
   transition:transform 70ms linear;
 }
 
 
-/* v0.15: Kopfneigung über festen Cutout-Anker */
+/* v0.15.1: Kopfneigung über festen Cutout-Anker */
 .head-anchor{
   transform-origin:0 0;
   will-change:transform;
@@ -944,7 +944,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.15: Aufnahme sichtbar unter den Touchfeldern */
+/* v0.15.1: Aufnahme sichtbar unter den Touchfeldern */
 .record-workspace{
   margin-top:14px;
   border:1px solid rgba(255,255,255,.07);
@@ -992,7 +992,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.15: gleiche Figur auf Handy, Desktop und Aufnahme */
+/* v0.15.1: gleiche Figur auf Handy, Desktop und Aufnahme */
 .avatar-body{
   width:min(330px,65vw)!important;
   bottom:4px!important;
@@ -1015,6 +1015,62 @@ body.menu-open{overflow:hidden}
 }
 #leftArmBase,#rightArmBase{
   will-change:transform;
+}
+
+
+/* v0.15.1: sichtbare Arm-Regler auf der Hauptseite */
+.arm-main-controls{
+  margin-top:14px;
+  border:1px solid rgba(39,200,255,.22);
+  background:linear-gradient(180deg,rgba(39,200,255,.055),rgba(0,0,0,.16));
+  border-radius:18px;
+  padding:13px;
+}
+.arm-main-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:12px;
+}
+.arm-main-head>div{
+  display:grid;
+  gap:2px;
+}
+.arm-main-head strong{
+  font-size:15px;
+}
+#armReset{
+  border:1px solid #28506a;
+  background:#091925;
+  color:var(--text);
+  border-radius:11px;
+  min-height:40px;
+  padding:7px 11px;
+  font-weight:800;
+}
+.arm-slider-row{
+  display:grid;
+  gap:8px;
+  margin-top:12px;
+}
+.arm-slider-row label{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  color:var(--text);
+  font-size:13px;
+}
+.arm-slider-row label strong{
+  color:var(--accent);
+  font-variant-numeric:tabular-nums;
+}
+.arm-slider-row input[type="range"]{
+  width:100%;
+  min-height:42px;
+  accent-color:var(--accent);
+  touch-action:pan-x;
 }
 
 </style>
@@ -1268,7 +1324,7 @@ body.menu-open{overflow:hidden}
         </div>
 
         <div class="stage-caption">
-          <strong>Schritt 15:</strong> Bewegliche Cutout-Arme</div>
+          <strong>Schritt 15.1:</strong> Arm-Regler auf Hauptseite</div>
       </div>
     </section>
 
@@ -1348,6 +1404,32 @@ body.menu-open{overflow:hidden}
             </div>
           </section>
         </div>
+
+        <section class="arm-main-controls" aria-label="Arm Steuerung">
+          <div class="arm-main-head">
+            <div>
+              <span class="mini-label">ARME</span>
+              <strong>Cutout-Armsteuerung</strong>
+            </div>
+            <button id="armReset" type="button">↺ Arme runter</button>
+          </div>
+
+          <div class="arm-slider-row">
+            <label for="leftArmSlider">
+              <span>🫲 Linker Arm</span>
+              <strong id="leftArmSliderValue">0°</strong>
+            </label>
+            <input id="leftArmSlider" type="range" min="0" max="95" value="0" step="1">
+          </div>
+
+          <div class="arm-slider-row">
+            <label for="rightArmSlider">
+              <span>🫱 Rechter Arm</span>
+              <strong id="rightArmSliderValue">0°</strong>
+            </label>
+            <input id="rightArmSlider" type="range" min="0" max="95" value="0" step="1">
+          </div>
+        </section>
     </section>
 
     <section class="record-workspace" aria-label="Avatar Aufnahme">
@@ -1491,7 +1573,7 @@ body.menu-open{overflow:hidden}
       </article>
         </section>
 
-        <div class="menu-version">Version <strong>0.15</strong></div>
+        <div class="menu-version">Version <strong>0.15.1</strong></div>
       </div>
     </aside>
 
@@ -1501,7 +1583,7 @@ body.menu-open{overflow:hidden}
 (() => {
   "use strict";
 
-  const VERSION = "0.15";
+  const VERSION = "0.15.1";
 
   const avatarState = {
     version: VERSION,
@@ -1630,6 +1712,11 @@ body.menu-open{overflow:hidden}
     rightArmKnob: document.getElementById("rightArmKnob"),
     leftArmTouchValue: document.getElementById("leftArmTouchValue"),
     rightArmTouchValue: document.getElementById("rightArmTouchValue"),
+    leftArmSlider: document.getElementById("leftArmSlider"),
+    rightArmSlider: document.getElementById("rightArmSlider"),
+    leftArmSliderValue: document.getElementById("leftArmSliderValue"),
+    rightArmSliderValue: document.getElementById("rightArmSliderValue"),
+    armReset: document.getElementById("armReset"),
     touchReset: document.getElementById("touchReset"),
     blinkLeftTouch: document.getElementById("blinkLeftTouch"),
     blinkRightTouch: document.getElementById("blinkRightTouch"),
@@ -1707,22 +1794,32 @@ body.menu-open{overflow:hidden}
       ui.headMotionGroup.removeAttribute("transform");
     }
 
-    // Starre Cutout-Arme: pro Seite nur ein Schulter-Drehpunkt.
-    const leftArmAngle = Math.max(0, Math.min(95, avatarState.leftArm.shoulder || 0));
-    const rightArmAngle = Math.max(-95, Math.min(0, avatarState.rightArm.shoulder || 0));
+    // Starre Cutout-Arme: je Seite ein klarer Schulter-Drehpunkt.
+    const leftArmAngle = Math.max(0, Math.min(105, avatarState.leftArm.shoulder || 0));
+    const rightArmAngle = Math.max(-105, Math.min(0, avatarState.rightArm.shoulder || 0));
 
     if (ui.leftArmBase) {
-      ui.leftArmBase.setAttribute("transform", "rotate(" + leftArmAngle.toFixed(2) + " 112 112)");
+      const t = "rotate(" + leftArmAngle.toFixed(2) + " 112 112)";
+      ui.leftArmBase.setAttribute("transform", t);
     }
     if (ui.rightArmBase) {
-      ui.rightArmBase.setAttribute("transform", "rotate(" + rightArmAngle.toFixed(2) + " 308 112)");
+      const t = "rotate(" + rightArmAngle.toFixed(2) + " 308 112)";
+      ui.rightArmBase.setAttribute("transform", t);
     }
 
-    if (ui.leftArmTouchValue) {
-      ui.leftArmTouchValue.textContent = Math.round(Math.abs(leftArmAngle)) + "°";
+    const leftDisplay = Math.round(Math.abs(leftArmAngle));
+    const rightDisplay = Math.round(Math.abs(rightArmAngle));
+
+    if (ui.leftArmTouchValue) ui.leftArmTouchValue.textContent = leftDisplay + "°";
+    if (ui.rightArmTouchValue) ui.rightArmTouchValue.textContent = rightDisplay + "°";
+    if (ui.leftArmSliderValue) ui.leftArmSliderValue.textContent = leftDisplay + "°";
+    if (ui.rightArmSliderValue) ui.rightArmSliderValue.textContent = rightDisplay + "°";
+
+    if (ui.leftArmSlider && document.activeElement !== ui.leftArmSlider) {
+      ui.leftArmSlider.value = String(leftDisplay);
     }
-    if (ui.rightArmTouchValue) {
-      ui.rightArmTouchValue.textContent = Math.round(Math.abs(rightArmAngle)) + "°";
+    if (ui.rightArmSlider && document.activeElement !== ui.rightArmSlider) {
+      ui.rightArmSlider.value = String(rightDisplay);
     }
 
     if (ui.leftArmKnob) {
@@ -2351,13 +2448,37 @@ body.menu-open{overflow:hidden}
     // Einfaches Cutout-Prinzip: hochziehen = Arm hebt sich als ein starres Teil.
     bindTouchPad(ui.leftArmPad, (x,y) => {
       const lift = Math.max(0, Math.min(1, 1 - y));
-      avatarState.leftArm.shoulder = lift * 95;
+      avatarState.leftArm.shoulder = lift * 105;
     });
 
     bindTouchPad(ui.rightArmPad, (x,y) => {
       const lift = Math.max(0, Math.min(1, 1 - y));
-      avatarState.rightArm.shoulder = -(lift * 95);
+      avatarState.rightArm.shoulder = -(lift * 105);
     });
+
+    if (ui.leftArmSlider) {
+      ui.leftArmSlider.addEventListener("input", () => {
+        avatarState.leftArm.shoulder = Number(ui.leftArmSlider.value);
+        renderAvatar();
+      });
+    }
+
+    if (ui.rightArmSlider) {
+      ui.rightArmSlider.addEventListener("input", () => {
+        avatarState.rightArm.shoulder = -Number(ui.rightArmSlider.value);
+        renderAvatar();
+      });
+    }
+
+    if (ui.armReset) {
+      ui.armReset.addEventListener("click", () => {
+        avatarState.leftArm.shoulder = 0;
+        avatarState.rightArm.shoulder = 0;
+        if (ui.leftArmSlider) ui.leftArmSlider.value = "0";
+        if (ui.rightArmSlider) ui.rightArmSlider.value = "0";
+        renderAvatar();
+      });
+    }
 
     const holdBlink = (button, side) => {
       if (!button) return;
@@ -2436,7 +2557,7 @@ body.menu-open{overflow:hidden}
     if (ui.menuButton) ui.menuButton.setAttribute("aria-expanded", open ? "true" : "false");
   }
 
-  // --- Figurenaufnahme v0.15 -------------------------------------------
+  // --- Figurenaufnahme v0.15.1 -------------------------------------------
   // Direkter Canvas-Renderer: keine langsame SVG->Bitmap-Konvertierung pro Frame.
   let avatarRecorder = null;
   let recorderChunks = [];
@@ -2529,8 +2650,8 @@ body.menu-open{overflow:hidden}
     ctx.translate(x,y);
     ctx.scale(s,s);
 
-    const leftArmAngle=Math.max(0,Math.min(95,avatarState.leftArm.shoulder||0));
-    const rightArmAngle=Math.max(-95,Math.min(0,avatarState.rightArm.shoulder||0));
+    const leftArmAngle=Math.max(0,Math.min(105,avatarState.leftArm.shoulder||0));
+    const rightArmAngle=Math.max(-105,Math.min(0,avatarState.rightArm.shoulder||0));
 
     // Linker Arm + Hand als ein starres Cutout-Teil.
     ctx.save();
