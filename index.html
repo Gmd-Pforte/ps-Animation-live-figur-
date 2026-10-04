@@ -860,14 +860,14 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.16: Touch-Fix – JS darf den Kopf transformieren */
+/* v0.17: Touch-Fix – JS darf den Kopf transformieren */
 .avatar-head-module{
   will-change:transform;
   transition:transform 70ms linear;
 }
 
 
-/* v0.16: Kopfneigung über festen Cutout-Anker */
+/* v0.17: Kopfneigung über festen Cutout-Anker */
 .head-anchor{
   transform-origin:0 0;
   will-change:transform;
@@ -944,7 +944,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.16: Aufnahme sichtbar unter den Touchfeldern */
+/* v0.17: Aufnahme sichtbar unter den Touchfeldern */
 .record-workspace{
   margin-top:14px;
   border:1px solid rgba(255,255,255,.07);
@@ -992,7 +992,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.16: gleiche Figur auf Handy, Desktop und Aufnahme */
+/* v0.17: gleiche Figur auf Handy, Desktop und Aufnahme */
 .avatar-body{
   width:min(330px,65vw)!important;
   bottom:4px!important;
@@ -1018,7 +1018,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.16: sichtbare Arm-Regler auf der Hauptseite */
+/* v0.17: sichtbare Arm-Regler auf der Hauptseite */
 .arm-main-controls{
   margin-top:14px;
   border:1px solid rgba(39,200,255,.22);
@@ -1129,6 +1129,25 @@ body.menu-open{overflow:hidden}
   .character-button{min-height:58px}
 }
 
+
+/* v0.17: drei Charaktere */
+.character-buttons{
+  grid-template-columns:repeat(3,minmax(0,1fr));
+}
+@media(max-width:560px){
+  .character-buttons{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:6px;
+  }
+  .character-button{
+    flex-direction:column;
+    gap:3px;
+    padding:7px 3px;
+    font-size:11px;
+  }
+  .character-icon{font-size:22px}
+}
+
 </style>
 </head>
 <body>
@@ -1157,6 +1176,10 @@ body.menu-open{overflow:hidden}
         <button id="avatarBearButton" class="character-button" type="button" data-character="bear">
           <span class="character-icon">🐻</span>
           <span>PS Bär</span>
+        </button>
+        <button id="avatarGullButton" class="character-button" type="button" data-character="gull">
+          <span class="character-icon">🐦</span>
+          <span>PS Möwe</span>
         </button>
       </div>
     </section>
@@ -1400,7 +1423,7 @@ body.menu-open{overflow:hidden}
         </div>
 
         <div class="stage-caption">
-          <strong>Schritt 16:</strong> Zwei wechselbare Charaktere</div>
+          <strong>Schritt 17:</strong> Dritter Charakter · PS Möwe</div>
       </div>
     </section>
 
@@ -1644,13 +1667,13 @@ body.menu-open{overflow:hidden}
           <div class="progress-row done"><span>Arme beweglich</span><strong>✓</strong></div>
           <div class="progress-row done"><span>Beine</span><strong>✓</strong></div>
           <div class="progress-row done"><span>Aufnahme</span><strong>✓</strong></div>
-          <div class="progress-row done"><span>2 Charaktere</span><strong>✓</strong></div>
+          <div class="progress-row done"><span>3 Charaktere</span><strong>✓</strong></div>
           <div class="progress-row"><span>Idle / Leben</span><strong>○</strong></div>
         </div>
       </article>
         </section>
 
-        <div class="menu-version">Version <strong>0.16</strong></div>
+        <div class="menu-version">Version <strong>0.17</strong></div>
       </div>
     </aside>
 
@@ -1660,7 +1683,7 @@ body.menu-open{overflow:hidden}
 (() => {
   "use strict";
 
-  const VERSION = "0.16";
+  const VERSION = "0.17";
 
   const avatarState = {
     version: VERSION,
@@ -1744,6 +1767,7 @@ body.menu-open{overflow:hidden}
     versionValue: document.getElementById("versionValue"),
     avatarHumanButton: document.getElementById("avatarHumanButton"),
     avatarBearButton: document.getElementById("avatarBearButton"),
+    avatarGullButton: document.getElementById("avatarGullButton"),
     activeCharacterName: document.getElementById("activeCharacterName"),
     headPart: document.getElementById("headPart"),
     headAnchor: document.getElementById("headAnchor"),
@@ -2008,6 +2032,183 @@ body.menu-open{overflow:hidden}
     `
   };
 
+  const gullCharacterTemplate = {
+    body: `
+      <svg viewBox="0 0 420 620" role="img" aria-label="PS AI MUSIC Möwe Ganzkörper">
+        <defs>
+          <linearGradient id="gullWaveGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#ffffff"/>
+            <stop offset="45%" stop-color="#57a9ff"/>
+            <stop offset="100%" stop-color="#1672bd"/>
+          </linearGradient>
+        </defs>
+
+        <!-- Arme / Flügel -->
+        <g id="leftArmBase">
+          <path d="M108 110 Q78 124 62 166 Q48 207 52 278 Q55 329 76 356
+                   Q88 371 104 360 Q117 350 112 330 Q99 287 104 230
+                   Q110 173 135 148 Z"
+                fill="#0d2341" stroke="#06101e" stroke-width="9"/>
+          <path d="M75 346 Q58 365 63 391 Q73 405 87 391
+                   Q96 410 109 395 Q123 377 108 350 Z"
+                fill="#f2f4f6" stroke="#697681" stroke-width="6"/>
+          <path d="M80 189 Q96 201 110 194 M72 216 Q91 229 107 220"
+                fill="none" stroke="#e8edf2" stroke-width="6" stroke-linecap="round"/>
+          <path d="M79 241 Q96 253 108 245"
+                fill="none" stroke="#2b8fd8" stroke-width="6" stroke-linecap="round"/>
+        </g>
+
+        <g id="rightArmBase">
+          <path d="M312 110 Q342 124 358 166 Q372 207 368 278 Q365 329 344 356
+                   Q332 371 316 360 Q303 350 308 330 Q321 287 316 230
+                   Q310 173 285 148 Z"
+                fill="#0d2341" stroke="#06101e" stroke-width="9"/>
+          <path d="M345 346 Q362 365 357 391 Q347 405 333 391
+                   Q324 410 311 395 Q297 377 312 350 Z"
+                fill="#f2f4f6" stroke="#697681" stroke-width="6"/>
+          <path d="M340 189 Q324 201 310 194 M348 216 Q329 229 313 220"
+                fill="none" stroke="#e8edf2" stroke-width="6" stroke-linecap="round"/>
+          <path d="M341 241 Q324 253 312 245"
+                fill="none" stroke="#2b8fd8" stroke-width="6" stroke-linecap="round"/>
+        </g>
+
+        <!-- Rennanzug -->
+        <path d="M111 98 Q151 67 210 64 Q269 67 309 98
+                 Q333 121 340 169 L331 344 Q326 376 294 388
+                 L126 388 Q94 376 89 344 L80 169 Q87 121 111 98 Z"
+              fill="#0b1d36" stroke="#050b13" stroke-width="10"/>
+
+        <!-- weiße Schulterfelder -->
+        <path d="M109 104 Q137 77 170 70 L153 126 L103 143 Z"
+              fill="#e9edf1" stroke="#254a70" stroke-width="6"/>
+        <path d="M311 104 Q283 77 250 70 L267 126 L317 143 Z"
+              fill="#e9edf1" stroke="#254a70" stroke-width="6"/>
+
+        <!-- Brust -->
+        <path d="M159 120 Q182 143 210 149 Q238 143 261 120
+                 L274 370 L146 370 Z"
+              fill="#0a1730"/>
+        <path d="M121 203 Q157 218 185 210 Q210 202 235 210 Q263 218 299 203"
+              fill="none" stroke="url(#gullWaveGrad)" stroke-width="7" stroke-linecap="round"/>
+        <path d="M125 220 Q160 235 188 228 Q210 221 232 228 Q260 235 295 220"
+              fill="none" stroke="#2b8fd8" stroke-width="5" stroke-linecap="round"/>
+
+        <!-- Anker-Brustemblem -->
+        <g transform="translate(210 205)" stroke="#e4b43e" fill="none" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="0" cy="-35" r="10"/>
+          <path d="M0 -25 V40 M-20 -5 H20"/>
+          <path d="M-39 22 Q-20 48 0 40 Q20 48 39 22"/>
+          <path d="M-39 22 L-28 19 M39 22 L28 19"/>
+        </g>
+
+        <text x="210" y="284" text-anchor="middle"
+              fill="#bfe1ff" font-size="23" font-weight="900"
+              font-family="Arial, sans-serif">PS AI MUSIC</text>
+
+        <!-- Gürtel / Hose -->
+        <path d="M127 374 Q210 389 293 374 L299 408 Q210 421 121 408 Z"
+              fill="#081321" stroke="#050b13" stroke-width="7"/>
+        <path d="M129 406 Q210 419 291 406 L293 450 Q210 462 127 450 Z"
+              fill="#0d2341" stroke="#06101e" stroke-width="8"/>
+
+        <path d="M127 445 L201 451 L195 566 Q194 583 177 587 L142 587
+                 Q124 582 125 565 Z"
+              fill="#0d2341" stroke="#06101e" stroke-width="8"/>
+        <path d="M219 451 L293 445 L295 565 Q296 582 278 587 L243 587
+                 Q226 583 225 566 Z"
+              fill="#0d2341" stroke="#06101e" stroke-width="8"/>
+
+        <path d="M139 472 Q165 464 196 476" fill="none" stroke="#edf2f5" stroke-width="6"/>
+        <path d="M224 476 Q255 464 281 472" fill="none" stroke="#edf2f5" stroke-width="6"/>
+        <path d="M144 500 Q171 490 194 501 M226 501 Q249 490 276 500"
+              fill="none" stroke="#2b8fd8" stroke-width="6" stroke-linecap="round"/>
+
+        <!-- Schuhe -->
+        <path d="M121 571 Q144 558 188 565 Q204 568 210 589 L207 607
+                 Q164 614 117 604 Q107 596 111 585 Q114 578 121 571 Z"
+              fill="#f5f7fb" stroke="#aab5c0" stroke-width="7"/>
+        <path d="M299 571 Q276 558 232 565 Q216 568 210 589 L213 607
+                 Q256 614 303 604 Q313 596 309 585 Q306 578 299 571 Z"
+              fill="#f5f7fb" stroke="#aab5c0" stroke-width="7"/>
+        <path d="M136 588 L190 592 M132 599 L193 602 M284 588 L230 592 M288 599 L227 602"
+              fill="none" stroke="#6d91b2" stroke-width="4" stroke-linecap="round"/>
+      </svg>
+    `,
+    head: `
+      <svg viewBox="0 0 420 360" role="img" aria-label="PS AI MUSIC Möwe Kopf">
+        <defs>
+          <clipPath id="eyeClipLeft"><ellipse cx="155" cy="164" rx="38" ry="31"/></clipPath>
+          <clipPath id="eyeClipRight"><ellipse cx="265" cy="164" rx="38" ry="31"/></clipPath>
+        </defs>
+
+        <g id="headMotionGroup">
+          <!-- weiße Möwen-Kopfform -->
+          <path d="M76 159 Q70 96 116 57 Q155 23 210 24 Q265 23 304 57
+                   Q350 96 344 159 Q338 222 300 278 Q264 329 210 346
+                   Q156 329 120 278 Q82 222 76 159 Z"
+                fill="#f3f5f5" stroke="#59636d" stroke-width="8"/>
+          <!-- Federzacken -->
+          <path d="M88 213 L65 226 L90 234 L68 252 L98 252
+                   M332 213 L355 226 L330 234 L352 252 L322 252"
+                fill="#f3f5f5" stroke="#59636d" stroke-width="7" stroke-linejoin="round"/>
+
+          <!-- schwarze Mütze -->
+          <path d="M92 111 Q92 42 145 20 Q210 -5 275 20 Q328 42 328 111
+                   Q284 83 210 83 Q136 83 92 111 Z"
+                fill="#15191f" stroke="#07090c" stroke-width="9"/>
+          <path d="M102 95 Q210 67 318 95 Q285 118 210 121 Q135 118 102 95 Z"
+                fill="#0c1015" stroke="#07090c" stroke-width="8"/>
+          <text x="210" y="66" text-anchor="middle"
+                fill="#f0f4f7" font-size="22" font-weight="900"
+                font-family="Arial, sans-serif">PS AI MUSIC</text>
+
+          <!-- Augen -->
+          <g id="eyesModule">
+            <ellipse cx="155" cy="164" rx="40" ry="33" fill="#fff"/>
+            <ellipse cx="265" cy="164" rx="40" ry="33" fill="#fff"/>
+            <g clip-path="url(#eyeClipLeft)">
+              <circle id="pupilLeft" cx="155" cy="164" r="7.5" fill="#000"/>
+              <rect id="lidTopLeft" x="114" y="129" width="82" height="0" fill="#d9dde0"/>
+              <rect id="lidBottomLeft" x="114" y="198" width="82" height="0" fill="#d9dde0"/>
+            </g>
+            <g clip-path="url(#eyeClipRight)">
+              <circle id="pupilRight" cx="265" cy="164" r="7.5" fill="#000"/>
+              <rect id="lidTopRight" x="224" y="129" width="82" height="0" fill="#d9dde0"/>
+              <rect id="lidBottomRight" x="224" y="198" width="82" height="0" fill="#d9dde0"/>
+            </g>
+          </g>
+
+          <!-- dunkle Brille, Augen bleiben leicht sichtbar -->
+          <g stroke="#080a0d" stroke-width="9">
+            <rect x="99" y="132" width="106" height="70" rx="24" fill="#11151a" fill-opacity=".22"/>
+            <rect x="215" y="132" width="106" height="70" rx="24" fill="#11151a" fill-opacity=".22"/>
+            <path d="M205 157 Q210 151 215 157" fill="none"/>
+            <path d="M99 151 L69 143 M321 151 L351 143" fill="none"/>
+          </g>
+
+          <!-- Schnabel -->
+          <path d="M164 209 Q210 184 256 209
+                   Q278 223 294 239
+                   Q258 247 226 252
+                   Q190 258 155 244
+                   Q143 238 149 226 Q154 216 164 209 Z"
+                fill="#f4a619" stroke="#8e5700" stroke-width="7"/>
+          <path d="M154 244 Q194 263 230 255 Q260 250 294 239
+                   Q269 269 226 279 Q184 285 155 263 Q145 254 154 244 Z"
+                fill="#e9900d" stroke="#8e5700" stroke-width="6"/>
+
+          <!-- Dynamischer Mund / Schnabelöffnung -->
+          <g id="mouthModule">
+            <ellipse id="mouthHole" cx="210" cy="247" rx="0" ry="0" fill="#5b2500"/>
+            <ellipse id="tongueShape" cx="210" cy="254" rx="0" ry="0" fill="#d26c57" opacity="0"/>
+            <path id="mouthLine" d="M184 247 Q210 250 236 247"
+                  fill="none" stroke="#6a3600" stroke-width="6" stroke-linecap="round"/>
+          </g>
+        </g>
+      </svg>
+    `
+  };
+
   function refreshCharacterRefs() {
     ui.headMotionGroup = document.getElementById("headMotionGroup");
     ui.leftArmBase = document.getElementById("leftArmBase");
@@ -2025,14 +2226,15 @@ body.menu-open{overflow:hidden}
   }
 
   function switchCharacter(character) {
-    if (character !== "human" && character !== "bear") return;
+    if (!["human","bear","gull"].includes(character)) return;
     if (!ui.torsoPart || !ui.headPart) return;
 
     avatarState.character = character;
 
-    const template = character === "bear"
-      ? bearCharacterTemplate
-      : humanCharacterTemplate;
+    const template =
+      character === "bear" ? bearCharacterTemplate :
+      character === "gull" ? gullCharacterTemplate :
+      humanCharacterTemplate;
 
     ui.torsoPart.innerHTML = template.body;
     ui.headPart.innerHTML = template.head;
@@ -2044,8 +2246,14 @@ body.menu-open{overflow:hidden}
     if (ui.avatarBearButton) {
       ui.avatarBearButton.classList.toggle("active", character === "bear");
     }
+    if (ui.avatarGullButton) {
+      ui.avatarGullButton.classList.toggle("active", character === "gull");
+    }
     if (ui.activeCharacterName) {
-      ui.activeCharacterName.textContent = character === "bear" ? "PS Bär" : "PS Avatar";
+      ui.activeCharacterName.textContent =
+        character === "bear" ? "PS Bär" :
+        character === "gull" ? "PS Möwe" :
+        "PS Avatar";
     }
 
     renderAvatar();
@@ -2057,6 +2265,9 @@ body.menu-open{overflow:hidden}
     }
     if (ui.avatarBearButton) {
       ui.avatarBearButton.addEventListener("click", () => switchCharacter("bear"));
+    }
+    if (ui.avatarGullButton) {
+      ui.avatarGullButton.addEventListener("click", () => switchCharacter("gull"));
     }
   }
 
@@ -2847,7 +3058,7 @@ body.menu-open{overflow:hidden}
     if (ui.menuButton) ui.menuButton.setAttribute("aria-expanded", open ? "true" : "false");
   }
 
-  // --- Figurenaufnahme v0.16 -------------------------------------------
+  // --- Figurenaufnahme v0.17 -------------------------------------------
   // Direkter Canvas-Renderer: keine langsame SVG->Bitmap-Konvertierung pro Frame.
   let avatarRecorder = null;
   let recorderChunks = [];
@@ -3088,9 +3299,159 @@ body.menu-open{overflow:hidden}
     ctx.restore();
   }
 
+  function drawRecordedGullBody(ctx) {
+    const s=0.7857;
+    const x=360-210*s;
+    const y=900-620*s;
+
+    ctx.save();
+    ctx.translate(x,y);
+    ctx.scale(s,s);
+
+    const leftArmAngle=Math.max(0,Math.min(105,avatarState.leftArm.shoulder||0));
+    const rightArmAngle=Math.max(-105,Math.min(0,avatarState.rightArm.shoulder||0));
+
+    ctx.save();
+    ctx.translate(112,112);
+    ctx.rotate(leftArmAngle*Math.PI/180);
+    ctx.translate(-112,-112);
+    fillStrokePath(ctx,BODY_PATHS.leftArm,"#0d2341","#06101e",9);
+    ctx.beginPath();ctx.ellipse(88,374,27,30,0,0,Math.PI*2);
+    ctx.fillStyle="#f2f4f6";ctx.fill();ctx.strokeStyle="#697681";ctx.lineWidth=6;ctx.stroke();
+    ctx.restore();
+
+    ctx.save();
+    ctx.translate(308,112);
+    ctx.rotate(rightArmAngle*Math.PI/180);
+    ctx.translate(-308,-112);
+    fillStrokePath(ctx,BODY_PATHS.rightArm,"#0d2341","#06101e",9);
+    ctx.beginPath();ctx.ellipse(332,374,27,30,0,0,Math.PI*2);
+    ctx.fillStyle="#f2f4f6";ctx.fill();ctx.strokeStyle="#697681";ctx.lineWidth=6;ctx.stroke();
+    ctx.restore();
+
+    fillStrokePath(ctx,BODY_PATHS.torso,"#0b1d36","#050b13",10);
+    fillStrokePath(ctx,BODY_PATHS.collar,"#e9edf1","#254a70",7);
+    fillStrokePath(ctx,BODY_PATHS.shirt,"#0a1730",null,0);
+
+    ctx.strokeStyle="#e4b43e";ctx.lineWidth=6;ctx.lineCap="round";
+    ctx.beginPath();ctx.arc(210,168,10,0,Math.PI*2);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(210,178);ctx.lineTo(210,243);ctx.moveTo(190,198);ctx.lineTo(230,198);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(171,226);ctx.quadraticCurveTo(190,252,210,243);ctx.quadraticCurveTo(230,252,249,226);ctx.stroke();
+
+    ctx.strokeStyle="#57a9ff";ctx.lineWidth=6;
+    ctx.beginPath();ctx.moveTo(122,270);ctx.quadraticCurveTo(170,290,210,277);ctx.quadraticCurveTo(250,290,298,270);ctx.stroke();
+    ctx.fillStyle="#bfe1ff";ctx.font="900 23px Arial";ctx.textAlign="center";ctx.fillText("PS AI MUSIC",210,315);
+
+    fillStrokePath(ctx,BODY_PATHS.waist,"#081321","#050b13",7);
+    fillStrokePath(ctx,BODY_PATHS.hips,"#0d2341","#06101e",8);
+    fillStrokePath(ctx,BODY_PATHS.leftLeg,"#0d2341","#06101e",8);
+    fillStrokePath(ctx,BODY_PATHS.rightLeg,"#0d2341","#06101e",8);
+
+    ctx.strokeStyle="#edf2f5";ctx.lineWidth=6;
+    ctx.beginPath();ctx.moveTo(142,475);ctx.quadraticCurveTo(170,468,197,476);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(223,476);ctx.quadraticCurveTo(250,468,278,475);ctx.stroke();
+
+    fillStrokePath(ctx,BODY_PATHS.leftShoe,"#f5f7fb","#aab5c0",7);
+    fillStrokePath(ctx,BODY_PATHS.rightShoe,"#f5f7fb","#aab5c0",7);
+    strokeLine(ctx,[[137,586],[190,590]],"#6d91b2",4);
+    strokeLine(ctx,[[132,597],[193,601]],"#6d91b2",4);
+    strokeLine(ctx,[[283,586],[230,590]],"#6d91b2",4);
+    strokeLine(ctx,[[288,597],[227,601]],"#6d91b2",4);
+
+    ctx.restore();
+  }
+
+  function drawRecordedGullHead(ctx) {
+    const face=avatarState.face;
+    const head=avatarState.head;
+    const s=0.6548;
+    const anchorX=360;
+    const anchorY=550+(head.idleLift||0);
+    const lean=Math.max(-12,Math.min(12,(head.sideLean||0)+(head.idleLean||0)));
+
+    ctx.save();
+    ctx.translate(anchorX,anchorY);
+    ctx.rotate(lean*Math.PI/180);
+    ctx.scale(s,s);
+    ctx.translate(-210,-360);
+
+    // white head
+    ctx.beginPath();ctx.ellipse(210,174,142,146,0,0,Math.PI*2);
+    ctx.fillStyle="#f3f5f5";ctx.fill();ctx.strokeStyle="#59636d";ctx.lineWidth=8;ctx.stroke();
+
+    // cap/beanie
+    fillStrokePath(ctx,HEAD_PATHS.cap,"#15191f","#07090c",9);
+    fillStrokePath(ctx,HEAD_PATHS.brim,"#0c1015","#07090c",8);
+    ctx.fillStyle="#f0f4f7";ctx.font="900 22px Arial";ctx.textAlign="center";ctx.fillText("PS AI MUSIC",210,66);
+
+    // eyes
+    ctx.beginPath();ctx.ellipse(155,164,40,33,0,0,Math.PI*2);ctx.fillStyle="#fff";ctx.fill();
+    ctx.beginPath();ctx.ellipse(265,164,40,33,0,0,Math.PI*2);ctx.fill();
+
+    const pxOffset=(face.lookX||0)*2+(head.sideLean||0)*0.12;
+    const pyOffset=(face.lookY||0)*2;
+    ctx.beginPath();ctx.arc(155+pxOffset,164+pyOffset,7.5*(face.pupilScale||1),0,Math.PI*2);ctx.fillStyle="#000";ctx.fill();
+    ctx.beginPath();ctx.arc(265+pxOffset,164+pyOffset,7.5*(face.pupilScale||1),0,Math.PI*2);ctx.fill();
+
+    const maxLid=31;
+    const lc=Math.max(0,Math.min(100,face.blinkLeft||0))/100*maxLid;
+    const rc=Math.max(0,Math.min(100,face.blinkRight||0))/100*maxLid;
+    ctx.save();ctx.beginPath();ctx.ellipse(155,164,40,33,0,0,Math.PI*2);ctx.clip();
+    ctx.fillStyle="#d9dde0";ctx.fillRect(114,129,82,lc);ctx.fillRect(114,198-lc,82,lc);ctx.restore();
+    ctx.save();ctx.beginPath();ctx.ellipse(265,164,40,33,0,0,Math.PI*2);ctx.clip();
+    ctx.fillStyle="#d9dde0";ctx.fillRect(224,129,82,rc);ctx.fillRect(224,198-rc,82,rc);ctx.restore();
+
+    // glasses
+    ctx.fillStyle="rgba(17,21,26,.22)";
+    ctx.strokeStyle="#080a0d";ctx.lineWidth=9;
+    ctx.beginPath();if(ctx.roundRect)ctx.roundRect(99,132,106,70,24);else ctx.rect(99,132,106,70);ctx.fill();ctx.stroke();
+    ctx.beginPath();if(ctx.roundRect)ctx.roundRect(215,132,106,70,24);else ctx.rect(215,132,106,70);ctx.fill();ctx.stroke();
+    strokeLine(ctx,[[205,157],[210,151],[215,157]],"#080a0d",9);
+    strokeLine(ctx,[[99,151],[69,143]],"#080a0d",9);
+    strokeLine(ctx,[[321,151],[351,143]],"#080a0d",9);
+
+    // beak
+    ctx.beginPath();
+    ctx.moveTo(164,209);ctx.quadraticCurveTo(210,184,256,209);
+    ctx.quadraticCurveTo(278,223,294,239);
+    ctx.quadraticCurveTo(258,247,226,252);
+    ctx.quadraticCurveTo(190,258,155,244);
+    ctx.quadraticCurveTo(143,238,149,226);
+    ctx.quadraticCurveTo(154,216,164,209);
+    ctx.fillStyle="#f4a619";ctx.fill();ctx.strokeStyle="#8e5700";ctx.lineWidth=7;ctx.stroke();
+
+    // animated mouth
+    const widthScale=(face.mouthWidth||100)/100;
+    const halfWidth=26*widthScale;
+    const openRy=(face.mouthOpen||0)/100*15;
+    const baseY=247;
+
+    if(openRy>0.25){
+      ctx.beginPath();ctx.ellipse(210,baseY+4,halfWidth*.82,openRy,0,0,Math.PI*2);
+      ctx.fillStyle="#5b2500";ctx.fill();
+      if((face.mouthOpen||0)>20){
+        ctx.globalAlpha=.86;
+        ctx.beginPath();ctx.ellipse(210,baseY+7+openRy*.25,halfWidth*.48,openRy*.34,0,0,Math.PI*2);
+        ctx.fillStyle="#d26c57";ctx.fill();ctx.globalAlpha=1;
+      }
+    }
+
+    const leftY=baseY-(face.mouthCornerLeft||0)*.55;
+    const rightY=baseY-(face.mouthCornerRight||0)*.55;
+    const controlY=baseY-(((face.mouthCornerLeft||0)+(face.mouthCornerRight||0))/2)*.40;
+    ctx.beginPath();ctx.moveTo(210-halfWidth,leftY);ctx.quadraticCurveTo(210,controlY+3,210+halfWidth,rightY);
+    ctx.strokeStyle="#6a3600";ctx.lineWidth=6;ctx.lineCap="round";ctx.stroke();
+
+    ctx.restore();
+  }
+
   function drawRecordedBody(ctx) {
     if (avatarState.character === "bear") {
       drawRecordedBearBody(ctx);
+      return;
+    }
+    if (avatarState.character === "gull") {
+      drawRecordedGullBody(ctx);
       return;
     }
 
@@ -3158,6 +3519,10 @@ body.menu-open{overflow:hidden}
   function drawRecordedHead(ctx) {
     if (avatarState.character === "bear") {
       drawRecordedBearHead(ctx);
+      return;
+    }
+    if (avatarState.character === "gull") {
+      drawRecordedGullHead(ctx);
       return;
     }
 
