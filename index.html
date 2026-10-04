@@ -860,14 +860,14 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.21.1: Touch-Fix – JS darf den Kopf transformieren */
+/* v0.21.2: Touch-Fix – JS darf den Kopf transformieren */
 .avatar-head-module{
   will-change:transform;
   transition:transform 70ms linear;
 }
 
 
-/* v0.21.1: Kopfneigung über festen Cutout-Anker */
+/* v0.21.2: Kopfneigung über festen Cutout-Anker */
 .head-anchor{
   transform-origin:0 0;
   will-change:transform;
@@ -944,7 +944,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.21.1: Aufnahme sichtbar unter den Touchfeldern */
+/* v0.21.2: Aufnahme sichtbar unter den Touchfeldern */
 .record-workspace{
   margin-top:14px;
   border:1px solid rgba(255,255,255,.07);
@@ -992,7 +992,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.21.1: gleiche Figur auf Handy, Desktop und Aufnahme */
+/* v0.21.2: gleiche Figur auf Handy, Desktop und Aufnahme */
 .avatar-body{
   width:min(330px,65vw)!important;
   bottom:4px!important;
@@ -1018,7 +1018,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.21.1: sichtbare Arm-Regler auf der Hauptseite */
+/* v0.21.2: sichtbare Arm-Regler auf der Hauptseite */
 .arm-main-controls{
   margin-top:14px;
   border:1px solid rgba(39,200,255,.22);
@@ -1130,7 +1130,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.21.1: vier Charaktere */
+/* v0.21.2: vier Charaktere */
 .character-buttons{
   grid-template-columns:repeat(4,minmax(0,1fr));
 }
@@ -1517,6 +1517,39 @@ body.menu-open{overflow:hidden}
   .background-color-button,
   .background-file-button{min-height:48px;font-size:11px;padding:4px}
   .background-options{grid-template-columns:1fr}
+}
+
+
+/* v0.21.2: Recorder-Format */
+.record-format-choice{
+  display:grid;
+  grid-template-columns:auto minmax(150px,1fr);
+  gap:6px 10px;
+  align-items:center;
+  margin:10px 0 0;
+  padding:10px;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:12px;
+  background:rgba(0,0,0,.14);
+}
+.record-format-choice label{
+  color:var(--muted);
+  font-size:11px;
+  font-weight:800;
+}
+.record-format-choice select{
+  min-height:40px;
+  border:1px solid #2d485a;
+  border-radius:10px;
+  background:#07111b;
+  color:var(--text);
+  padding:7px 9px;
+  font-weight:800;
+}
+#recordFormatSupport{
+  grid-column:1/-1;
+  color:var(--muted);
+  font-size:10px;
 }
 
 </style>
@@ -2055,13 +2088,23 @@ body.menu-open{overflow:hidden}
           <span class="record-format">720 × 920 · 30 FPS</span>
         </div>
 
+        <div class="record-format-choice">
+          <label for="recordFormatSelect">Format</label>
+          <select id="recordFormatSelect">
+            <option value="auto">Auto · MP4 → WebM</option>
+            <option value="mp4">MP4 bevorzugen</option>
+            <option value="webm">WebM</option>
+          </select>
+          <span id="recordFormatSupport">Prüfe Browser …</span>
+        </div>
+
         <div class="record-actions">
           <button id="recordStart" type="button">● Aufnahme</button>
           <button id="recordStop" type="button" disabled>■ Stop</button>
           <button id="recordSave" type="button" disabled>⬇ Speichern</button>
         </div>
 
-        <p class="record-note">Eine geladene MP3/WAV startet beim Aufnahme-Button automatisch bei 0:00. Wenn Android die Spur freigibt, erscheint „🔊 MP3 aktiv“ und der Ton landet direkt im Video.</p>
+        <p class="record-note">Du kannst MP4 oder WebM wählen. „Auto“ versucht zuerst MP4 und fällt bei fehlender Browser-Unterstützung automatisch auf WebM zurück. Geladene MP3/WAV-Dateien werden weiterhin mit der Aufnahme synchron gestartet.</p>
       </section>
     </section>
   
@@ -2181,7 +2224,7 @@ body.menu-open{overflow:hidden}
       </article>
         </section>
 
-        <div class="menu-version">Version <strong>0.21.1</strong></div>
+        <div class="menu-version">Version <strong>0.21.2</strong></div>
       </div>
     </aside>
 
@@ -2191,7 +2234,7 @@ body.menu-open{overflow:hidden}
 (() => {
   "use strict";
 
-  const VERSION = "0.21.1";
+  const VERSION = "0.21.2";
 
   const avatarState = {
     version: VERSION,
@@ -2408,6 +2451,8 @@ body.menu-open{overflow:hidden}
     recordSave: document.getElementById("recordSave"),
     recordStatus: document.getElementById("recordStatus"),
     recordTime: document.getElementById("recordTime"),
+    recordFormatSelect: document.getElementById("recordFormatSelect"),
+    recordFormatSupport: document.getElementById("recordFormatSupport"),
     menuButton: document.getElementById("menuButton"),
     menuClose: document.getElementById("menuClose"),
     menuBackdrop: document.getElementById("menuBackdrop"),
@@ -4489,7 +4534,7 @@ body.menu-open{overflow:hidden}
     if (ui.menuButton) ui.menuButton.setAttribute("aria-expanded", open ? "true" : "false");
   }
 
-  // --- Figurenaufnahme v0.21.1 -------------------------------------------
+  // --- Figurenaufnahme v0.21.2 -------------------------------------------
   // Direkter Canvas-Renderer: keine langsame SVG->Bitmap-Konvertierung pro Frame.
   let avatarRecorder = null;
   let recorderChunks = [];
@@ -4506,6 +4551,8 @@ body.menu-open{overflow:hidden}
   let recorderCapturedAudioTrack = null;
   let recorderAutoStartedAudio = false;
   let recorderAudioRoute = "";
+  let recorderFileExtension = "webm";
+  let recorderFormatLabel = "WebM";
   let recorderStopping = false;
 
   const BODY_PATHS = {
@@ -5377,12 +5424,20 @@ body.menu-open{overflow:hidden}
     }
   }
 
-  function preferredRecorderMime(hasAudio=false) {
-    if (!window.MediaRecorder) return "";
+  function getRecorderMimeCandidates(format,hasAudio=false) {
+    const mp4 = hasAudio
+      ? [
+          "video/mp4;codecs=avc1.42E01E,mp4a.40.2",
+          "video/mp4;codecs=avc1.4D401E,mp4a.40.2",
+          "video/mp4"
+        ]
+      : [
+          "video/mp4;codecs=avc1.42E01E",
+          "video/mp4;codecs=avc1.4D401E",
+          "video/mp4"
+        ];
 
-    // Sobald eine Tonspur vorhanden ist, keinen expliziten reinen VP8-Codec
-    // wählen. Auf einigen Android-Browsern wird sonst die Audiospur verworfen.
-    const options = hasAudio
+    const webm = hasAudio
       ? [
           "video/webm;codecs=vp8,opus",
           "video/webm;codecs=vp9,opus",
@@ -5394,8 +5449,30 @@ body.menu-open{overflow:hidden}
           "video/webm"
         ];
 
+    if (format === "mp4") return [...mp4,...webm];
+    if (format === "webm") return webm;
+    return [...mp4,...webm];
+  }
+
+  function preferredRecorderMime(hasAudio=false,format="auto") {
+    if (!window.MediaRecorder) return "";
+
+    const options=getRecorderMimeCandidates(format,hasAudio);
     return options.find(type=>MediaRecorder.isTypeSupported(type))||"";
   }
+
+  function updateRecorderFormatSupport() {
+    if (!ui.recordFormatSupport || !window.MediaRecorder) return;
+
+    const mp4Supported = getRecorderMimeCandidates("mp4",true)
+      .slice(0,3)
+      .some(type=>MediaRecorder.isTypeSupported(type));
+
+    ui.recordFormatSupport.textContent = mp4Supported
+      ? "✅ MP4 wird von diesem Browser direkt unterstützt"
+      : "ℹ️ MP4 direkt nicht verfügbar · Auto fällt auf WebM zurück";
+  }
+
 
   async function startAvatarRecording() {
     if (avatarRecorder && avatarRecorder.state!=="inactive") return;
@@ -5438,12 +5515,17 @@ body.menu-open{overflow:hidden}
 
       recorderStream=new MediaStream(tracks);
 
-      const mimeType=preferredRecorderMime(recorderHasAudio);
+      const requestedFormat = ui.recordFormatSelect?.value || "auto";
+      const mimeType=preferredRecorderMime(recorderHasAudio,requestedFormat);
       const options=mimeType
         ? {mimeType,videoBitsPerSecond:5000000,audioBitsPerSecond:160000}
         : {videoBitsPerSecond:5000000,audioBitsPerSecond:160000};
 
       avatarRecorder=new MediaRecorder(recorderStream,options);
+
+      const actualMime=(avatarRecorder.mimeType || mimeType || "").toLowerCase();
+      recorderFileExtension=actualMime.includes("mp4") ? "mp4" : "webm";
+      recorderFormatLabel=recorderFileExtension === "mp4" ? "MP4" : "WebM";
 
       avatarRecorder.ondataavailable=(event)=>{
         if(event.data && event.data.size>0) recorderChunks.push(event.data);
@@ -5500,7 +5582,7 @@ body.menu-open{overflow:hidden}
 
         const seconds=Math.max(1,Math.round((performance.now()-recorderStartedAt)/1000));
         setRecorderStatus(
-          "Aufnahme fertig · "+seconds+" s · "+Math.round(recorderBlob.size/1024)+" KB"+
+          "Aufnahme fertig · "+recorderFormatLabel+" · "+seconds+" s · "+Math.round(recorderBlob.size/1024)+" KB"+
           (hadAudio ? " · 🔊 mit Ton" : " · ohne Ton")
         );
         recorderStopping=false;
@@ -5523,12 +5605,13 @@ body.menu-open{overflow:hidden}
         audioStarted=await startRecorderAudioPlayback();
       }
 
+      const formatPrefix = "● "+recorderFormatLabel+" · ";
       setRecorderStatus(
         audioTrackCount && audioStarted
-          ? "● Aufnahme läuft · 🔊 MP3 aktiv · " + (recorderAudioRoute || "Audio")
+          ? formatPrefix + "🔊 MP3 aktiv · " + (recorderAudioRoute || "Audio")
           : audioTrackCount
-            ? "● Aufnahme läuft · 🔊 Tonspur vorhanden, Audio-Start blockiert"
-            : "● Aufnahme läuft · Browser liefert keine MP3-Tonspur"
+            ? formatPrefix + "🔊 Tonspur vorhanden, Audio-Start blockiert"
+            : formatPrefix + "Browser liefert keine MP3-Tonspur"
       );
 
       // Feste Malfrequenz unabhängig vom Browser-UI.
@@ -5583,13 +5666,19 @@ body.menu-open{overflow:hidden}
 
     const link=document.createElement("a");
     link.href=recorderUrl;
-    link.download="PS_AI_MUSIC_Avatar_"+new Date().toISOString().replace(/[:.]/g,"-")+".webm";
+    link.download="PS_AI_MUSIC_Avatar_"+new Date().toISOString().replace(/[:.]/g,"-")+"."+recorderFileExtension;
     document.body.appendChild(link);
     link.click();
     link.remove();
   }
 
   function bindAvatarRecorder() {
+    updateRecorderFormatSupport();
+
+    if(ui.recordFormatSelect){
+      ui.recordFormatSelect.addEventListener("change",updateRecorderFormatSupport);
+    }
+
     if(ui.recordStart) ui.recordStart.addEventListener("click",startAvatarRecording);
     if(ui.recordStop) ui.recordStop.addEventListener("click",stopAvatarRecording);
     if(ui.recordSave) ui.recordSave.addEventListener("click",saveAvatarRecording);
