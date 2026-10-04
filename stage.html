@@ -8378,7 +8378,7 @@ function applyRemoteCommand(command={}){
   const s=engine.state;
   const action=command.action;
 
-  if(action==="avatar" && ["human","bear","gull","mask"].includes(command.character)){
+  if(action==="avatar" && ["human","bear","gull","mask","psgirl","darkviking","viking","psstreet","beardark","bbhiphop","techno","rock","business","chill"].includes(command.character)){
     engine.switchCharacter(command.character);
   }else if(action==="answer"){
     engine.playAnswerClip(s.character,String(command.id||""),String(command.label||command.id||"Antwort"),true);
