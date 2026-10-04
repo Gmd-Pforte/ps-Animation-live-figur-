@@ -860,14 +860,14 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.28: Touch-Fix – JS darf den Kopf transformieren */
+/* v0.28.1: Touch-Fix – JS darf den Kopf transformieren */
 .avatar-head-module{
   will-change:transform;
   transition:transform 70ms linear;
 }
 
 
-/* v0.28: Kopfneigung über festen Cutout-Anker */
+/* v0.28.1: Kopfneigung über festen Cutout-Anker */
 .head-anchor{
   transform-origin:0 0;
   will-change:transform;
@@ -944,7 +944,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.28: Aufnahme sichtbar unter den Touchfeldern */
+/* v0.28.1: Aufnahme sichtbar unter den Touchfeldern */
 .record-workspace{
   margin-top:14px;
   border:1px solid rgba(255,255,255,.07);
@@ -992,7 +992,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.28: gleiche Figur auf Handy, Desktop und Aufnahme */
+/* v0.28.1: gleiche Figur auf Handy, Desktop und Aufnahme */
 .avatar-body{
   width:min(330px,65vw)!important;
   bottom:4px!important;
@@ -1018,7 +1018,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.28: sichtbare Arm-Regler auf der Hauptseite */
+/* v0.28.1: sichtbare Arm-Regler auf der Hauptseite */
 .arm-main-controls{
   margin-top:14px;
   border:1px solid rgba(39,200,255,.22);
@@ -1130,7 +1130,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.28: vier Charaktere */
+/* v0.28.1: vier Charaktere */
 .character-buttons{
   grid-template-columns:repeat(4,minmax(0,1fr));
 }
@@ -1520,7 +1520,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.28: Recorder-Format */
+/* v0.28.1: Recorder-Format */
 .record-format-choice{
   display:grid;
   grid-template-columns:auto minmax(150px,1fr);
@@ -1553,7 +1553,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.28: Avatar Designer */
+/* v0.28.1: Avatar Designer */
 .designer-panel{margin-top:10px;border:1px solid rgba(255,96,190,.22);background:linear-gradient(180deg,rgba(255,67,170,.045),rgba(0,0,0,.16));border-radius:18px;padding:12px}
 .designer-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.designer-head>div{display:grid;gap:2px}.designer-head strong{font-size:16px}
 #designerNotice{font-size:10px;color:var(--muted)}
@@ -1573,7 +1573,7 @@ body.menu-open{overflow:hidden}
 @media(max-width:620px){.designer-grid{grid-template-columns:1fr}.designer-colors{grid-template-columns:repeat(3,1fr)}}
 
 
-/* v0.28: Leg Control */
+/* v0.28.1: Leg Control */
 .leg-main-controls{margin-top:10px;border:1px solid rgba(122,220,255,.18);background:linear-gradient(180deg,rgba(64,182,255,.045),rgba(0,0,0,.14));border-radius:16px;padding:12px}
 .leg-main-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.leg-main-head>div{display:grid;gap:2px}.leg-main-head strong{font-size:14px}
 #legReset{min-height:40px;border:1px solid rgba(39,200,255,.32);background:var(--accent-soft);color:var(--text);border-radius:11px;padding:7px 10px;font-weight:850}
@@ -1586,7 +1586,7 @@ body.menu-open{overflow:hidden}
 @media(max-width:520px){.walk-row{grid-template-columns:1fr}}
 
 
-/* v0.28: Dance Mode */
+/* v0.28.1: Dance Mode */
 .dance-panel{margin-top:10px;border:1px solid rgba(255,92,193,.24);background:linear-gradient(180deg,rgba(255,66,178,.07),rgba(57,23,69,.12));border-radius:18px;padding:12px}
 .dance-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.dance-head>div{display:grid;gap:2px}.dance-head strong{font-size:15px}#danceStatus{font-size:10px;color:var(--muted)}
 #danceToggle{min-width:116px;min-height:48px;border-radius:13px;border:1px solid #75405f;background:#190f18;color:var(--text);font-weight:900;font-size:14px}
@@ -1600,7 +1600,7 @@ body.menu-open{overflow:hidden}
 @media(max-width:620px){.dance-controls{grid-template-columns:1fr}.dance-head{align-items:flex-start;flex-direction:column}#danceToggle{width:100%}}
 
 
-/* v0.28: App-Reiter + Avatar Catalog */
+/* v0.28.1: App-Reiter + Avatar Catalog */
 .app-tabs{
   position:sticky;top:0;z-index:40;
   display:grid;grid-template-columns:repeat(3,1fr);gap:6px;
@@ -1692,7 +1692,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.28: Antwort-MP3 Bibliothek */
+/* v0.28.1: Antwort-MP3 Bibliothek */
 .app-tabs{grid-template-columns:repeat(4,1fr)}
 .answer-library{
   border:1px solid rgba(123,103,255,.22);
@@ -1727,6 +1727,23 @@ body.menu-open{overflow:hidden}
   .answer-slots{grid-template-columns:1fr}.answer-library-head{flex-direction:column}.answer-library-head button{width:100%}
   .answer-add{align-items:stretch;flex-direction:column}.answer-add-controls{display:grid;grid-template-columns:1fr auto}.answer-add-controls input{min-width:0;width:100%}
 }
+
+
+/* v0.28.1: Live-Antworten + Reaktionen */
+.live-answer-bar{
+  margin-top:9px;padding:11px;border:1px solid rgba(39,200,255,.16);
+  border-radius:15px;background:linear-gradient(180deg,rgba(39,200,255,.045),rgba(0,0,0,.13))
+}
+.live-answer-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.live-answer-head>div{display:grid;gap:2px}.live-answer-head strong{font-size:13px}
+.live-answer-head button{min-height:36px;border:1px solid #344d60;border-radius:9px;background:#081721;color:var(--text);padding:6px 9px;font-weight:850;font-size:10px}
+.live-answer-buttons{display:flex;gap:7px;overflow-x:auto;padding:10px 1px 4px;scrollbar-width:thin}
+.live-answer-button{flex:0 0 auto;min-width:88px;min-height:48px;border-radius:12px;border:1px solid #31566e;background:#091b27;color:var(--text);font-weight:900;font-size:13px;padding:8px 13px}
+.live-answer-button.ready{border-color:rgba(58,219,155,.38);background:rgba(32,132,91,.09)}
+.live-answer-button.playing{border-color:#27c8ff;background:rgba(39,200,255,.15)}
+.live-answer-button.empty{border-style:dashed;color:#817f8a;background:#0d1116}
+.live-answer-loading{font-size:10px;color:var(--muted);padding:7px 2px}
+.live-answer-status{margin-top:6px;font-size:10px;color:#8093a1}
 
 </style>
 </head>
@@ -2201,7 +2218,21 @@ body.menu-open{overflow:hidden}
           </div>
         </div>
 
-        <div class="stage-caption"><strong>v0.28:</strong> PS Avatar Premium</div>
+        <div class="stage-caption"><strong>v0.28.1:</strong> Live Antworten</div>
+      </div>
+
+      <div id="liveAnswerBar" class="live-answer-bar app-tab-section" data-app-view="studio">
+        <div class="live-answer-head">
+          <div>
+            <span class="mini-label">LIVE ANTWORTEN</span>
+            <strong id="liveAnswerCharacter">PS Avatar</strong>
+          </div>
+          <button type="button" data-open-tab="answers">⚙️ Verwalten</button>
+        </div>
+        <div id="liveAnswerButtons" class="live-answer-buttons">
+          <span class="live-answer-loading">Antworten werden geladen …</span>
+        </div>
+        <div id="liveAnswerStatus" class="live-answer-status">Bereit · Antwort antippen</div>
       </div>
     </section>
 
@@ -2729,7 +2760,7 @@ body.menu-open{overflow:hidden}
       </article>
         </section>
 
-        <div class="menu-version">Version <strong>0.28</strong></div>
+        <div class="menu-version">Version <strong>0.28.1</strong></div>
       </div>
     </aside>
 
@@ -2739,7 +2770,7 @@ body.menu-open{overflow:hidden}
 (() => {
   "use strict";
 
-  const VERSION = "0.28";
+  const VERSION = "0.28.1";
 
   const avatarState = {
     version: VERSION,
@@ -2835,6 +2866,19 @@ body.menu-open{overflow:hidden}
       lastEnergy: 0
     },
 
+    responseReaction: {
+      active: false,
+      type: "",
+      startedAt: 0,
+      duration: 900,
+      headLean: 0,
+      headY: 0,
+      leftArm: 0,
+      rightArm: 0,
+      bodyX: 0,
+      bodyY: 0
+    },
+
     brain: {
       enabled: true,
       mode: "natural",
@@ -2898,6 +2942,10 @@ body.menu-open{overflow:hidden}
     answerNewLabel: document.getElementById("answerNewLabel"),
     answerAddButton: document.getElementById("answerAddButton"),
     responseAudio: document.getElementById("responseAudio"),
+    liveAnswerBar: document.getElementById("liveAnswerBar"),
+    liveAnswerCharacter: document.getElementById("liveAnswerCharacter"),
+    liveAnswerButtons: document.getElementById("liveAnswerButtons"),
+    liveAnswerStatus: document.getElementById("liveAnswerStatus"),
     avatarStage: document.getElementById("avatarStage"),
     stageGrid: document.getElementById("stageGrid"),
     stageBackgroundColor: document.getElementById("stageBackgroundColor"),
@@ -3411,7 +3459,9 @@ body.menu-open{overflow:hidden}
     if(ui.studioActiveCharacterName) ui.studioActiveCharacterName.textContent=name;
     if(ui.designerCharacterTitle) ui.designerCharacterTitle.textContent=name+" gestalten";
     if(ui.answerCharacterName) ui.answerCharacterName.textContent=name;
+    if(ui.liveAnswerCharacter) ui.liveAnswerCharacter.textContent=name;
     if(typeof renderAnswerLibrary==="function") renderAnswerLibrary();
+    if(typeof renderLiveAnswerBar==="function") renderLiveAnswerBar();
 
     document.querySelectorAll("[data-avatar-card]").forEach(card=>{
       card.classList.toggle("selected",card.dataset.avatarCard===character);
@@ -4341,10 +4391,11 @@ body.menu-open{overflow:hidden}
     const dance = avatarState.dance;
     const extra = b && b.enabled ? b.headLean : 0;
     const danceLean = dance && dance.enabled ? dance.headLean : 0;
-    return Math.max(-16,Math.min(16,
+    const reactionLean = avatarState.responseReaction ? (avatarState.responseReaction.headLean||0) : 0;
+    return Math.max(-18,Math.min(18,
       (avatarState.head.sideLean||0) +
       (avatarState.head.idleLean||0) +
-      extra + danceLean
+      extra + danceLean + reactionLean
     ));
   }
 
@@ -4364,7 +4415,8 @@ body.menu-open{overflow:hidden}
     return Math.max(0,Math.min(105,
       (avatarState.leftArm.shoulder||0) +
       (b && b.enabled ? b.leftArm : 0) +
-      (d && d.enabled ? d.leftArm : 0)
+      (d && d.enabled ? d.leftArm : 0) +
+      (avatarState.responseReaction ? (avatarState.responseReaction.leftArm||0) : 0)
     ));
   }
 
@@ -4374,7 +4426,8 @@ body.menu-open{overflow:hidden}
     return Math.max(-105,Math.min(0,
       (avatarState.rightArm.shoulder||0) +
       (b && b.enabled ? b.rightArm : 0) +
-      (d && d.enabled ? d.rightArm : 0)
+      (d && d.enabled ? d.rightArm : 0) +
+      (avatarState.responseReaction ? (avatarState.responseReaction.rightArm||0) : 0)
     ));
   }
 
@@ -4529,8 +4582,9 @@ body.menu-open{overflow:hidden}
     const dance = avatarState.dance;
 
     if(ui.avatarFigure){
-      const dx=dance ? (dance.swayX||0) : 0;
-      const dy=dance ? (dance.bounceY||0) : 0;
+      const reaction=avatarState.responseReaction;
+      const dx=(dance ? (dance.swayX||0) : 0)+(reaction ? (reaction.bodyX||0) : 0);
+      const dy=(dance ? (dance.bounceY||0) : 0)+(reaction ? (reaction.bodyY||0) : 0);
       ui.avatarFigure.style.transform="translate("+dx.toFixed(2)+"px,"+dy.toFixed(2)+"px)";
     }
 
@@ -4542,7 +4596,8 @@ body.menu-open{overflow:hidden}
 
     // Der Kopf selbst bleibt unverformt. Gedreht wird nur sein fester Ankerpunkt.
     if (ui.headAnchor) {
-      const y = lift + nod * 0.08;
+      const reactionHeadY=avatarState.responseReaction ? (avatarState.responseReaction.headY||0) : 0;
+      const y = lift + nod * 0.08 + reactionHeadY;
       ui.headAnchor.style.transform =
         "translateY(" + y.toFixed(2) + "px) rotate(" + lean.toFixed(2) + "deg)";
     }
@@ -4773,6 +4828,7 @@ body.menu-open{overflow:hidden}
     updateAvatarBrain(now);
     updateWalk(now);
     updateDance(now);
+    updateResponseReaction(now);
     renderAvatar();
     updateEngineUi(now);
 
@@ -5095,7 +5151,7 @@ body.menu-open{overflow:hidden}
       ui.audioMeterFill.style.width = Math.round(Math.min(1, rms * 8) * 100) + "%";
     }
 
-    if (audioLipSyncEnabled) {
+    if (audioLipSyncEnabled && !responseAudioSpeaking) {
       const open = Math.max(0, Math.min(100, smoothedAudioMouth * 100));
       avatarState.face.mouthOpen = open;
 
@@ -5204,6 +5260,8 @@ body.menu-open{overflow:hidden}
   let answerDbPromise=null;
   let responseAudioContext=null;
   let responseAudioSource=null;
+  let responseRecorderDestinationConnected=false;
+  let responseAudioSpeaking=false;
   let responseAudioAnalyser=null;
   let responseAudioData=null;
   let responseAudioFrame=null;
@@ -5282,6 +5340,106 @@ body.menu-open{overflow:hidden}
     return [...DEFAULT_ANSWER_DEFS,...list];
   }
 
+  async function renderLiveAnswerBar(){
+    if(!ui.liveAnswerButtons) return;
+
+    const character=avatarState.character;
+    const defs=getAnswerDefinitions();
+    ui.liveAnswerButtons.innerHTML='<span class="live-answer-loading">Antworten werden geladen …</span>';
+
+    const rows=await Promise.all(defs.map(async def=>({
+      def,
+      clip:await getAnswerClip(character,def.id)
+    })));
+
+    if(character!==avatarState.character) return;
+
+    ui.liveAnswerButtons.innerHTML="";
+    rows.forEach(({def,clip})=>{
+      const btn=document.createElement("button");
+      btn.type="button";
+      btn.className="live-answer-button "+(clip?"ready":"empty");
+      btn.dataset.liveAnswerId=def.id;
+      btn.textContent=(clip?"🔊 ":"＋ ")+def.label;
+      btn.title=clip ? def.label+" abspielen" : def.label+" · zuerst MP3 hinterlegen";
+      btn.addEventListener("click",()=>{
+        if(clip){
+          playAnswerClip(character,def.id,def.label,true);
+        }else{
+          if(ui.liveAnswerStatus) ui.liveAnswerStatus.textContent="Für „"+def.label+"“ fehlt noch die MP3 · öffne Antworten";
+          setAppTab("answers");
+        }
+      });
+      ui.liveAnswerButtons.appendChild(btn);
+    });
+
+    if(!rows.length){
+      ui.liveAnswerButtons.innerHTML='<span class="live-answer-loading">Noch keine Antworten vorhanden</span>';
+    }
+  }
+
+  function triggerResponseReaction(id,label,durationMs=900){
+    const r=avatarState.responseReaction;
+    if(!r) return;
+
+    const normalized=(String(id||"")+" "+String(label||"")).toLowerCase();
+    r.type=normalized.includes("nein") ? "no" : normalized.includes("ja") ? "yes" : "talk";
+    r.startedAt=performance.now();
+    r.duration=Math.max(650,Math.min(2600,Number(durationMs)||900));
+    r.active=true;
+    r.headLean=0;r.headY=0;r.leftArm=0;r.rightArm=0;r.bodyX=0;r.bodyY=0;
+
+    noteManualControl(r.duration+450);
+  }
+
+  function updateResponseReaction(now){
+    const r=avatarState.responseReaction;
+    if(!r) return;
+
+    if(!r.active){
+      r.headLean+=(0-r.headLean)*.2;
+      r.headY+=(0-r.headY)*.2;
+      r.leftArm+=(0-r.leftArm)*.18;
+      r.rightArm+=(0-r.rightArm)*.18;
+      r.bodyX+=(0-r.bodyX)*.2;
+      r.bodyY+=(0-r.bodyY)*.2;
+      return;
+    }
+
+    const p=Math.max(0,Math.min(1,(now-r.startedAt)/r.duration));
+    const envelope=Math.sin(Math.PI*p);
+
+    if(r.type==="yes"){
+      // zustimmendes, mehrfaches Nicken + kleine offene Geste
+      r.headY=Math.sin(p*Math.PI*5)*5.4*envelope;
+      r.headLean=Math.sin(p*Math.PI*2)*1.2*envelope;
+      r.leftArm=10*envelope;
+      r.rightArm=-10*envelope;
+      r.bodyY=-Math.abs(Math.sin(p*Math.PI*2))*1.8*envelope;
+      r.bodyX=0;
+    }else if(r.type==="no"){
+      // klares Kopfschütteln
+      r.headLean=Math.sin(p*Math.PI*7)*8.5*envelope;
+      r.headY=0;
+      r.leftArm=3*envelope;
+      r.rightArm=-3*envelope;
+      r.bodyX=Math.sin(p*Math.PI*5)*1.8*envelope;
+      r.bodyY=0;
+    }else{
+      // neutrale Sprechgeste für weitere Antwortclips
+      r.headLean=Math.sin(p*Math.PI*2.2)*2.5*envelope;
+      r.headY=Math.sin(p*Math.PI*3)*1.7*envelope;
+      r.leftArm=14*envelope;
+      r.rightArm=-8*envelope;
+      r.bodyX=0;
+      r.bodyY=-Math.sin(Math.PI*p)*1.4;
+    }
+
+    if(p>=1){
+      r.active=false;
+    }
+  }
+
   function saveCustomAnswerDefinitions(list){
     let custom={};
     try{custom=JSON.parse(localStorage.getItem(ANSWER_META_KEY)||"{}")||{};}catch(_){}
@@ -5340,10 +5498,12 @@ body.menu-open{overflow:hidden}
         if(!file) return;
         await putAnswerClip(character,def.id,file);
         await refresh();
+        renderLiveAnswerBar();
       });
       del.addEventListener("click",async()=>{
         await deleteAnswerClip(character,def.id);
         await refresh();
+        renderLiveAnswerBar();
       });
 
       refresh();
@@ -5359,22 +5519,38 @@ body.menu-open{overflow:hidden}
     const AudioCtx=window.AudioContext||window.webkitAudioContext;
     if(!AudioCtx) return false;
 
-    if(!responseAudioContext){
-      responseAudioContext=new AudioCtx();
-      responseAudioAnalyser=responseAudioContext.createAnalyser();
+    // Antwort-Audio benutzt denselben AudioContext wie Musik/Recorder,
+    // damit es während einer Aufnahme in denselben Audiomix gelangen kann.
+    if(!audioContext){
+      audioContext=new AudioCtx();
+    }
+    responseAudioContext=audioContext;
+
+    if(!responseAudioAnalyser){
+      responseAudioAnalyser=audioContext.createAnalyser();
       responseAudioAnalyser.fftSize=1024;
       responseAudioAnalyser.smoothingTimeConstant=.38;
       responseAudioData=new Uint8Array(responseAudioAnalyser.fftSize);
     }
     if(!responseAudioSource){
-      responseAudioSource=responseAudioContext.createMediaElementSource(ui.responseAudio);
+      responseAudioSource=audioContext.createMediaElementSource(ui.responseAudio);
       responseAudioSource.connect(responseAudioAnalyser);
-      responseAudioAnalyser.connect(responseAudioContext.destination);
+      responseAudioAnalyser.connect(audioContext.destination);
+    }
+
+    if(recorderAudioDestination && responseAudioSource && !responseRecorderDestinationConnected){
+      try{
+        responseAudioSource.connect(recorderAudioDestination);
+        responseRecorderDestinationConnected=true;
+      }catch(error){
+        console.warn("Antwort-Audio konnte nicht an Recorder-Mix angeschlossen werden",error);
+      }
     }
     return true;
   }
 
   function stopResponseLipSync(reset=true){
+    responseAudioSpeaking=false;
     if(responseAudioFrame){
       cancelAnimationFrame(responseAudioFrame);
       responseAudioFrame=null;
@@ -5405,9 +5581,15 @@ body.menu-open{overflow:hidden}
     responseAudioFrame=requestAnimationFrame(responseLipSyncLoop);
   }
 
-  async function playAnswerClip(character,id,label){
+  async function playAnswerClip(character,id,label,fromStage=false){
     const clip=await getAnswerClip(character,id);
-    if(!clip || !ui.responseAudio) return;
+    if(!clip || !ui.responseAudio){
+      if(ui.liveAnswerStatus) ui.liveAnswerStatus.textContent="Für „"+label+"“ ist noch keine MP3 gespeichert";
+      return;
+    }
+
+    try{ui.responseAudio.pause();ui.responseAudio.currentTime=0;}catch(_){}
+    stopResponseLipSync(false);
 
     if(responseObjectUrl) URL.revokeObjectURL(responseObjectUrl);
     responseObjectUrl=URL.createObjectURL(clip.blob);
@@ -5421,12 +5603,25 @@ body.menu-open{overflow:hidden}
 
     try{
       await ui.responseAudio.play();
+      responseAudioSpeaking=true;
+
+      const durationMs=Number.isFinite(ui.responseAudio.duration) && ui.responseAudio.duration>0
+        ? ui.responseAudio.duration*1000
+        : 950;
+      triggerResponseReaction(id,label,durationMs);
+
       const status=document.getElementById("answerPlayingStatus");
       if(status) status.textContent="🔊 "+characterDisplayName(character)+" sagt: "+label;
-      stopResponseLipSync(false);
+      if(ui.liveAnswerStatus) ui.liveAnswerStatus.textContent="🔊 "+characterDisplayName(character)+" · "+label;
+
+      document.querySelectorAll(".live-answer-button").forEach(btn=>{
+        btn.classList.toggle("playing",btn.dataset.liveAnswerId===id);
+      });
+
       responseLipSyncLoop();
     }catch(error){
       console.warn("Answer audio play failed",error);
+      if(ui.liveAnswerStatus) ui.liveAnswerStatus.textContent="Antwort konnte nicht abgespielt werden";
     }
   }
 
@@ -5450,6 +5645,7 @@ body.menu-open{overflow:hidden}
         saveCustomAnswerDefinitions(defs);
         if(ui.answerNewLabel) ui.answerNewLabel.value="";
         renderAnswerLibrary();
+        renderLiveAnswerBar();
       });
     }
 
@@ -5465,12 +5661,15 @@ body.menu-open{overflow:hidden}
     if(ui.responseAudio){
       ui.responseAudio.addEventListener("ended",()=>{
         stopResponseLipSync(true);
+        document.querySelectorAll(".live-answer-button").forEach(btn=>btn.classList.remove("playing"));
+        if(ui.liveAnswerStatus) ui.liveAnswerStatus.textContent="Bereit · Antwort beendet";
         const status=document.getElementById("answerPlayingStatus");
         if(status) status.textContent="Bereit · Antwort beendet";
       });
     }
 
     renderAnswerLibrary();
+    renderLiveAnswerBar();
   }
 
   // --- Avatar Talk v1 ----------------------------------------------------
@@ -5992,7 +6191,7 @@ body.menu-open{overflow:hidden}
     if (ui.menuButton) ui.menuButton.setAttribute("aria-expanded", open ? "true" : "false");
   }
 
-  // --- Figurenaufnahme v0.28 -------------------------------------------
+  // --- Figurenaufnahme v0.28.1 -------------------------------------------
   // Direkter Canvas-Renderer: keine langsame SVG->Bitmap-Konvertierung pro Frame.
   let avatarRecorder = null;
   let recorderChunks = [];
@@ -6235,7 +6434,7 @@ body.menu-open{overflow:hidden}
     const head=avatarState.head;
     const s=0.6548;
     const anchorX=360;
-    const anchorY=550+(head.idleLift||0);
+    const anchorY=550+(head.idleLift||0)+(avatarState.responseReaction?.headY||0);
     const lean=getEffectiveHeadLean();
 
     ctx.save();
@@ -6400,7 +6599,7 @@ body.menu-open{overflow:hidden}
     const head=avatarState.head;
     const s=0.6548;
     const anchorX=360;
-    const anchorY=550+(head.idleLift||0);
+    const anchorY=550+(head.idleLift||0)+(avatarState.responseReaction?.headY||0);
     const lean=getEffectiveHeadLean();
 
     ctx.save();
@@ -6550,7 +6749,7 @@ body.menu-open{overflow:hidden}
     const head=avatarState.head;
     const s=0.6548;
     const anchorX=360;
-    const anchorY=550+(head.idleLift||0);
+    const anchorY=550+(head.idleLift||0)+(avatarState.responseReaction?.headY||0);
     const lean=getEffectiveHeadLean();
 
     ctx.save();
@@ -6764,7 +6963,7 @@ body.menu-open{overflow:hidden}
     const head=avatarState.head;
     const s=0.6548;
     const anchorX=360;
-    const anchorY=550+(head.idleLift||0);
+    const anchorY=550+(head.idleLift||0)+(avatarState.responseReaction?.headY||0);
     const lean=getEffectiveHeadLean();
 
     ctx.save();
@@ -6886,8 +7085,9 @@ body.menu-open{overflow:hidden}
     drawRecordingBackground(recorderCtx,recorderCanvas.width,recorderCanvas.height);
 
     const d=avatarState.dance;
-    const dx=d ? (d.swayX||0)*1.35 : 0;
-    const dy=d ? (d.bounceY||0)*1.35 : 0;
+    const r=avatarState.responseReaction;
+    const dx=((d ? (d.swayX||0) : 0)+(r ? (r.bodyX||0) : 0))*1.35;
+    const dy=((d ? (d.bounceY||0) : 0)+(r ? (r.bodyY||0) : 0))*1.35;
 
     recorderCtx.save();
     recorderCtx.translate(dx,dy);
@@ -6901,85 +7101,89 @@ body.menu-open{overflow:hidden}
     recorderAutoStartedAudio = false;
     recorderMediaElementStream = null;
     recorderCapturedAudioTrack = null;
+    responseRecorderDestinationConnected = false;
 
-    if (!ui.speechAudio || !ui.speechAudio.src) return null;
+    const hasMainAudio=!!(ui.speechAudio && ui.speechAudio.src);
 
-    // Android erzeugt bei einem pausierten <audio> teilweise noch keinen
-    // captureStream-Audiotrack. Deshalb einmal aus dem echten User-Klick
-    // heraus kurz starten und anschließend wieder auf 0 setzen.
     try {
-      ui.speechAudio.pause();
-      ui.speechAudio.currentTime = 0;
+      // Gemeinsamer WebAudio-Mix: Musik + Live-Antworten landen auf EINER Recorder-Tonspur.
+      if(hasMainAudio) ensureAudioGraph();
+      ensureResponseAudioGraph();
 
-      if (ensureAudioGraph() && audioContext && audioContext.state === "suspended") {
-        try { await audioContext.resume(); } catch (_) {}
+      if(audioContext && audioContext.state==="suspended"){
+        try{await audioContext.resume();}catch(_){}
       }
 
-      try {
-        await ui.speechAudio.play();
-        await new Promise(resolve => setTimeout(resolve, 120));
-      } catch (playError) {
-        console.warn("Audio prime play failed:", playError);
-      }
+      if(audioContext){
+        try{
+          recorderAudioDestination=audioContext.createMediaStreamDestination();
 
-      // 1. Wahl: echter Stream des Audioelements.
-      const captureFn = ui.speechAudio.captureStream || ui.speechAudio.mozCaptureStream;
-      if (captureFn) {
-        try {
-          recorderMediaElementStream = captureFn.call(ui.speechAudio);
-
-          // Track kann auf Mobilgeräten einen Moment später auftauchen.
-          let audioTrack = recorderMediaElementStream.getAudioTracks()[0] || null;
-          if (!audioTrack) {
-            await new Promise(resolve => setTimeout(resolve, 160));
-            audioTrack = recorderMediaElementStream.getAudioTracks()[0] || null;
+          if(hasMainAudio && audioSource){
+            audioSource.connect(recorderAudioDestination);
+          }
+          if(responseAudioSource){
+            responseAudioSource.connect(recorderAudioDestination);
+            responseRecorderDestinationConnected=true;
           }
 
-          if (audioTrack) {
-            recorderCapturedAudioTrack = audioTrack.clone();
-            recorderAudioRoute = "HTML-Audio";
+          let track=recorderAudioDestination.stream.getAudioTracks()[0]||null;
+          if(!track){
+            await new Promise(resolve=>setTimeout(resolve,80));
+            track=recorderAudioDestination.stream.getAudioTracks()[0]||null;
           }
-        } catch (captureError) {
-          console.warn("HTML audio captureStream failed:", captureError);
+          if(track){
+            recorderCapturedAudioTrack=track.clone();
+            recorderAudioRoute="WebAudio Mix";
+            return recorderCapturedAudioTrack;
+          }
+        }catch(error){
+          console.warn("WebAudio recorder mix failed:",error);
+          recorderAudioDestination=null;
+          responseRecorderDestinationConnected=false;
         }
       }
 
-      // 2. Wahl: WebAudio-Route als Fallback.
-      if (!recorderCapturedAudioTrack && ensureAudioGraph()) {
-        try {
-          recorderAudioDestination = audioContext.createMediaStreamDestination();
-          audioSource.connect(recorderAudioDestination);
-
-          let webAudioTrack = recorderAudioDestination.stream.getAudioTracks()[0] || null;
-          if (!webAudioTrack) {
-            await new Promise(resolve => setTimeout(resolve, 80));
-            webAudioTrack = recorderAudioDestination.stream.getAudioTracks()[0] || null;
+      // Fallback für ältere/mobile Browser: bisherige captureStream-Route der Musik.
+      if(hasMainAudio){
+        try{
+          ui.speechAudio.pause();
+          ui.speechAudio.currentTime=0;
+          try{
+            await ui.speechAudio.play();
+            await new Promise(resolve=>setTimeout(resolve,120));
+          }catch(playError){
+            console.warn("Audio prime play failed:",playError);
           }
 
-          if (webAudioTrack) {
-            recorderCapturedAudioTrack = webAudioTrack.clone();
-            recorderAudioRoute = "WebAudio";
+          const captureFn=ui.speechAudio.captureStream||ui.speechAudio.mozCaptureStream;
+          if(captureFn){
+            recorderMediaElementStream=captureFn.call(ui.speechAudio);
+            let track=recorderMediaElementStream.getAudioTracks()[0]||null;
+            if(!track){
+              await new Promise(resolve=>setTimeout(resolve,160));
+              track=recorderMediaElementStream.getAudioTracks()[0]||null;
+            }
+            if(track){
+              recorderCapturedAudioTrack=track.clone();
+              recorderAudioRoute="HTML-Audio";
+            }
           }
-        } catch (routeError) {
-          console.warn("WebAudio recorder route failed:", routeError);
+        }catch(error){
+          console.warn("HTML audio fallback failed:",error);
+        }finally{
+          try{
+            ui.speechAudio.pause();
+            ui.speechAudio.currentTime=0;
+          }catch(_){}
         }
       }
-
-      // Das kurze technische Anspielen darf nicht im Video landen.
-      ui.speechAudio.pause();
-      try { ui.speechAudio.currentTime = 0; } catch (_) {}
 
       return recorderCapturedAudioTrack;
-    } catch (error) {
-      console.warn("prepareRecorderAudioTrack:", error);
-      try {
-        ui.speechAudio.pause();
-        ui.speechAudio.currentTime = 0;
-      } catch (_) {}
+    } catch(error){
+      console.warn("prepareRecorderAudioTrack:",error);
       return null;
     }
   }
-
   async function startRecorderAudioPlayback() {
     if (!ui.speechAudio || !ui.speechAudio.src || !recorderCapturedAudioTrack) return false;
 
@@ -7161,8 +7365,14 @@ body.menu-open{overflow:hidden}
           recorderCapturedAudioTrack=null;
         }
 
-        if(recorderAudioDestination && audioSource){
-          try{audioSource.disconnect(recorderAudioDestination);}catch(_){}
+        if(recorderAudioDestination){
+          if(audioSource){
+            try{audioSource.disconnect(recorderAudioDestination);}catch(_){}
+          }
+          if(responseAudioSource && responseRecorderDestinationConnected){
+            try{responseAudioSource.disconnect(recorderAudioDestination);}catch(_){}
+          }
+          responseRecorderDestinationConnected=false;
           recorderAudioDestination=null;
         }
 
@@ -7209,17 +7419,17 @@ body.menu-open{overflow:hidden}
       }
 
       let audioStarted=false;
-      if(audioTrackCount){
+      if(audioTrackCount && ui.speechAudio?.src){
         audioStarted=await startRecorderAudioPlayback();
       }
 
       const formatPrefix = "● "+recorderFormatLabel+" · ";
       setRecorderStatus(
         audioTrackCount && audioStarted
-          ? formatPrefix + "🔊 MP3 aktiv · " + (recorderAudioRoute || "Audio")
+          ? formatPrefix + "🔊 Musik + Live-Antworten · " + (recorderAudioRoute || "Audio")
           : audioTrackCount
-            ? formatPrefix + "🔊 Tonspur vorhanden, Audio-Start blockiert"
-            : formatPrefix + "Browser liefert keine MP3-Tonspur"
+            ? formatPrefix + "🔊 Live-Antworten bereit · " + (recorderAudioRoute || "Audio")
+            : formatPrefix + "Browser liefert keine Audiotonspur"
       );
 
       // Feste Malfrequenz unabhängig vom Browser-UI.
