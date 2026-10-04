@@ -6776,6 +6776,17 @@ body.menu-open{overflow:hidden}
     strokeLine(ctx,[[316,150],[324,230],[319,325]],"#3b444f",4);
     ctx.beginPath();ctx.moveTo(145,324);ctx.quadraticCurveTo(210,344,275,324);ctx.strokeStyle="#2e3741";ctx.lineWidth=3;ctx.stroke();
 
+    if(avatarState.character==="beardark"){
+      ctx.save();
+      ctx.globalAlpha=.82;
+      ctx.fillStyle="#16090e";ctx.fillRect(151,166,118,150);
+      ctx.globalAlpha=1;
+      strokeLine(ctx,[[157,196],[263,196]],"#d62441",6);
+      strokeLine(ctx,[[170,229],[250,229]],"#8d162a",4);
+      ctx.fillStyle="#ff5169";ctx.font="900 25px Arial";ctx.textAlign="center";ctx.fillText("DARK",210,281);
+      ctx.restore();
+    }
+
     ctx.restore();
   }
 
@@ -6868,6 +6879,16 @@ body.menu-open{overflow:hidden}
     ctx.beginPath();ctx.moveTo(210-halfWidth,leftY);ctx.quadraticCurveTo(210,controlY+10,210+halfWidth,rightY);
     ctx.strokeStyle="#23150d";ctx.lineWidth=6;ctx.lineCap="round";ctx.stroke();
 
+    if(avatarState.character==="beardark"){
+      ctx.save();
+      ctx.strokeStyle="#c31f39";ctx.lineWidth=5;ctx.lineCap="round";
+      ctx.beginPath();ctx.moveTo(125,222);ctx.lineTo(148,203);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(295,222);ctx.lineTo(272,203);ctx.stroke();
+      ctx.strokeStyle="#ff435f";ctx.lineWidth=3;
+      ctx.beginPath();ctx.moveTo(199,94);ctx.lineTo(213,118);ctx.lineTo(202,137);ctx.stroke();
+      ctx.restore();
+    }
+
     ctx.restore();
   }
 
@@ -6940,6 +6961,15 @@ body.menu-open{overflow:hidden}
     strokeLine(ctx,[[118,145],[108,225],[109,328]],"#315a82",4);
     strokeLine(ctx,[[302,145],[312,225],[311,328]],"#315a82",4);
     ctx.setLineDash([8,7]);strokeLine(ctx,[[210,151],[210,363]],"#284d76",3);ctx.setLineDash([]);
+
+    if(avatarState.character==="bbhiphop"){
+      ctx.save();
+      ctx.strokeStyle="#e5b849";ctx.lineWidth=6;ctx.lineCap="round";
+      ctx.beginPath();ctx.moveTo(162,154);ctx.quadraticCurveTo(176,215,210,234);ctx.quadraticCurveTo(244,215,258,154);ctx.stroke();
+      ctx.beginPath();ctx.arc(210,241,13,0,Math.PI*2);ctx.stroke();
+      ctx.fillStyle="#f056da";ctx.font="900 22px Arial";ctx.textAlign="center";ctx.fillText("BB HIPHOP",210,292);
+      ctx.restore();
+    }
 
     ctx.restore();
   }
@@ -7028,6 +7058,15 @@ body.menu-open{overflow:hidden}
     const controlY=baseY-(((face.mouthCornerLeft||0)+(face.mouthCornerRight||0))/2)*.40;
     ctx.beginPath();ctx.moveTo(210-halfWidth,leftY);ctx.quadraticCurveTo(210,controlY+3,210+halfWidth,rightY);
     ctx.strokeStyle="#6a3600";ctx.lineWidth=6;ctx.lineCap="round";ctx.stroke();
+
+    if(avatarState.character==="bbhiphop"){
+      ctx.save();
+      ctx.strokeStyle="#f056da";ctx.lineWidth=5;ctx.lineCap="round";
+      ctx.beginPath();ctx.moveTo(112,92);ctx.quadraticCurveTo(210,67,308,92);ctx.stroke();
+      ctx.strokeStyle="#e5b849";ctx.lineWidth=4;
+      ctx.beginPath();ctx.moveTo(131,116);ctx.lineTo(289,116);ctx.stroke();
+      ctx.restore();
+    }
 
     ctx.restore();
   }
