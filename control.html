@@ -157,18 +157,6 @@ radial-gradient(circle at center,#0d2534,#071018 70%);background-size:25% 25%,25
       <div class="avatar-grid">
         <button class="avatar-btn active" type="button" data-avatar="human"><span>🧔</span>PS Avatar<small>Hauptfigur</small></button>
         <button class="avatar-btn" type="button" data-avatar="bear"><span>🐻</span>PS Bär<small>Maskottchen</small></button>
-        <button class="avatar-btn" type="button" data-avatar="gull"><span>🐦</span>BreuerBeatz<small>Special</small></button>
-        <button class="avatar-btn" type="button" data-avatar="mask"><span>🎭</span>Mask Avatar<small>Dark</small></button>
-        <button class="avatar-btn" type="button" data-avatar="psgirl"><span>👩</span>PS Girl<small>Neon</small></button>
-        <button class="avatar-btn" type="button" data-avatar="darkviking"><span>🪓</span>Dark Viking<small>Dark</small></button>
-        <button class="avatar-btn" type="button" data-avatar="viking"><span>🛡️</span>Viking<small>Classic</small></button>
-        <button class="avatar-btn" type="button" data-avatar="psstreet"><span>🧢</span>PS Street<small>Street</small></button>
-        <button class="avatar-btn" type="button" data-avatar="beardark"><span>🐻</span>PS Bär Dark<small>Dark</small></button>
-        <button class="avatar-btn" type="button" data-avatar="bbhiphop"><span>🐦</span>BB Hiphop<small>Hiphop</small></button>
-        <button class="avatar-btn" type="button" data-avatar="techno"><span>🎧</span>Techno<small>Neon</small></button>
-        <button class="avatar-btn" type="button" data-avatar="rock"><span>🎸</span>Rock<small>Leather</small></button>
-        <button class="avatar-btn" type="button" data-avatar="business"><span>👔</span>Business<small>Suit</small></button>
-        <button class="avatar-btn" type="button" data-avatar="chill"><span>😎</span>Chill<small>Soft</small></button>
       </div>
     </article>
 
@@ -368,12 +356,7 @@ function log(text){logEl.textContent=text}
 function updateStageLink(){stageLink.href="stage.html?room="+encodeURIComponent(cleanRoom(roomEl.value)||room||"")}
 function setConnection(text,ok=false){connEl.textContent=text;connEl.classList.toggle("online",ok)}
 function avatarName(c){
-  const names={
-    human:"PS Avatar",bear:"PS Bär",gull:"BreuerBeatz",mask:"Mask Avatar",
-    psgirl:"PS Girl",darkviking:"Dark Viking",viking:"Viking",psstreet:"PS Street",
-    beardark:"PS Bär Dark",bbhiphop:"BB Hiphop",techno:"Techno",rock:"Rock",
-    business:"Business",chill:"Chill"
-  };
+  const names={human:"PS Avatar",bear:"PS Bär"};
   return names[c]||"PS Avatar";
 }
 
