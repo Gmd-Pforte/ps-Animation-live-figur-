@@ -8710,6 +8710,10 @@ function applyRemoteCommand(command={}){
     if(Number.isFinite(Number(command.width))) s.face.mouthWidth=Math.max(65,Math.min(140,Number(command.width)));
     s.brain.manualHoldUntil=performance.now()+900;
     engine.render();
+  }else if(action==="expression"){
+    const mode=["neutral","smile","sad"].includes(command.mode)?command.mode:"neutral";
+    setMouthMood(mode);
+    s.brain.manualHoldUntil=performance.now()+1200;
   }else if(action==="head"){
     if(Number.isFinite(Number(command.lean))) s.head.sideLean=Math.max(-12,Math.min(12,Number(command.lean)));
     if(Number.isFinite(Number(command.tilt))) s.head.tilt=Math.max(-5,Math.min(5,Number(command.tilt)));
