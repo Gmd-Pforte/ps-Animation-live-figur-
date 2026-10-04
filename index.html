@@ -860,14 +860,14 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.25: Touch-Fix – JS darf den Kopf transformieren */
+/* v0.26: Touch-Fix – JS darf den Kopf transformieren */
 .avatar-head-module{
   will-change:transform;
   transition:transform 70ms linear;
 }
 
 
-/* v0.25: Kopfneigung über festen Cutout-Anker */
+/* v0.26: Kopfneigung über festen Cutout-Anker */
 .head-anchor{
   transform-origin:0 0;
   will-change:transform;
@@ -944,7 +944,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.25: Aufnahme sichtbar unter den Touchfeldern */
+/* v0.26: Aufnahme sichtbar unter den Touchfeldern */
 .record-workspace{
   margin-top:14px;
   border:1px solid rgba(255,255,255,.07);
@@ -992,7 +992,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.25: gleiche Figur auf Handy, Desktop und Aufnahme */
+/* v0.26: gleiche Figur auf Handy, Desktop und Aufnahme */
 .avatar-body{
   width:min(330px,65vw)!important;
   bottom:4px!important;
@@ -1018,7 +1018,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.25: sichtbare Arm-Regler auf der Hauptseite */
+/* v0.26: sichtbare Arm-Regler auf der Hauptseite */
 .arm-main-controls{
   margin-top:14px;
   border:1px solid rgba(39,200,255,.22);
@@ -1130,7 +1130,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.25: vier Charaktere */
+/* v0.26: vier Charaktere */
 .character-buttons{
   grid-template-columns:repeat(4,minmax(0,1fr));
 }
@@ -1520,7 +1520,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.25: Recorder-Format */
+/* v0.26: Recorder-Format */
 .record-format-choice{
   display:grid;
   grid-template-columns:auto minmax(150px,1fr);
@@ -1553,7 +1553,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.25: Avatar Designer */
+/* v0.26: Avatar Designer */
 .designer-panel{margin-top:10px;border:1px solid rgba(255,96,190,.22);background:linear-gradient(180deg,rgba(255,67,170,.045),rgba(0,0,0,.16));border-radius:18px;padding:12px}
 .designer-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.designer-head>div{display:grid;gap:2px}.designer-head strong{font-size:16px}
 #designerNotice{font-size:10px;color:var(--muted)}
@@ -1573,7 +1573,7 @@ body.menu-open{overflow:hidden}
 @media(max-width:620px){.designer-grid{grid-template-columns:1fr}.designer-colors{grid-template-columns:repeat(3,1fr)}}
 
 
-/* v0.25: Leg Control */
+/* v0.26: Leg Control */
 .leg-main-controls{margin-top:10px;border:1px solid rgba(122,220,255,.18);background:linear-gradient(180deg,rgba(64,182,255,.045),rgba(0,0,0,.14));border-radius:16px;padding:12px}
 .leg-main-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.leg-main-head>div{display:grid;gap:2px}.leg-main-head strong{font-size:14px}
 #legReset{min-height:40px;border:1px solid rgba(39,200,255,.32);background:var(--accent-soft);color:var(--text);border-radius:11px;padding:7px 10px;font-weight:850}
@@ -1584,6 +1584,20 @@ body.menu-open{overflow:hidden}
 .walk-row label{display:grid;gap:5px;color:var(--muted);font-size:10px}.walk-row label span{display:flex;justify-content:space-between}.walk-row label strong{color:var(--accent)}.walk-row input{width:100%;accent-color:var(--accent)}
 .leg-note{margin:9px 0 0;color:#7890a1;font-size:10px;line-height:1.45}
 @media(max-width:520px){.walk-row{grid-template-columns:1fr}}
+
+
+/* v0.26: Dance Mode */
+.dance-panel{margin-top:10px;border:1px solid rgba(255,92,193,.24);background:linear-gradient(180deg,rgba(255,66,178,.07),rgba(57,23,69,.12));border-radius:18px;padding:12px}
+.dance-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.dance-head>div{display:grid;gap:2px}.dance-head strong{font-size:15px}#danceStatus{font-size:10px;color:var(--muted)}
+#danceToggle{min-width:116px;min-height:48px;border-radius:13px;border:1px solid #75405f;background:#190f18;color:var(--text);font-weight:900;font-size:14px}
+#danceToggle.active{border-color:#ff62c3;background:rgba(255,70,175,.16);box-shadow:0 0 20px rgba(255,70,175,.12)}
+.dance-controls{display:grid;grid-template-columns:.8fr 1fr 1fr;gap:9px;margin-top:12px}.dance-controls label{display:grid;gap:6px;color:var(--muted);font-size:10px}
+.dance-controls label span{display:flex;justify-content:space-between;gap:6px}.dance-controls strong{color:#ff8bd0}.dance-controls select{min-height:42px;border:1px solid #54364c;border-radius:10px;background:#0d0b10;color:var(--text);padding:7px;font-weight:800}
+.dance-controls input{width:100%;accent-color:#ff61c3}.dance-beat-row{display:flex;align-items:center;gap:7px;margin-top:10px;color:#947f90;font-size:10px}
+.dance-beat-dot{width:9px;height:9px;border-radius:50%;background:#553345;box-shadow:0 0 0 rgba(255,98,195,0);transition:transform 70ms linear}
+.dance-beat-dot.hit{background:#ff62c3;transform:scale(1.6);box-shadow:0 0 14px rgba(255,98,195,.65)}
+#avatarFigure{will-change:transform}
+@media(max-width:620px){.dance-controls{grid-template-columns:1fr}.dance-head{align-items:flex-start;flex-direction:column}#danceToggle{width:100%}}
 
 </style>
 </head>
@@ -1973,7 +1987,7 @@ body.menu-open{overflow:hidden}
           </div>
         </div>
 
-        <div class="stage-caption"><strong>v0.25:</strong> PS Avatar Premium</div>
+        <div class="stage-caption"><strong>v0.26:</strong> PS Avatar Premium</div>
       </div>
     </section>
 
@@ -2187,6 +2201,43 @@ body.menu-open{overflow:hidden}
           </div>
 
           <p class="leg-note">Jedes Bein dreht um einen eigenen Hüftpunkt. Beim Gehen schwingen beide Beine gegeneinander; Kopf, Arme und Lip-Sync bleiben unabhängig.</p>
+        </section>
+
+        <section class="dance-panel" aria-label="Dance Mode">
+          <div class="dance-head">
+            <div>
+              <span class="mini-label">DANCE MODE v1</span>
+              <strong>Musik an · Figur tanzt 😁</strong>
+              <span id="danceStatus">Bereit · Audio-Reaktion automatisch</span>
+            </div>
+            <button id="danceToggle" type="button">💃 Tanzen</button>
+          </div>
+
+          <div class="dance-controls">
+            <label>
+              <span>Stil</span>
+              <select id="danceStyle">
+                <option value="groove">😎 Groove</option>
+                <option value="bounce">🔥 Bounce</option>
+                <option value="party">🎉 Party</option>
+              </select>
+            </label>
+
+            <label>
+              <span>Intensität <strong id="danceIntensityValue">70%</strong></span>
+              <input id="danceIntensity" type="range" min="30" max="100" value="70" step="5">
+            </label>
+
+            <label>
+              <span>Tempo <strong id="danceSpeedValue">100%</strong></span>
+              <input id="danceSpeed" type="range" min="60" max="160" value="100" step="5">
+            </label>
+          </div>
+
+          <div class="dance-beat-row">
+            <span id="danceBeatDot" class="dance-beat-dot"></span>
+            <span>Song läuft → Bewegung reagiert automatisch auf Pegelspitzen</span>
+          </div>
         </section>
 
         <section class="brain-panel" aria-label="Avatar Brain">
@@ -2430,7 +2481,7 @@ body.menu-open{overflow:hidden}
       </article>
         </section>
 
-        <div class="menu-version">Version <strong>0.25</strong></div>
+        <div class="menu-version">Version <strong>0.26</strong></div>
       </div>
     </aside>
 
@@ -2440,7 +2491,7 @@ body.menu-open{overflow:hidden}
 (() => {
   "use strict";
 
-  const VERSION = "0.25";
+  const VERSION = "0.26";
 
   const avatarState = {
     version: VERSION,
@@ -2517,6 +2568,23 @@ body.menu-open{overflow:hidden}
       amplitude: 16,
       left: 0,
       right: 0
+    },
+
+    dance: {
+      enabled: false,
+      style: "groove",
+      intensity: 0.70,
+      speed: 1,
+      leftLeg: 0,
+      rightLeg: 0,
+      leftArm: 0,
+      rightArm: 0,
+      headLean: 0,
+      swayX: 0,
+      bounceY: 0,
+      beatKick: 0,
+      lastBeatAt: 0,
+      lastEnergy: 0
     },
 
     brain: {
@@ -2655,6 +2723,14 @@ body.menu-open{overflow:hidden}
     walkToggle: document.getElementById("walkToggle"),
     walkSpeed: document.getElementById("walkSpeed"),
     walkSpeedValue: document.getElementById("walkSpeedValue"),
+    danceToggle: document.getElementById("danceToggle"),
+    danceStyle: document.getElementById("danceStyle"),
+    danceIntensity: document.getElementById("danceIntensity"),
+    danceIntensityValue: document.getElementById("danceIntensityValue"),
+    danceSpeed: document.getElementById("danceSpeed"),
+    danceSpeedValue: document.getElementById("danceSpeedValue"),
+    danceStatus: document.getElementById("danceStatus"),
+    danceBeatDot: document.getElementById("danceBeatDot"),
     brainToggle: document.getElementById("brainToggle"),
     brainStatus: document.getElementById("brainStatus"),
     brainDot: document.getElementById("brainDot"),
@@ -3611,12 +3687,18 @@ body.menu-open{overflow:hidden}
 
   function getEffectiveLeftLegAngle(){
     const walk=avatarState.walk||{left:0};
-    return Math.max(-30,Math.min(30,(avatarState.leftLeg.hip||0)+(walk.left||0)));
+    const dance=avatarState.dance||{leftLeg:0,enabled:false};
+    return Math.max(-32,Math.min(32,
+      (avatarState.leftLeg.hip||0)+(walk.left||0)+(dance.enabled?(dance.leftLeg||0):0)
+    ));
   }
 
   function getEffectiveRightLegAngle(){
     const walk=avatarState.walk||{right:0};
-    return Math.max(-30,Math.min(30,(avatarState.rightLeg.hip||0)+(walk.right||0)));
+    const dance=avatarState.dance||{rightLeg:0,enabled:false};
+    return Math.max(-32,Math.min(32,
+      (avatarState.rightLeg.hip||0)+(walk.right||0)+(dance.enabled?(dance.rightLeg||0):0)
+    ));
   }
 
   function updateWalk(now){
@@ -3633,6 +3715,112 @@ body.menu-open{overflow:hidden}
       walk.right+=(0-walk.right)*0.12;
       if(Math.abs(walk.left)<0.03) walk.left=0;
       if(Math.abs(walk.right)<0.03) walk.right=0;
+    }
+  }
+
+  function updateDance(now){
+    const d=avatarState.dance;
+    if(!d) return;
+
+    if(!d.enabled){
+      d.leftLeg+=(0-d.leftLeg)*0.14;
+      d.rightLeg+=(0-d.rightLeg)*0.14;
+      d.leftArm+=(0-d.leftArm)*0.12;
+      d.rightArm+=(0-d.rightArm)*0.12;
+      d.headLean+=(0-d.headLean)*0.14;
+      d.swayX+=(0-d.swayX)*0.14;
+      d.bounceY+=(0-d.bounceY)*0.14;
+      d.beatKick*=0.84;
+      return;
+    }
+
+    const intensity=Math.max(.3,Math.min(1,d.intensity||.7));
+    const audioActive=!!(ui.speechAudio && !ui.speechAudio.paused && !ui.speechAudio.ended);
+    const energy=audioActive?Math.max(0,Math.min(1,brainAudioEnergy)):0;
+    const beat=Math.max(0,Math.min(1,d.beatKick||0));
+    const boost=1+energy*.35+beat*.38;
+    const phase=now*.001*(d.speed||1)*Math.PI*2;
+
+    if(d.style==="bounce"){
+      const step=Math.sin(phase*1.35);
+      const pulse=Math.abs(Math.sin(phase*1.35));
+      d.leftLeg=step*9*intensity*boost;
+      d.rightLeg=-step*9*intensity*boost;
+      d.leftArm=(28+pulse*35)*intensity*boost;
+      d.rightArm=-(28+pulse*35)*intensity*boost;
+      d.headLean=Math.sin(phase*.68)*3.3*intensity;
+      d.swayX=Math.sin(phase*.68)*5*intensity;
+      d.bounceY=-(pulse*7+beat*7)*intensity;
+    }else if(d.style==="party"){
+      const step=Math.sin(phase*1.12);
+      const alt=Math.sin(phase*.56+1.2);
+      d.leftLeg=(step*19+alt*4)*intensity*boost;
+      d.rightLeg=(-step*19+alt*4)*intensity*boost;
+      d.leftArm=(45+Math.max(0,Math.sin(phase*1.12))*48)*intensity*boost;
+      d.rightArm=-(45+Math.max(0,-Math.sin(phase*1.12))*48)*intensity*boost;
+      d.headLean=Math.sin(phase*.82)*6*intensity+alt*2;
+      d.swayX=Math.sin(phase*.56)*10*intensity;
+      d.bounceY=-(Math.abs(Math.sin(phase*1.12))*6+beat*9)*intensity;
+    }else{
+      const step=Math.sin(phase*.92);
+      d.leftLeg=step*14*intensity*boost;
+      d.rightLeg=-step*14*intensity*boost;
+      d.leftArm=(24+(step+1)*18)*intensity*boost;
+      d.rightArm=-(24+(-step+1)*18)*intensity*boost;
+      d.headLean=Math.sin(phase*.46)*4.2*intensity;
+      d.swayX=Math.sin(phase*.46)*8*intensity;
+      d.bounceY=-(Math.abs(Math.sin(phase*.92))*4+beat*7)*intensity;
+    }
+
+    d.beatKick*=0.86;
+  }
+
+  function bindDanceControls(){
+    const d=avatarState.dance;
+    if(!d) return;
+
+    if(ui.danceToggle){
+      ui.danceToggle.addEventListener("click",()=>{
+        d.enabled=!d.enabled;
+
+        if(d.enabled && avatarState.walk?.enabled){
+          avatarState.walk.enabled=false;
+          avatarState.walk.left=0;
+          avatarState.walk.right=0;
+          if(ui.walkToggle){
+            ui.walkToggle.classList.remove("active");
+            ui.walkToggle.textContent="🚶 Gehen starten";
+          }
+        }
+
+        ui.danceToggle.classList.toggle("active",d.enabled);
+        ui.danceToggle.textContent=d.enabled?"⏸ Tanz stoppen":"💃 Tanzen";
+        if(ui.danceStatus){
+          ui.danceStatus.textContent=d.enabled
+            ? (ui.speechAudio && !ui.speechAudio.paused ? "Tanzt · reagiert auf Audio 🔥" : "Tanzt · Song kann zusätzlich laufen")
+            : "Bereit · Audio-Reaktion automatisch";
+        }
+      });
+    }
+
+    if(ui.danceStyle){
+      ui.danceStyle.addEventListener("change",()=>{
+        d.style=ui.danceStyle.value;
+      });
+    }
+
+    if(ui.danceIntensity){
+      ui.danceIntensity.addEventListener("input",()=>{
+        d.intensity=Number(ui.danceIntensity.value)/100;
+        if(ui.danceIntensityValue) ui.danceIntensityValue.textContent=ui.danceIntensity.value+"%";
+      });
+    }
+
+    if(ui.danceSpeed){
+      ui.danceSpeed.addEventListener("input",()=>{
+        d.speed=Number(ui.danceSpeed.value)/100;
+        if(ui.danceSpeedValue) ui.danceSpeedValue.textContent=ui.danceSpeed.value+"%";
+      });
     }
   }
 
@@ -3660,6 +3848,14 @@ body.menu-open{overflow:hidden}
     if(ui.walkToggle){
       ui.walkToggle.addEventListener("click",()=>{
         avatarState.walk.enabled=!avatarState.walk.enabled;
+        if(avatarState.walk.enabled && avatarState.dance?.enabled){
+          avatarState.dance.enabled=false;
+          if(ui.danceToggle){
+            ui.danceToggle.classList.remove("active");
+            ui.danceToggle.textContent="💃 Tanzen";
+          }
+          if(ui.danceStatus) ui.danceStatus.textContent="Bereit · Audio-Reaktion automatisch";
+        }
         ui.walkToggle.classList.toggle("active",avatarState.walk.enabled);
         ui.walkToggle.textContent=avatarState.walk.enabled?"⏸ Gehen stoppen":"🚶 Gehen starten";
       });
@@ -3808,11 +4004,13 @@ body.menu-open{overflow:hidden}
 
   function getEffectiveHeadLean() {
     const b = avatarState.brain;
+    const dance = avatarState.dance;
     const extra = b && b.enabled ? b.headLean : 0;
-    return Math.max(-12,Math.min(12,
+    const danceLean = dance && dance.enabled ? dance.headLean : 0;
+    return Math.max(-16,Math.min(16,
       (avatarState.head.sideLean||0) +
       (avatarState.head.idleLean||0) +
-      extra
+      extra + danceLean
     ));
   }
 
@@ -3828,17 +4026,21 @@ body.menu-open{overflow:hidden}
 
   function getEffectiveLeftArmAngle() {
     const b = avatarState.brain;
+    const d = avatarState.dance;
     return Math.max(0,Math.min(105,
       (avatarState.leftArm.shoulder||0) +
-      (b && b.enabled ? b.leftArm : 0)
+      (b && b.enabled ? b.leftArm : 0) +
+      (d && d.enabled ? d.leftArm : 0)
     ));
   }
 
   function getEffectiveRightArmAngle() {
     const b = avatarState.brain;
+    const d = avatarState.dance;
     return Math.max(-105,Math.min(0,
       (avatarState.rightArm.shoulder||0) +
-      (b && b.enabled ? b.rightArm : 0)
+      (b && b.enabled ? b.rightArm : 0) +
+      (d && d.enabled ? d.rightArm : 0)
     ));
   }
 
@@ -3990,6 +4192,13 @@ body.menu-open{overflow:hidden}
 
   function renderAvatar() {
     const head = avatarState.head;
+    const dance = avatarState.dance;
+
+    if(ui.avatarFigure){
+      const dx=dance ? (dance.swayX||0) : 0;
+      const dy=dance ? (dance.bounceY||0) : 0;
+      ui.avatarFigure.style.transform="translate("+dx.toFixed(2)+"px,"+dy.toFixed(2)+"px)";
+    }
 
     // Einfache Cutout-Mechanik: Kopf bleibt starr und neigt sich nur seitlich.
     const manualTilt = Math.max(-5, Math.min(5, head.tilt));
@@ -4229,6 +4438,7 @@ body.menu-open{overflow:hidden}
     updateNaturalIdle(now);
     updateAvatarBrain(now);
     updateWalk(now);
+    updateDance(now);
     renderAvatar();
     updateEngineUi(now);
 
@@ -4492,6 +4702,12 @@ body.menu-open{overflow:hidden}
     }
     if (ui.audioMeterFill) ui.audioMeterFill.style.width = "0%";
     brainAudioEnergy = 0;
+    if(avatarState.dance){
+      avatarState.dance.lastEnergy=0;
+      avatarState.dance.beatKick=0;
+      if(ui.danceBeatDot) ui.danceBeatDot.classList.remove("hit");
+      if(ui.danceStatus && avatarState.dance.enabled) ui.danceStatus.textContent="Tanzt · Song pausiert";
+    }
 
     if (resetMouth) {
       smoothedAudioMouth = 0;
@@ -4517,6 +4733,27 @@ body.menu-open{overflow:hidden}
 
     const rms = Math.sqrt(sum / audioData.length);
     brainAudioEnergy += (Math.min(1,rms * 8) - brainAudioEnergy) * 0.32;
+
+    const dance=avatarState.dance;
+    if(dance && dance.enabled){
+      const energy=Math.min(1,rms*8);
+      const now=performance.now();
+      const rising=energy-(dance.lastEnergy||0);
+      if(energy>.34 && rising>.045 && now-(dance.lastBeatAt||0)>170){
+        dance.beatKick=1;
+        dance.lastBeatAt=now;
+        if(ui.danceBeatDot){
+          ui.danceBeatDot.classList.add("hit");
+          setTimeout(()=>ui.danceBeatDot?.classList.remove("hit"),90);
+        }
+      }
+      dance.lastEnergy=energy;
+      if(ui.danceStatus && now-(dance._statusAt||0)>700){
+        dance._statusAt=now;
+        ui.danceStatus.textContent="Tanzt · Audio "+Math.round(energy*100)+"% 🔥";
+      }
+    }
+
     const raw = Math.max(0, Math.min(1, (rms - 0.012) * 9.5 * audioStrength));
     smoothedAudioMouth += (raw - smoothedAudioMouth) * (raw > smoothedAudioMouth ? 0.46 : 0.20);
 
@@ -5105,6 +5342,22 @@ body.menu-open{overflow:hidden}
         avatarState.walk.enabled = false;
         avatarState.walk.left = 0;
         avatarState.walk.right = 0;
+        if(avatarState.dance){
+          avatarState.dance.enabled=false;
+          avatarState.dance.leftLeg=0;
+          avatarState.dance.rightLeg=0;
+          avatarState.dance.leftArm=0;
+          avatarState.dance.rightArm=0;
+          avatarState.dance.headLean=0;
+          avatarState.dance.swayX=0;
+          avatarState.dance.bounceY=0;
+          avatarState.dance.beatKick=0;
+        }
+        if(ui.danceToggle){
+          ui.danceToggle.classList.remove("active");
+          ui.danceToggle.textContent="💃 Tanzen";
+        }
+        if(ui.danceStatus) ui.danceStatus.textContent="Bereit · Audio-Reaktion automatisch";
         if (ui.walkToggle) {
           ui.walkToggle.classList.remove("active");
           ui.walkToggle.textContent = "🚶 Gehen starten";
@@ -5128,7 +5381,7 @@ body.menu-open{overflow:hidden}
     if (ui.menuButton) ui.menuButton.setAttribute("aria-expanded", open ? "true" : "false");
   }
 
-  // --- Figurenaufnahme v0.25 -------------------------------------------
+  // --- Figurenaufnahme v0.26 -------------------------------------------
   // Direkter Canvas-Renderer: keine langsame SVG->Bitmap-Konvertierung pro Frame.
   let avatarRecorder = null;
   let recorderChunks = [];
@@ -6018,8 +6271,16 @@ body.menu-open{overflow:hidden}
   function paintRecorderFrame() {
     if (!recorderCtx || !recorderCanvas) return;
     drawRecordingBackground(recorderCtx,recorderCanvas.width,recorderCanvas.height);
+
+    const d=avatarState.dance;
+    const dx=d ? (d.swayX||0)*1.35 : 0;
+    const dy=d ? (d.bounceY||0)*1.35 : 0;
+
+    recorderCtx.save();
+    recorderCtx.translate(dx,dy);
     drawRecordedBody(recorderCtx);
     drawRecordedHead(recorderCtx);
+    recorderCtx.restore();
   }
 
   async function prepareRecorderAudioTrack() {
@@ -6418,6 +6679,7 @@ body.menu-open{overflow:hidden}
   bindEyeControls();
   bindTouchControls();
   bindLegControls();
+  bindDanceControls();
   bindAudioLipSync();
   bindAvatarBrain();
   bindAvatarTalk();
