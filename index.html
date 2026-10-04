@@ -860,14 +860,14 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.17.1: Touch-Fix – JS darf den Kopf transformieren */
+/* v0.18: Touch-Fix – JS darf den Kopf transformieren */
 .avatar-head-module{
   will-change:transform;
   transition:transform 70ms linear;
 }
 
 
-/* v0.17.1: Kopfneigung über festen Cutout-Anker */
+/* v0.18: Kopfneigung über festen Cutout-Anker */
 .head-anchor{
   transform-origin:0 0;
   will-change:transform;
@@ -944,7 +944,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.17.1: Aufnahme sichtbar unter den Touchfeldern */
+/* v0.18: Aufnahme sichtbar unter den Touchfeldern */
 .record-workspace{
   margin-top:14px;
   border:1px solid rgba(255,255,255,.07);
@@ -992,7 +992,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.17.1: gleiche Figur auf Handy, Desktop und Aufnahme */
+/* v0.18: gleiche Figur auf Handy, Desktop und Aufnahme */
 .avatar-body{
   width:min(330px,65vw)!important;
   bottom:4px!important;
@@ -1018,7 +1018,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.17.1: sichtbare Arm-Regler auf der Hauptseite */
+/* v0.18: sichtbare Arm-Regler auf der Hauptseite */
 .arm-main-controls{
   margin-top:14px;
   border:1px solid rgba(39,200,255,.22);
@@ -1130,7 +1130,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.17.1: drei Charaktere */
+/* v0.18: drei Charaktere */
 .character-buttons{
   grid-template-columns:repeat(3,minmax(0,1fr));
 }
@@ -1146,6 +1146,86 @@ body.menu-open{overflow:hidden}
     font-size:11px;
   }
   .character-icon{font-size:22px}
+}
+
+
+/* Schritt 18: Avatar Brain v1 */
+.brain-panel{
+  margin-top:14px;
+  border:1px solid rgba(135,106,255,.28);
+  background:linear-gradient(180deg,rgba(135,106,255,.085),rgba(0,0,0,.16));
+  border-radius:18px;
+  padding:13px;
+}
+.brain-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+.brain-head>div{display:grid;gap:2px}
+.brain-head strong{font-size:15px}
+.brain-toggle{
+  min-height:42px;
+  border-radius:12px;
+  border:1px solid #4e4776;
+  background:#111125;
+  color:var(--text);
+  padding:8px 12px;
+  font-weight:900;
+}
+.brain-toggle.active{
+  border-color:#8c72ff;
+  background:rgba(126,95,255,.18);
+  box-shadow:0 0 18px rgba(126,95,255,.12);
+}
+.brain-status-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  min-height:30px;
+  margin-top:8px;
+  color:var(--muted);
+  font-size:12px;
+}
+.brain-dot{
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:#59606a;
+  box-shadow:none;
+}
+.brain-dot.active{
+  background:#65e6a6;
+  box-shadow:0 0 12px rgba(101,230,166,.55);
+}
+.brain-modes{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:7px;
+  margin-top:8px;
+}
+.brain-modes button{
+  min-height:44px;
+  border-radius:11px;
+  border:1px solid #30394a;
+  background:#09131e;
+  color:var(--text);
+  font-weight:800;
+  font-size:12px;
+}
+.brain-modes button.active{
+  border-color:#8c72ff;
+  background:rgba(126,95,255,.16);
+}
+.brain-note{
+  margin:10px 0 0;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.45;
+}
+@media(max-width:560px){
+  .brain-modes button{font-size:11px;padding:6px 3px}
 }
 
 </style>
@@ -1423,7 +1503,7 @@ body.menu-open{overflow:hidden}
         </div>
 
         <div class="stage-caption">
-          <strong>Schritt 17.1:</strong> Dritter Charakter · BreuerBeatz</div>
+          <strong>Schritt 18:</strong> Avatar Brain v1</div>
       </div>
     </section>
 
@@ -1528,6 +1608,29 @@ body.menu-open{overflow:hidden}
             </label>
             <input id="rightArmSlider" type="range" min="0" max="95" value="0" step="1">
           </div>
+        </section>
+
+        <section class="brain-panel" aria-label="Avatar Brain">
+          <div class="brain-head">
+            <div>
+              <span class="mini-label">AVATAR BRAIN v1</span>
+              <strong>Automatische Bewegungen</strong>
+            </div>
+            <button id="brainToggle" class="brain-toggle active" type="button">🧠 Brain AN</button>
+          </div>
+
+          <div class="brain-status-row">
+            <span id="brainDot" class="brain-dot active"></span>
+            <span id="brainStatus">Natürlich · beobachtet</span>
+          </div>
+
+          <div class="brain-modes" role="group" aria-label="Bewegungsintensität">
+            <button type="button" data-brain-mode="quiet">😌 Ruhig</button>
+            <button type="button" data-brain-mode="natural" class="active">🙂 Natürlich</button>
+            <button type="button" data-brain-mode="lively">⚡ Lebendig</button>
+          </div>
+
+          <p class="brain-note">Der Brain steuert Blick, Kopf und kleine Armgesten. Bei Audio reagiert er stärker auf den Pegel. Berührst du die Steuerung selbst, hält er sich kurz zurück.</p>
         </section>
     </section>
 
@@ -1668,12 +1771,12 @@ body.menu-open{overflow:hidden}
           <div class="progress-row done"><span>Beine</span><strong>✓</strong></div>
           <div class="progress-row done"><span>Aufnahme</span><strong>✓</strong></div>
           <div class="progress-row done"><span>3 Charaktere</span><strong>✓</strong></div>
-          <div class="progress-row"><span>Idle / Leben</span><strong>○</strong></div>
+          <div class="progress-row done"><span>Avatar Brain v1</span><strong>✓</strong></div>
         </div>
       </article>
         </section>
 
-        <div class="menu-version">Version <strong>0.17.1</strong></div>
+        <div class="menu-version">Version <strong>0.18</strong></div>
       </div>
     </aside>
 
@@ -1683,7 +1786,7 @@ body.menu-open{overflow:hidden}
 (() => {
   "use strict";
 
-  const VERSION = "0.17.1";
+  const VERSION = "0.18";
 
   const avatarState = {
     version: VERSION,
@@ -1752,6 +1855,25 @@ body.menu-open{overflow:hidden}
       hip: 0,
       knee: 0,
       foot: 0
+    },
+
+    brain: {
+      enabled: true,
+      mode: "natural",
+      lookX: 0,
+      lookY: 0,
+      headLean: 0,
+      leftArm: 0,
+      rightArm: 0,
+      targetLookX: 0,
+      targetLookY: 0,
+      targetHeadLean: 0,
+      targetLeftArm: 0,
+      targetRightArm: 0,
+      nextDecisionAt: 0,
+      gestureUntil: 0,
+      manualHoldUntil: 0,
+      lastPeakGestureAt: 0
     }
   };
 
@@ -1822,6 +1944,9 @@ body.menu-open{overflow:hidden}
     leftArmSliderValue: document.getElementById("leftArmSliderValue"),
     rightArmSliderValue: document.getElementById("rightArmSliderValue"),
     armReset: document.getElementById("armReset"),
+    brainToggle: document.getElementById("brainToggle"),
+    brainStatus: document.getElementById("brainStatus"),
+    brainDot: document.getElementById("brainDot"),
     touchReset: document.getElementById("touchReset"),
     blinkLeftTouch: document.getElementById("blinkLeftTouch"),
     blinkRightTouch: document.getElementById("blinkRightTouch"),
@@ -2271,12 +2396,243 @@ body.menu-open{overflow:hidden}
     }
   }
 
+  // --- Avatar Brain v1 ---------------------------------------------------
+  const BRAIN_MODES = {
+    quiet: {
+      label: "Ruhig",
+      minDelay: 3600,
+      maxDelay: 6800,
+      lookX: 2.2,
+      lookY: 1.4,
+      lean: 2.2,
+      arm: 18,
+      gestureChance: 0.18,
+      ease: 0.025
+    },
+    natural: {
+      label: "Natürlich",
+      minDelay: 1900,
+      maxDelay: 4300,
+      lookX: 4.2,
+      lookY: 2.4,
+      lean: 4.0,
+      arm: 34,
+      gestureChance: 0.34,
+      ease: 0.038
+    },
+    lively: {
+      label: "Lebendig",
+      minDelay: 850,
+      maxDelay: 2300,
+      lookX: 6.2,
+      lookY: 3.6,
+      lean: 6.5,
+      arm: 56,
+      gestureChance: 0.56,
+      ease: 0.055
+    }
+  };
+
+  let brainAudioEnergy = 0;
+  let brainLastUiUpdate = 0;
+
+  function randomRange(min,max) {
+    return min + Math.random() * (max-min);
+  }
+
+  function noteManualControl(duration=1900) {
+    if (!avatarState.brain) return;
+    avatarState.brain.manualHoldUntil = performance.now() + duration;
+  }
+
+  function getEffectiveHeadLean() {
+    const b = avatarState.brain;
+    const extra = b && b.enabled ? b.headLean : 0;
+    return Math.max(-12,Math.min(12,
+      (avatarState.head.sideLean||0) +
+      (avatarState.head.idleLean||0) +
+      extra
+    ));
+  }
+
+  function getEffectiveLookX() {
+    const b = avatarState.brain;
+    return (avatarState.face.lookX||0) + (b && b.enabled ? b.lookX : 0);
+  }
+
+  function getEffectiveLookY() {
+    const b = avatarState.brain;
+    return (avatarState.face.lookY||0) + (b && b.enabled ? b.lookY : 0);
+  }
+
+  function getEffectiveLeftArmAngle() {
+    const b = avatarState.brain;
+    return Math.max(0,Math.min(105,
+      (avatarState.leftArm.shoulder||0) +
+      (b && b.enabled ? b.leftArm : 0)
+    ));
+  }
+
+  function getEffectiveRightArmAngle() {
+    const b = avatarState.brain;
+    return Math.max(-105,Math.min(0,
+      (avatarState.rightArm.shoulder||0) +
+      (b && b.enabled ? b.rightArm : 0)
+    ));
+  }
+
+  function planBrainDecision(now) {
+    const brain = avatarState.brain;
+    const cfg = BRAIN_MODES[brain.mode] || BRAIN_MODES.natural;
+    const audioActive = !!(ui.speechAudio && !ui.speechAudio.paused && !ui.speechAudio.ended);
+    const energy = audioActive ? Math.max(0,Math.min(1,brainAudioEnergy)) : 0;
+    const boost = 1 + energy * (brain.mode === "lively" ? 0.9 : 0.55);
+
+    brain.targetLookX = randomRange(-cfg.lookX,cfg.lookX) * boost;
+    brain.targetLookY = randomRange(-cfg.lookY,cfg.lookY) * (0.8 + energy*0.3);
+    brain.targetHeadLean = randomRange(-cfg.lean,cfg.lean) * boost;
+
+    // Arme bewusst nicht ständig bewegen. Eine Geste ist ein kurzes Ereignis.
+    const chance = Math.min(0.88,cfg.gestureChance + energy*0.38);
+    if (Math.random() < chance) {
+      const strength = cfg.arm * (0.65 + Math.random()*0.55) * (1 + energy*0.65);
+      const gesture = Math.random();
+
+      if (gesture < 0.42) {
+        brain.targetLeftArm = strength;
+        brain.targetRightArm = 0;
+      } else if (gesture < 0.84) {
+        brain.targetLeftArm = 0;
+        brain.targetRightArm = -strength;
+      } else {
+        brain.targetLeftArm = strength * 0.72;
+        brain.targetRightArm = -strength * 0.72;
+      }
+
+      brain.gestureUntil = now + randomRange(700,1450);
+    } else {
+      brain.targetLeftArm = 0;
+      brain.targetRightArm = 0;
+      brain.gestureUntil = 0;
+    }
+
+    const audioFactor = audioActive ? Math.max(0.55,1-energy*0.45) : 1;
+    brain.nextDecisionAt = now + randomRange(cfg.minDelay,cfg.maxDelay) * audioFactor;
+  }
+
+  function updateAvatarBrain(now) {
+    const brain = avatarState.brain;
+    if (!brain) return;
+
+    const cfg = BRAIN_MODES[brain.mode] || BRAIN_MODES.natural;
+    const manual = now < (brain.manualHoldUntil||0);
+    const audioActive = !!(ui.speechAudio && !ui.speechAudio.paused && !ui.speechAudio.ended);
+
+    if (!brain.enabled || manual) {
+      brain.targetLookX = 0;
+      brain.targetLookY = 0;
+      brain.targetHeadLean = 0;
+      brain.targetLeftArm = 0;
+      brain.targetRightArm = 0;
+    } else {
+      if (!brain.nextDecisionAt || now >= brain.nextDecisionAt) {
+        planBrainDecision(now);
+      }
+
+      if (brain.gestureUntil && now >= brain.gestureUntil) {
+        brain.targetLeftArm = 0;
+        brain.targetRightArm = 0;
+        brain.gestureUntil = 0;
+      }
+
+      // Bei deutlicher Audio-Spitze darf gelegentlich eine zusätzliche kleine Geste entstehen.
+      if (audioActive && brainAudioEnergy > 0.36 &&
+          now - (brain.lastPeakGestureAt||0) > 1800 &&
+          Math.random() < 0.025) {
+        const strength = cfg.arm * (0.65 + brainAudioEnergy*0.75);
+        if (Math.random() < 0.5) {
+          brain.targetLeftArm = strength;
+        } else {
+          brain.targetRightArm = -strength;
+        }
+        brain.gestureUntil = now + 650 + brainAudioEnergy*550;
+        brain.lastPeakGestureAt = now;
+      }
+    }
+
+    const ease = brain.enabled && !manual ? cfg.ease : 0.08;
+    brain.lookX += (brain.targetLookX - brain.lookX) * ease;
+    brain.lookY += (brain.targetLookY - brain.lookY) * ease;
+    brain.headLean += (brain.targetHeadLean - brain.headLean) * ease;
+    brain.leftArm += (brain.targetLeftArm - brain.leftArm) * ease;
+    brain.rightArm += (brain.targetRightArm - brain.rightArm) * ease;
+
+    if (now - brainLastUiUpdate > 320) {
+      brainLastUiUpdate = now;
+
+      if (ui.brainToggle) {
+        ui.brainToggle.classList.toggle("active",brain.enabled);
+        ui.brainToggle.textContent = brain.enabled ? "🧠 Brain AN" : "🧠 Brain AUS";
+      }
+      if (ui.brainDot) ui.brainDot.classList.toggle("active",brain.enabled);
+
+      if (ui.brainStatus) {
+        const modeLabel = cfg.label;
+        const stateLabel =
+          !brain.enabled ? "ausgeschaltet" :
+          manual ? "wartet auf dich" :
+          audioActive ? "hört Audio" :
+          "beobachtet";
+        ui.brainStatus.textContent = modeLabel + " · " + stateLabel;
+      }
+    }
+  }
+
+  function setBrainMode(mode) {
+    if (!BRAIN_MODES[mode]) return;
+    const brain = avatarState.brain;
+    brain.mode = mode;
+    brain.nextDecisionAt = 0;
+
+    document.querySelectorAll("[data-brain-mode]").forEach(btn => {
+      btn.classList.toggle("active",btn.dataset.brainMode === mode);
+    });
+  }
+
+  function bindAvatarBrain() {
+    if (ui.brainToggle) {
+      ui.brainToggle.addEventListener("click",() => {
+        const brain = avatarState.brain;
+        brain.enabled = !brain.enabled;
+        brain.nextDecisionAt = 0;
+        if (!brain.enabled) {
+          brain.targetLookX = 0;
+          brain.targetLookY = 0;
+          brain.targetHeadLean = 0;
+          brain.targetLeftArm = 0;
+          brain.targetRightArm = 0;
+        }
+        updateAvatarBrain(performance.now());
+        renderAvatar();
+      });
+    }
+
+    document.querySelectorAll("[data-brain-mode]").forEach(btn => {
+      btn.addEventListener("click",() => {
+        setBrainMode(btn.dataset.brainMode);
+        updateAvatarBrain(performance.now());
+      });
+    });
+
+    setBrainMode("natural");
+  }
+
   function renderAvatar() {
     const head = avatarState.head;
 
     // Einfache Cutout-Mechanik: Kopf bleibt starr und neigt sich nur seitlich.
     const manualTilt = Math.max(-5, Math.min(5, head.tilt));
-    const lean = Math.max(-12, Math.min(12, (head.sideLean || 0) + (head.idleLean || 0)));
+    const lean = getEffectiveHeadLean();
     const nod = manualTilt + (head.idleTilt || 0);
     const lift = head.idleLift || 0;
 
@@ -2296,8 +2652,8 @@ body.menu-open{overflow:hidden}
     }
 
     // Starre Cutout-Arme: je Seite ein klarer Schulter-Drehpunkt.
-    const leftArmAngle = Math.max(0, Math.min(105, avatarState.leftArm.shoulder || 0));
-    const rightArmAngle = Math.max(-105, Math.min(0, avatarState.rightArm.shoulder || 0));
+    const leftArmAngle = getEffectiveLeftArmAngle();
+    const rightArmAngle = getEffectiveRightArmAngle();
 
     if (ui.leftArmBase) {
       const t = "rotate(" + leftArmAngle.toFixed(2) + " 112 112)";
@@ -2350,11 +2706,13 @@ body.menu-open{overflow:hidden}
 
     if (ui.pupilLeft && ui.pupilRight) {
       const pupilRadius = 6 * face.pupilScale;
-      const leanEyeOffset = (head.sideLean || 0) * 0.12;
-      ui.pupilLeft.setAttribute("cx", 155 + face.lookX * 2.0 + leanEyeOffset);
-      ui.pupilRight.setAttribute("cx", 265 + face.lookX * 2.0 + leanEyeOffset);
-      ui.pupilLeft.setAttribute("cy", 164 + face.lookY * 2.0);
-      ui.pupilRight.setAttribute("cy", 164 + face.lookY * 2.0);
+      const leanEyeOffset = lean * 0.12;
+      const effectiveLookX = getEffectiveLookX();
+      const effectiveLookY = getEffectiveLookY();
+      ui.pupilLeft.setAttribute("cx", 155 + effectiveLookX * 2.0 + leanEyeOffset);
+      ui.pupilRight.setAttribute("cx", 265 + effectiveLookX * 2.0 + leanEyeOffset);
+      ui.pupilLeft.setAttribute("cy", 164 + effectiveLookY * 2.0);
+      ui.pupilRight.setAttribute("cy", 164 + effectiveLookY * 2.0);
       ui.pupilLeft.setAttribute("r", 7.5 * face.pupilScale);
       ui.pupilRight.setAttribute("r", 7.5 * face.pupilScale);
     }
@@ -2492,6 +2850,7 @@ body.menu-open{overflow:hidden}
     avatarState.engine.frame++;
 
     updateNaturalIdle(now);
+    updateAvatarBrain(now);
     renderAvatar();
     updateEngineUi(now);
 
@@ -2754,6 +3113,7 @@ body.menu-open{overflow:hidden}
       audioAnimationFrame = null;
     }
     if (ui.audioMeterFill) ui.audioMeterFill.style.width = "0%";
+    brainAudioEnergy = 0;
 
     if (resetMouth) {
       smoothedAudioMouth = 0;
@@ -2778,6 +3138,7 @@ body.menu-open{overflow:hidden}
     }
 
     const rms = Math.sqrt(sum / audioData.length);
+    brainAudioEnergy += (Math.min(1,rms * 8) - brainAudioEnergy) * 0.32;
     const raw = Math.max(0, Math.min(1, (rms - 0.012) * 9.5 * audioStrength));
     smoothedAudioMouth += (raw - smoothedAudioMouth) * (raw > smoothedAudioMouth ? 0.46 : 0.20);
 
@@ -2930,11 +3291,13 @@ body.menu-open{overflow:hidden}
 
   function bindTouchControls() {
     bindTouchPad(ui.eyePad, (x,y) => {
+      noteManualControl();
       avatarState.face.lookX = (x - 0.5) * 20;
       avatarState.face.lookY = (y - 0.5) * 14;
     });
 
     bindTouchPad(ui.headPad, (x,y) => {
+      noteManualControl();
       // Links/rechts = echte Cutout-Neigung um den Kopf-Anker.
       avatarState.head.sideLean = (x - 0.5) * 24;
       avatarState.head.tilt = (y - 0.5) * 6;
@@ -2948,17 +3311,20 @@ body.menu-open{overflow:hidden}
 
     // Einfaches Cutout-Prinzip: hochziehen = Arm hebt sich als ein starres Teil.
     bindTouchPad(ui.leftArmPad, (x,y) => {
+      noteManualControl();
       const lift = Math.max(0, Math.min(1, 1 - y));
       avatarState.leftArm.shoulder = lift * 105;
     });
 
     bindTouchPad(ui.rightArmPad, (x,y) => {
+      noteManualControl();
       const lift = Math.max(0, Math.min(1, 1 - y));
       avatarState.rightArm.shoulder = -(lift * 105);
     });
 
     if (ui.leftArmSlider) {
       ui.leftArmSlider.addEventListener("input", () => {
+        noteManualControl();
         avatarState.leftArm.shoulder = Number(ui.leftArmSlider.value);
         renderAvatar();
       });
@@ -2966,6 +3332,7 @@ body.menu-open{overflow:hidden}
 
     if (ui.rightArmSlider) {
       ui.rightArmSlider.addEventListener("input", () => {
+        noteManualControl();
         avatarState.rightArm.shoulder = -Number(ui.rightArmSlider.value);
         renderAvatar();
       });
@@ -3058,7 +3425,7 @@ body.menu-open{overflow:hidden}
     if (ui.menuButton) ui.menuButton.setAttribute("aria-expanded", open ? "true" : "false");
   }
 
-  // --- Figurenaufnahme v0.17.1 -------------------------------------------
+  // --- Figurenaufnahme v0.18 -------------------------------------------
   // Direkter Canvas-Renderer: keine langsame SVG->Bitmap-Konvertierung pro Frame.
   let avatarRecorder = null;
   let recorderChunks = [];
@@ -3150,8 +3517,8 @@ body.menu-open{overflow:hidden}
     ctx.translate(x,y);
     ctx.scale(s,s);
 
-    const leftArmAngle=Math.max(0,Math.min(105,avatarState.leftArm.shoulder||0));
-    const rightArmAngle=Math.max(-105,Math.min(0,avatarState.rightArm.shoulder||0));
+    const leftArmAngle=getEffectiveLeftArmAngle();
+    const rightArmAngle=getEffectiveRightArmAngle();
 
     ctx.save();
     ctx.translate(112,112);
@@ -3217,7 +3584,7 @@ body.menu-open{overflow:hidden}
     const s=0.6548;
     const anchorX=360;
     const anchorY=550+(head.idleLift||0);
-    const lean=Math.max(-12,Math.min(12,(head.sideLean||0)+(head.idleLean||0)));
+    const lean=getEffectiveHeadLean();
 
     ctx.save();
     ctx.translate(anchorX,anchorY);
@@ -3246,8 +3613,8 @@ body.menu-open{overflow:hidden}
     ctx.beginPath();ctx.ellipse(155,164,40,33,0,0,Math.PI*2);ctx.fillStyle="#fff";ctx.fill();
     ctx.beginPath();ctx.ellipse(265,164,40,33,0,0,Math.PI*2);ctx.fill();
 
-    const pxOffset=(face.lookX||0)*2+(head.sideLean||0)*0.12;
-    const pyOffset=(face.lookY||0)*2;
+    const pxOffset=getEffectiveLookX()*2+getEffectiveHeadLean()*0.12;
+    const pyOffset=getEffectiveLookY()*2;
     ctx.beginPath();ctx.arc(155+pxOffset,164+pyOffset,7.5*(face.pupilScale||1),0,Math.PI*2);ctx.fillStyle="#000";ctx.fill();
     ctx.beginPath();ctx.arc(265+pxOffset,164+pyOffset,7.5*(face.pupilScale||1),0,Math.PI*2);ctx.fill();
 
@@ -3308,8 +3675,8 @@ body.menu-open{overflow:hidden}
     ctx.translate(x,y);
     ctx.scale(s,s);
 
-    const leftArmAngle=Math.max(0,Math.min(105,avatarState.leftArm.shoulder||0));
-    const rightArmAngle=Math.max(-105,Math.min(0,avatarState.rightArm.shoulder||0));
+    const leftArmAngle=getEffectiveLeftArmAngle();
+    const rightArmAngle=getEffectiveRightArmAngle();
 
     ctx.save();
     ctx.translate(112,112);
@@ -3367,7 +3734,7 @@ body.menu-open{overflow:hidden}
     const s=0.6548;
     const anchorX=360;
     const anchorY=550+(head.idleLift||0);
-    const lean=Math.max(-12,Math.min(12,(head.sideLean||0)+(head.idleLean||0)));
+    const lean=getEffectiveHeadLean();
 
     ctx.save();
     ctx.translate(anchorX,anchorY);
@@ -3388,8 +3755,8 @@ body.menu-open{overflow:hidden}
     ctx.beginPath();ctx.ellipse(155,164,40,33,0,0,Math.PI*2);ctx.fillStyle="#fff";ctx.fill();
     ctx.beginPath();ctx.ellipse(265,164,40,33,0,0,Math.PI*2);ctx.fill();
 
-    const pxOffset=(face.lookX||0)*2+(head.sideLean||0)*0.12;
-    const pyOffset=(face.lookY||0)*2;
+    const pxOffset=getEffectiveLookX()*2+getEffectiveHeadLean()*0.12;
+    const pyOffset=getEffectiveLookY()*2;
     ctx.beginPath();ctx.arc(155+pxOffset,164+pyOffset,7.5*(face.pupilScale||1),0,Math.PI*2);ctx.fillStyle="#000";ctx.fill();
     ctx.beginPath();ctx.arc(265+pxOffset,164+pyOffset,7.5*(face.pupilScale||1),0,Math.PI*2);ctx.fill();
 
@@ -3464,8 +3831,8 @@ body.menu-open{overflow:hidden}
     ctx.translate(x,y);
     ctx.scale(s,s);
 
-    const leftArmAngle=Math.max(0,Math.min(105,avatarState.leftArm.shoulder||0));
-    const rightArmAngle=Math.max(-105,Math.min(0,avatarState.rightArm.shoulder||0));
+    const leftArmAngle=getEffectiveLeftArmAngle();
+    const rightArmAngle=getEffectiveRightArmAngle();
 
     // Linker Arm + Hand als ein starres Cutout-Teil.
     ctx.save();
@@ -3533,7 +3900,7 @@ body.menu-open{overflow:hidden}
     const anchorX=360;
     // Kopf bewusst tiefer: Bart überlappt den Hoodie wie in der Live-Ansicht.
     const anchorY=550 + (head.idleLift||0);
-    const lean=Math.max(-12,Math.min(12,(head.sideLean||0)+(head.idleLean||0)));
+    const lean=getEffectiveHeadLean();
 
     ctx.save();
     ctx.translate(anchorX,anchorY);
@@ -3570,8 +3937,8 @@ body.menu-open{overflow:hidden}
     ctx.beginPath();ctx.ellipse(155,164,40,33,0,0,Math.PI*2);ctx.fillStyle="#fff";ctx.fill();
     ctx.beginPath();ctx.ellipse(265,164,40,33,0,0,Math.PI*2);ctx.fill();
 
-    const pxOffset=(face.lookX||0)*2 + (head.sideLean||0)*0.12;
-    const pyOffset=(face.lookY||0)*2;
+    const pxOffset=getEffectiveLookX()*2 + getEffectiveHeadLean()*0.12;
+    const pyOffset=getEffectiveLookY()*2;
     ctx.beginPath();ctx.arc(155+pxOffset,164+pyOffset,7.5*(face.pupilScale||1),0,Math.PI*2);ctx.fillStyle="#000";ctx.fill();
     ctx.beginPath();ctx.arc(265+pxOffset,164+pyOffset,7.5*(face.pupilScale||1),0,Math.PI*2);ctx.fill();
 
@@ -3832,6 +4199,7 @@ body.menu-open{overflow:hidden}
   bindEyeControls();
   bindTouchControls();
   bindAudioLipSync();
+  bindAvatarBrain();
   bindCharacterSelector();
   bindAvatarRecorder();
   bindMenu();
