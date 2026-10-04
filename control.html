@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#05090d">
+<title>PS AI MUSIC · Remote Control</title>
+<style>
+:root{--bg:#05090d;--card:#0b1219;--card2:#101923;--line:#1f3442;--text:#eef8ff;--muted:#8297a5;--cyan:#27c8ff;--pink:#ff62c3;--green:#62e2aa}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 50% 0,#0b2232 0,#05090d 38%,#030609 100%);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+button,input,select{font:inherit}
+button{touch-action:manipulation}
+.shell{width:min(760px,100%);margin:0 auto;padding:12px 12px 40px}
+.hero{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin:3px 0 12px}
+.hero h1{margin:2px 0 4px;font-size:21px}.hero p{margin:0;color:var(--muted);font-size:11px}.badge{padding:6px 9px;border:1px solid #28485c;border-radius:999px;background:#07151f;color:#bfeeff;font-size:9px;font-weight:900}
+.connect{padding:12px;border:1px solid var(--line);border-radius:17px;background:rgba(10,17,24,.92)}
+.connect-row{display:grid;grid-template-columns:1fr auto;gap:7px}.connect input{min-width:0;height:48px;border:1px solid #315166;border-radius:11px;background:#06121b;color:white;padding:9px 11px;text-transform:uppercase;font-weight:900;letter-spacing:.05em}
+.connect button,.stage-link{min-height:48px;border:1px solid #315166;border-radius:11px;background:#0a1a25;color:var(--text);padding:8px 12px;font-weight:900}
+.connect-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:9px}.status{font-size:10px;color:var(--muted)}.status.online{color:var(--green)}
+.stage-link{display:inline-grid;place-items:center;text-decoration:none;font-size:10px;min-height:36px}
+.grid{display:grid;gap:10px;margin-top:11px}.card{padding:12px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,rgba(255,255,255,.018),rgba(0,0,0,.10))}
+.card-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}.card-head strong{font-size:14px}.card-head span{font-size:9px;color:var(--muted)}
+.avatar-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.avatar-btn{min-height:66px;border:1px solid #294759;border-radius:13px;background:#091721;color:var(--text);font-weight:900;text-align:left;padding:10px}.avatar-btn span{display:block;font-size:20px;margin-bottom:3px}.avatar-btn small{display:block;color:var(--muted);font-size:9px;font-weight:700}
+.avatar-btn.active{border-color:var(--cyan);background:rgba(39,200,255,.10)}
+.answer-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.answer-btn{min-height:72px;border-radius:14px;font-size:20px;font-weight:1000;border:1px solid #31566e;background:#091b27;color:#fff}.answer-btn.no{border-color:#663441;background:#1a0c11}.answer-btn:active{transform:scale(.98)}
+.dance-main{display:grid;grid-template-columns:1fr auto;gap:8px}.dance-toggle{min-height:58px;border:1px solid #71405d;border-radius:13px;background:#190f18;color:#fff;font-weight:1000;font-size:16px}.dance-toggle.active{border-color:var(--pink);background:rgba(255,98,195,.14)}
+.reset-btn{min-height:58px;border:1px solid #54434a;border-radius:13px;background:#130e11;color:#ddd;padding:8px 13px;font-weight:900}
+.style-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}.style-btn{min-height:42px;border:1px solid #403444;border-radius:10px;background:#100d11;color:#d7cbd3;font-weight:850;font-size:10px}.style-btn.active{border-color:var(--pink);color:#fff;background:rgba(255,98,195,.10)}
+.range{display:grid;gap:5px;margin-top:10px}.range span{display:flex;justify-content:space-between;color:var(--muted);font-size:10px}.range strong{color:var(--cyan)}.range input{width:100%;accent-color:var(--cyan)}
+.motion-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.motion-btn{min-height:49px;border:1px solid #2e4656;border-radius:11px;background:#0a151d;color:#edf8ff;font-weight:900}.motion-btn.alt{border-color:#415236;background:#10170d}.motion-btn.danger{border-color:#59303b;background:#160a0e}
+.arm-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.walk-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.walk-btn{min-height:50px;border:1px solid #3e5932;border-radius:12px;background:#0d170b;color:#e9ffe0;font-weight:900}.walk-btn.active{border-color:#7ddf69;background:rgba(100,220,80,.10)}
+.log{margin-top:11px;padding:10px;border:1px solid #182833;border-radius:12px;background:#050b10;color:#78909e;font-size:9px;line-height:1.45;min-height:38px}
+@media(min-width:650px){.grid{grid-template-columns:1fr 1fr}.card.wide{grid-column:1/-1}.avatar-grid{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+<main class="shell">
+  <div class="hero">
+    <div>
+      <span style="font-size:9px;color:#6e8999;font-weight:900;letter-spacing:.12em">PS AI MUSIC</span>
+      <h1>🎛️ Live Remote Control</h1>
+      <p>Handy-Fernsteuerung für deine Tablet-Bühne</p>
+    </div>
+    <span class="badge">REMOTE v1</span>
+  </div>
+
+  <section class="connect">
+    <div class="connect-row">
+      <input id="room" maxlength="24" placeholder="PS-ROOM" aria-label="Raumcode">
+      <button id="connect" type="button">Verbinden</button>
+    </div>
+    <div class="connect-meta">
+      <span id="connectionStatus" class="status">nicht verbunden</span>
+      <span id="stageStatus" class="status">Tablet-Bühne: unbekannt</span>
+      <a id="stageLink" class="stage-link" href="stage.html" target="_blank" rel="noopener">🎬 Bühne öffnen</a>
+    </div>
+  </section>
+
+  <div class="grid">
+    <section class="card wide">
+      <div class="card-head"><strong>👤 Avatar</strong><span id="activeAvatar">PS Avatar</span></div>
+      <div class="avatar-grid">
+        <button class="avatar-btn active" type="button" data-avatar="human"><span>🧔</span>PS Avatar<small>Hauptfigur</small></button>
+        <button class="avatar-btn" type="button" data-avatar="bear"><span>🐻</span>PS Bär<small>Maskottchen</small></button>
+        <button class="avatar-btn" type="button" data-avatar="gull"><span>🐦</span>BreuerBeatz<small>Special</small></button>
+        <button class="avatar-btn" type="button" data-avatar="mask"><span>🎭</span>Mask Avatar<small>Dark</small></button>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head"><strong>🔊 Live Antworten</strong><span>Tablet spielt MP3</span></div>
+      <div class="answer-grid">
+        <button class="answer-btn" type="button" data-answer="ja" data-label="Ja">JA</button>
+        <button class="answer-btn no" type="button" data-answer="nein" data-label="Nein">NEIN</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head"><strong>💃 Dance</strong><span id="danceState">AUS</span></div>
+      <div class="dance-main">
+        <button id="danceToggle" class="dance-toggle" type="button">💃 Tanzen</button>
+        <button id="reset" class="reset-btn" type="button">↺ Reset</button>
+      </div>
+      <div class="style-grid">
+        <button class="style-btn active" type="button" data-style="groove">😎 Groove</button>
+        <button class="style-btn" type="button" data-style="bounce">🔥 Bounce</button>
+        <button class="style-btn" type="button" data-style="party">🎉 Party</button>
+      </div>
+      <label class="range"><span>Intensität <strong id="intensityValue">70%</strong></span><input id="intensity" type="range" min="30" max="100" value="70" step="5"></label>
+      <label class="range"><span>Tempo <strong id="speedValue">100%</strong></span><input id="speed" type="range" min="60" max="160" value="100" step="5"></label>
+    </section>
+
+    <section class="card">
+      <div class="card-head"><strong>🙂 Kopf</strong><span>Live</span></div>
+      <div class="motion-grid">
+        <button class="motion-btn" type="button" data-head="-9">↙ Links</button>
+        <button class="motion-btn" type="button" data-head="0">● Mitte</button>
+        <button class="motion-btn" type="button" data-head="9">Rechts ↘</button>
+      </div>
+      <div class="arm-row">
+        <button class="motion-btn alt" type="button" data-arms="up">🙌 Arme hoch</button>
+        <button class="motion-btn" type="button" data-arms="down">👇 Arme runter</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head"><strong>🚶 Bewegung</strong><span id="walkState">AUS</span></div>
+      <div class="walk-row">
+        <button id="walkToggle" class="walk-btn" type="button">🚶 Gehen</button>
+        <button class="motion-btn danger" type="button" data-legs="neutral">🦵 Beine neutral</button>
+      </div>
+    </section>
+  </div>
+
+  <div id="log" class="log">Raum verbinden und dann die Tablet-Bühne mit demselben Raumcode öffnen.</div>
+</main>
+
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/+esm";
+
+const SUPABASE_URL="https://azrcyhyrhtinxqnzlrmf.supabase.co";
+const SUPABASE_KEY="sb_publishable_2vr7nbI55Ww_5KwtHAvbMA_bmteR8Sl";
+const supabase=createClient(SUPABASE_URL,SUPABASE_KEY);
+
+const roomEl=document.getElementById("room");
+const connectBtn=document.getElementById("connect");
+const connEl=document.getElementById("connectionStatus");
+const stageEl=document.getElementById("stageStatus");
+const stageLink=document.getElementById("stageLink");
+const logEl=document.getElementById("log");
+const danceBtn=document.getElementById("danceToggle");
+const danceState=document.getElementById("danceState");
+const walkBtn=document.getElementById("walkToggle");
+const walkState=document.getElementById("walkState");
+const intensity=document.getElementById("intensity");
+const speed=document.getElementById("speed");
+let channel=null;
+let room="";
+let connected=false;
+let dance=false;
+let walk=false;
+let danceStyle="groove";
+let lastStageSeen=0;
+let lastStageSnapshot=null;
+
+function cleanRoom(value){return String(value||"").toUpperCase().replace(/[^A-Z0-9_-]/g,"").slice(0,24)}
+function generateRoom(){
+  const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789",bytes=new Uint8Array(8);
+  crypto.getRandomValues(bytes);
+  let out="PS-";for(const b of bytes)out+=chars[b%chars.length];return out;
+}
+function log(text){logEl.textContent=text}
+function updateStageLink(){stageLink.href="stage.html?room="+encodeURIComponent(cleanRoom(roomEl.value)||room||"")}
+function setConnection(text,ok=false){connEl.textContent=text;connEl.classList.toggle("online",ok)}
+function setStageOnline(snapshot){
+  lastStageSeen=Date.now();lastStageSnapshot=snapshot||{};
+  stageEl.textContent="Tablet-Bühne: ● ONLINE";
+  stageEl.classList.add("online");
+  if(snapshot?.character){
+    document.getElementById("activeAvatar").textContent=
+      snapshot.character==="bear"?"PS Bär":snapshot.character==="gull"?"BreuerBeatz":snapshot.character==="mask"?"Mask Avatar":"PS Avatar";
+    document.querySelectorAll("[data-avatar]").forEach(b=>b.classList.toggle("active",b.dataset.avatar===snapshot.character));
+  }
+}
+async function sendCommand(payload){
+  if(!channel||!connected){log("⚠️ Erst mit einem Raum verbinden.");return false}
+  const result=await channel.send({type:"broadcast",event:"command",payload});
+  log("Gesendet: "+(payload.action||"Befehl"));
+  return result==="ok"||result===undefined;
+}
+async function connect(value){
+  const next=cleanRoom(value)||generateRoom();
+  room=next;roomEl.value=next;localStorage.setItem("ps-avatar-remote-room",next);
+  history.replaceState(null,"",location.pathname+"?room="+encodeURIComponent(next));updateStageLink();
+
+  if(channel){try{await supabase.removeChannel(channel)}catch(_){} channel=null}
+  connected=false;setConnection("verbinde …");stageEl.textContent="Tablet-Bühne: suche …";stageEl.classList.remove("online");
+
+  channel=supabase
+    .channel("ps-avatar:"+next,{config:{broadcast:{ack:true,self:false}}})
+    .on("broadcast",{event:"stage_status"},({payload})=>setStageOnline(payload||{}));
+
+  channel.subscribe(async status=>{
+    if(status==="SUBSCRIBED"){
+      connected=true;setConnection("● verbunden · "+next,true);log("Fernbedienung bereit. Öffne die Bühne mit demselben Raumcode.");
+      await channel.send({type:"broadcast",event:"ping",payload:{from:"control",at:Date.now()}});
+      await sendCommand({action:"ping"});
+    }else if(status==="CHANNEL_ERROR"||status==="TIMED_OUT"){
+      connected=false;setConnection("Verbindung fehlgeschlagen");
+    }else if(status==="CLOSED"){
+      connected=false;setConnection("Verbindung getrennt");
+    }
+  });
+}
+
+connectBtn.addEventListener("click",()=>connect(roomEl.value));
+roomEl.addEventListener("input",updateStageLink);
+roomEl.addEventListener("keydown",e=>{if(e.key==="Enter")connect(roomEl.value)});
+
+document.querySelectorAll("[data-avatar]").forEach(btn=>btn.addEventListener("click",async()=>{
+  const character=btn.dataset.avatar;
+  await sendCommand({action:"avatar",character});
+  document.querySelectorAll("[data-avatar]").forEach(b=>b.classList.toggle("active",b===btn));
+  document.getElementById("activeAvatar").textContent=btn.childNodes[2]?.textContent?.trim()||btn.textContent.trim();
+}));
+
+document.querySelectorAll("[data-answer]").forEach(btn=>btn.addEventListener("click",()=>{
+  sendCommand({action:"answer",id:btn.dataset.answer,label:btn.dataset.label});
+}));
+
+danceBtn.addEventListener("click",()=>{
+  dance=!dance;if(dance)walk=false;
+  danceBtn.classList.toggle("active",dance);danceBtn.textContent=dance?"⏸ Tanz stoppen":"💃 Tanzen";danceState.textContent=dance?"AN":"AUS";
+  walkBtn.classList.toggle("active",walk);walkState.textContent=walk?"AN":"AUS";
+  sendCommand({action:"dance",enabled:dance,style:danceStyle,intensity:Number(intensity.value)/100,speed:Number(speed.value)/100});
+});
+document.querySelectorAll("[data-style]").forEach(btn=>btn.addEventListener("click",()=>{
+  danceStyle=btn.dataset.style;document.querySelectorAll("[data-style]").forEach(b=>b.classList.toggle("active",b===btn));
+  if(dance)sendCommand({action:"dance",enabled:true,style:danceStyle,intensity:Number(intensity.value)/100,speed:Number(speed.value)/100});
+}));
+intensity.addEventListener("input",()=>{
+  document.getElementById("intensityValue").textContent=intensity.value+"%";
+  if(dance)sendCommand({action:"dance",enabled:true,style:danceStyle,intensity:Number(intensity.value)/100,speed:Number(speed.value)/100});
+});
+speed.addEventListener("input",()=>{
+  document.getElementById("speedValue").textContent=speed.value+"%";
+  if(dance)sendCommand({action:"dance",enabled:true,style:danceStyle,intensity:Number(intensity.value)/100,speed:Number(speed.value)/100});
+});
+document.querySelectorAll("[data-head]").forEach(btn=>btn.addEventListener("click",()=>sendCommand({action:"head",lean:Number(btn.dataset.head),tilt:0})));
+document.querySelectorAll("[data-arms]").forEach(btn=>btn.addEventListener("click",()=>{
+  if(btn.dataset.arms==="up")sendCommand({action:"arms",left:78,right:-78});
+  else sendCommand({action:"arms",left:0,right:0});
+}));
+walkBtn.addEventListener("click",()=>{
+  walk=!walk;if(walk)dance=false;
+  walkBtn.classList.toggle("active",walk);walkState.textContent=walk?"AN":"AUS";
+  danceBtn.classList.toggle("active",dance);danceBtn.textContent=dance?"⏸ Tanz stoppen":"💃 Tanzen";danceState.textContent=dance?"AN":"AUS";
+  sendCommand({action:"walk",enabled:walk,speed:1});
+});
+document.querySelector("[data-legs='neutral']").addEventListener("click",()=>sendCommand({action:"legs",left:0,right:0}));
+document.getElementById("reset").addEventListener("click",()=>{
+  dance=false;walk=false;danceBtn.classList.remove("active");danceBtn.textContent="💃 Tanzen";danceState.textContent="AUS";
+  walkBtn.classList.remove("active");walkState.textContent="AUS";sendCommand({action:"reset"});
+});
+
+setInterval(()=>{
+  if(lastStageSeen && Date.now()-lastStageSeen>9000){
+    stageEl.textContent="Tablet-Bühne: ○ keine Rückmeldung";stageEl.classList.remove("online");
+  }
+  if(channel&&connected)channel.send({type:"broadcast",event:"ping",payload:{from:"control",at:Date.now()}});
+},4000);
+
+const params=new URLSearchParams(location.search);
+const initial=cleanRoom(params.get("room"))||cleanRoom(localStorage.getItem("ps-avatar-remote-room"))||generateRoom();
+roomEl.value=initial;updateStageLink();connect(initial);
+</script>
+</body>
+</html>
