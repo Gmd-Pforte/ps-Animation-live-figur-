@@ -1,7 +1,7 @@
 (() => {
   "use strict";
 
-  const VERSION = "0.01";
+  const VERSION = "0.02";
 
   const avatarState = {
     version: VERSION,
@@ -24,7 +24,8 @@
 
     head: {
       rotation: 0,
-      tilt: 0
+      tilt: 0,
+      scale: 1
     },
 
     body: {
@@ -68,7 +69,15 @@
     frameCount: document.getElementById("frameCount"),
     fpsValue: document.getElementById("fpsValue"),
     heartbeatText: document.getElementById("heartbeatText"),
-    versionValue: document.getElementById("versionValue")
+    versionValue: document.getElementById("versionValue"),
+    headPart: document.getElementById("headPart"),
+    headTilt: document.getElementById("headTilt"),
+    headTurn: document.getElementById("headTurn"),
+    headScale: document.getElementById("headScale"),
+    headTiltValue: document.getElementById("headTiltValue"),
+    headTurnValue: document.getElementById("headTurnValue"),
+    headScaleValue: document.getElementById("headScaleValue"),
+    headReset: document.getElementById("headReset")
   };
 
   function registerPart(name, element) {
@@ -98,8 +107,27 @@
   }
 
   function renderAvatar() {
-    // Ab Schritt 2 werden hier Kopf und später Körperteile gerendert.
-    // Die Funktion bleibt dauerhaft der zentrale Render-Einstiegspunkt.
+    const head = avatarState.head;
+
+    if (ui.headPart) {
+      const squash = 1 - Math.min(Math.abs(head.rotation) / 220, 0.055);
+      ui.headPart.style.transform =
+        "translateX(" + head.rotation + "px) " +
+        "rotate(" + head.tilt + "deg) " +
+        "scale(" + (head.scale * squash) + "," + head.scale + ")";
+    }
+
+    if (ui.headTiltValue) {
+      ui.headTiltValue.textContent = Math.round(head.tilt) + "°";
+    }
+
+    if (ui.headTurnValue) {
+      ui.headTurnValue.textContent = Math.round(head.rotation) + "°";
+    }
+
+    if (ui.headScaleValue) {
+      ui.headScaleValue.textContent = Math.round(head.scale * 100) + "%";
+    }
   }
 
   let lastFpsTime = performance.now();
@@ -134,6 +162,45 @@
     requestAnimationFrame(engineLoop);
   }
 
+  function bindHeadControls() {
+    if (ui.headTilt) {
+      ui.headTilt.addEventListener("input", () => {
+        avatarState.head.tilt = Number(ui.headTilt.value);
+        renderAvatar();
+      });
+    }
+
+    if (ui.headTurn) {
+      ui.headTurn.addEventListener("input", () => {
+        avatarState.head.rotation = Number(ui.headTurn.value);
+        renderAvatar();
+      });
+    }
+
+    if (ui.headScale) {
+      ui.headScale.addEventListener("input", () => {
+        avatarState.head.scale = Number(ui.headScale.value) / 100;
+        renderAvatar();
+      });
+    }
+
+    if (ui.headReset) {
+      ui.headReset.addEventListener("click", () => {
+        avatarState.head.rotation = 0;
+        avatarState.head.tilt = 0;
+        avatarState.head.scale = 1;
+
+        ui.headTilt.value = 0;
+        ui.headTurn.value = 0;
+        ui.headScale.value = 100;
+
+        renderAvatar();
+      });
+    }
+
+    registerPart("head", ui.headPart);
+  }
+
   function startEngine() {
     avatarState.engine.running = true;
 
@@ -144,6 +211,9 @@
 
     requestAnimationFrame(engineLoop);
   }
+
+  bindHeadControls();
+  renderAvatar();
 
   window.PSAvatarEngine = {
     state: avatarState,
