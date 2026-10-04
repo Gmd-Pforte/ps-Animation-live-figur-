@@ -1520,6 +1520,18 @@ body.menu-open{overflow:hidden}
 }
 
 
+
+/* v0.36.0: direkte Mund-Feinposition */
+.mouth-position-card{
+  margin-top:8px;padding:11px 13px;border:1px solid rgba(39,200,255,.22);
+  border-radius:14px;background:linear-gradient(180deg,rgba(39,200,255,.055),rgba(0,0,0,.13));
+}
+.mouth-position-head,.mouth-position-labels{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.mouth-position-head span{color:var(--accent);font-weight:900;font-variant-numeric:tabular-nums}
+#mouthPositionSlider{width:100%;margin:10px 0 7px;accent-color:var(--accent)}
+.mouth-position-labels{font-size:10px;color:var(--muted)}
+#mouthPositionReset{border:1px solid rgba(39,200,255,.28);background:var(--accent-soft);color:var(--text);border-radius:9px;padding:6px 10px;font-weight:800}
+
 /* v0.34.0: Recorder-Format */
 .record-format-choice{
   display:grid;
@@ -2240,6 +2252,15 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
           <span class="live-answer-loading">Antworten werden geladen …</span>
         </div>
         <div id="liveAnswerStatus" class="live-answer-status">Bereit · Antwort antippen</div>
+      </div>
+
+      <div class="mouth-position-card app-tab-section" data-app-view="studio">
+        <div class="mouth-position-head">
+          <strong>👄 Mundposition</strong>
+          <span id="mouthPositionValue">+4</span>
+        </div>
+        <input id="mouthPositionSlider" type="range" min="-20" max="24" step="1" value="4" aria-label="Mund hoch oder runter">
+        <div class="mouth-position-labels"><span>hoch</span><button id="mouthPositionReset" type="button">↺ Mitte</button><span>runter</span></div>
       </div>
     </section>
 
@@ -3338,6 +3359,53 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
     applyOverlayMode();
   }
 
+
+  // --- PS Mund-Feinposition v1 ------------------------------------------
+  const MOUTH_POSITION_STORAGE_KEY="ps-avatar-mouth-position-v1";
+  let mouthPositionY=4;
+
+  function loadMouthPosition(){
+    try{
+      const saved=Number(localStorage.getItem(MOUTH_POSITION_STORAGE_KEY));
+      if(Number.isFinite(saved)) mouthPositionY=Math.max(-20,Math.min(24,saved));
+    }catch(_){}
+  }
+
+  function applyMouthPosition(){
+    if(avatarState.character!=="human") return;
+    const mouth=ui.headPart?.querySelector("#mouthModule");
+    if(!mouth) return;
+    // Reines translate – unabhängig von Lip-Sync, Mundform und Designer.
+    mouth.setAttribute("transform","translate(0 "+mouthPositionY+")");
+  }
+
+  function syncMouthPositionControl(){
+    const slider=document.getElementById("mouthPositionSlider");
+    const value=document.getElementById("mouthPositionValue");
+    if(slider) slider.value=String(mouthPositionY);
+    if(value) value.textContent=(mouthPositionY>0?"+":"")+mouthPositionY;
+  }
+
+  function setMouthPosition(value){
+    mouthPositionY=Math.max(-20,Math.min(24,Number(value)||0));
+    try{localStorage.setItem(MOUTH_POSITION_STORAGE_KEY,String(mouthPositionY));}catch(_){}
+    syncMouthPositionControl();
+    applyMouthPosition();
+  }
+
+  function bindMouthPositionControl(){
+    loadMouthPosition();
+    syncMouthPositionControl();
+    const slider=document.getElementById("mouthPositionSlider");
+    const reset=document.getElementById("mouthPositionReset");
+    if(slider){
+      slider.addEventListener("input",()=>setMouthPosition(slider.value));
+      slider.addEventListener("change",()=>setMouthPosition(slider.value));
+    }
+    if(reset) reset.addEventListener("click",()=>setMouthPosition(4));
+    applyMouthPosition();
+  }
+
   // --- Avatar Designer v1 -----------------------------------------------
   const DESIGNER_STORAGE_KEY="ps-avatar-designer-v3-image-head";
   const DESIGNER_DEFAULTS={
@@ -3416,15 +3484,9 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
       ui.psHumanBodySvg.style.transformOrigin="50% 100%";
       ui.psHumanBodySvg.style.transform="scaleX("+(d.bodyWidth/100)+")";
     }
-    // Originalbild-Kopf bleibt unverändert. Keine Gesichts-/Cap-/Bart-Skalierung.
-    // Nur der animierte Mund darf im Designer fein hoch/runter verschoben werden.
-    const mouthModule=ui.headPart?.querySelector("#mouthModule")||null;
-    if(mouthModule){
-      setSvgTransform(
-        mouthModule,
-        svgAround(210,239,d.mouthSize/100,d.mouthSize/100,0,d.mouthY)
-      );
-    }
+    // Originalbild-Kopf bleibt unverändert.
+    // Mundposition wird separat und direkt gesetzt, damit sie garantiert sichtbar reagiert.
+    applyMouthPosition();
   }
   function applyCurrentAvatarDesigner(){
     const d=avatarState.designer||DESIGNER_DEFAULTS;
@@ -5234,6 +5296,8 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
         );
       }
     }
+
+    applyMouthPosition();
 
     if (ui.eyeTouchValue) ui.eyeTouchValue.textContent = Math.round(face.lookX) + " / " + Math.round(face.lookY);
     if (ui.headTouchValue) ui.headTouchValue.textContent = Math.round(head.sideLean || 0) + "° / " + Math.round(head.tilt) + "°";
@@ -8579,6 +8643,7 @@ body.remote-stage-mode.overlay-live.overlay-bubble-off .remote-speech-bubble{
   bindAvatarTalk();
   bindAnswerLibrary();
   bindAvatarDesigner();
+  bindMouthPositionControl();
   bindBackgroundControls();
   applyOverlayMode();
   bindCharacterSelector();
