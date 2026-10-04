@@ -516,6 +516,167 @@ body.menu-open{overflow:hidden}
   .avatar-stage{min-height:62vh}
 }
 
+
+/* Schritt 9: Kopf und Torso als getrennte Cutout-Teile */
+.avatar-stage{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:clamp(600px,74vh,920px);
+  padding:18px 8px 46px;
+}
+
+.avatar-figure{
+  position:relative;
+  width:min(640px,96vw);
+  height:min(720px,68vh);
+  min-height:560px;
+  z-index:2;
+}
+
+.avatar-torso{
+  position:absolute;
+  left:50%;
+  bottom:20px;
+  transform:translateX(-50%);
+  width:330px;
+  height:335px;
+  z-index:1;
+}
+
+.torso-body{
+  position:absolute;
+  left:50%;
+  bottom:0;
+  transform:translateX(-50%);
+  width:330px;
+  height:285px;
+  border:7px solid #070a0e;
+  border-radius:118px 118px 52px 52px;
+  background:linear-gradient(180deg,#171b21 0%,#0a0d11 66%,#07090c 100%);
+  overflow:hidden;
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.025),0 18px 28px rgba(0,0,0,.25);
+}
+
+.torso-shirt{
+  position:absolute;
+  left:50%;
+  top:52px;
+  transform:translateX(-50%);
+  width:136px;
+  height:250px;
+  border-radius:36px 36px 0 0;
+  background:#070910;
+  border-left:4px solid #10151b;
+  border-right:4px solid #10151b;
+}
+
+.torso-neck{
+  position:absolute;
+  left:50%;
+  top:16px;
+  transform:translateX(-50%);
+  width:72px;
+  height:74px;
+  border-radius:25px 25px 31px 31px;
+  background:#efad73;
+  border:5px solid #130f0c;
+  z-index:3;
+}
+
+.torso-hood{
+  position:absolute;
+  top:45px;
+  width:120px;
+  height:112px;
+  border:8px solid #070a0e;
+  background:#11161c;
+  z-index:4;
+}
+.torso-hood-left{
+  left:18px;
+  border-radius:90px 34px 70px 32px;
+  transform:rotate(-17deg);
+}
+.torso-hood-right{
+  right:18px;
+  border-radius:34px 90px 32px 70px;
+  transform:rotate(17deg);
+}
+
+.torso-chain{
+  position:absolute;
+  left:50%;
+  top:38px;
+  width:126px;
+  height:104px;
+  transform:translateX(-50%);
+  border:7px double #aeb7c1;
+  border-top:0;
+  border-radius:0 0 70px 70px;
+  opacity:.78;
+}
+
+.torso-seam{
+  position:absolute;
+  top:72px;
+  bottom:12px;
+  width:3px;
+  background:rgba(255,255,255,.035);
+}
+.torso-seam-left{left:70px;transform:rotate(5deg)}
+.torso-seam-right{right:70px;transform:rotate(-5deg)}
+
+.avatar-head-module{
+  position:absolute!important;
+  left:50%!important;
+  bottom:235px!important;
+  width:min(455px,76vw)!important;
+  z-index:5!important;
+  transform-origin:50% 88%!important;
+  filter:drop-shadow(0 13px 22px rgba(0,0,0,.30))!important;
+}
+
+.avatar-head-module svg{
+  width:100%;
+  height:auto;
+  display:block;
+  overflow:visible;
+}
+
+#headMotionGroup{
+  transform:none;
+  transform-origin:50% 80%;
+}
+
+@media(max-width:760px){
+  .avatar-stage{
+    min-height:66vh;
+    padding-bottom:36px;
+  }
+  .avatar-figure{
+    width:100%;
+    height:58vh;
+    min-height:500px;
+  }
+  .avatar-torso{
+    width:270px;
+    height:282px;
+    bottom:12px;
+  }
+  .torso-body{
+    width:270px;
+    height:240px;
+  }
+  .torso-shirt{width:112px;height:215px}
+  .torso-neck{top:8px;width:62px;height:64px}
+  .torso-hood{width:100px;height:94px;top:37px}
+  .avatar-head-module{
+    bottom:192px!important;
+    width:min(390px,78vw)!important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -532,13 +693,26 @@ body.menu-open{overflow:hidden}
       <div id="avatarStage" class="avatar-stage" aria-label="Avatar Entwicklungsfläche">
         <div class="stage-grid"></div>
 
+        <div id="avatarFigure" class="avatar-figure" aria-label="PS AI MUSIC Figur">
+          <div id="torsoPart" class="avatar-torso" aria-label="Avatar Torso">
+            <div class="torso-neck" id="neckPart"></div>
+            <div class="torso-hood torso-hood-left"></div>
+            <div class="torso-hood torso-hood-right"></div>
+            <div class="torso-body">
+              <div class="torso-shirt"></div>
+              <div class="torso-chain"></div>
+              <div class="torso-seam torso-seam-left"></div>
+              <div class="torso-seam torso-seam-right"></div>
+            </div>
+          </div>
+
         <div id="headPart" class="avatar-head-module" aria-label="Avatar Kopf">
           <svg viewBox="0 0 1254 1254" role="img" aria-label="PS AI MUSIC Cartoon Kopf">
             <defs>
               <clipPath id="eyeClipLeft"><ellipse cx="520" cy="500" rx="88" ry="72"/></clipPath>
               <clipPath id="eyeClipRight"><ellipse cx="735" cy="500" rx="88" ry="72"/></clipPath>
               <clipPath id="portraitClip">
-                <ellipse cx="627" cy="590" rx="485" ry="525"/>
+                <ellipse cx="627" cy="505" rx="405" ry="465"/>
               </clipPath>
             </defs>
 
@@ -572,9 +746,10 @@ body.menu-open{overflow:hidden}
             </g>
           </svg>
         </div>
+        </div>
 
         <div class="stage-caption">
-          <strong>Schritt 8:</strong> Natürliche Kopfbewegung</div>
+          <strong>Schritt 9:</strong> Kopf + Torso getrennt</div>
       </div>
     </section>
 
@@ -602,7 +777,7 @@ body.menu-open{overflow:hidden}
 
           <section class="touch-card">
             <div class="touch-card-head">
-              <strong>🧢 Kopf</strong>
+              <strong>🧢 Kopf am Hals</strong>
               <span id="headTouchValue">0° / 0°</span>
             </div>
             <div id="headPad" class="touch-pad" aria-label="Kopf steuern">
@@ -732,7 +907,7 @@ body.menu-open{overflow:hidden}
           <div class="progress-row done"><span>Kopf</span><strong>✓</strong></div>
           <div class="progress-row done"><span>Augen</span><strong>✓</strong></div>
           <div class="progress-row done"><span>Mund</span><strong>✓</strong></div>
-          <div class="progress-row"><span>Körper</span><strong>○</strong></div>
+          <div class="progress-row done"><span>Torso</span><strong>✓</strong></div>
           <div class="progress-row"><span>Arme</span><strong>○</strong></div>
           <div class="progress-row"><span>Beine</span><strong>○</strong></div>
           <div class="progress-row"><span>Idle / Leben</span><strong>○</strong></div>
@@ -740,7 +915,7 @@ body.menu-open{overflow:hidden}
       </article>
         </section>
 
-        <div class="menu-version">Version <strong>0.08</strong></div>
+        <div class="menu-version">Version <strong>0.09</strong></div>
       </div>
     </aside>
 
@@ -750,7 +925,7 @@ body.menu-open{overflow:hidden}
 (() => {
   "use strict";
 
-  const VERSION = "0.08";
+  const VERSION = "0.09";
 
   const avatarState = {
     version: VERSION,
@@ -831,6 +1006,9 @@ body.menu-open{overflow:hidden}
     versionValue: document.getElementById("versionValue"),
     headPart: document.getElementById("headPart"),
     headMotionGroup: document.getElementById("headMotionGroup"),
+    avatarFigure: document.getElementById("avatarFigure"),
+    torsoPart: document.getElementById("torsoPart"),
+    neckPart: document.getElementById("neckPart"),
     headTilt: document.getElementById("headTilt"),
     headTurn: document.getElementById("headTurn"),
     headScale: document.getElementById("headScale"),
@@ -916,31 +1094,24 @@ body.menu-open{overflow:hidden}
   function renderAvatar() {
     const head = avatarState.head;
 
-    // Der äußere Avatar-Rahmen bleibt immer fest.
-    if (ui.headPart) {
-      ui.headPart.style.transform = "none";
-    }
-
-    // Nur der eigentliche Kopf-Inhalt bewegt sich subtil im festen Rahmen.
+    // Cutout-Prinzip: Torso bleibt fest, der Kopf ist ein eigenes Teil.
     const manualTurn = Math.max(-6, Math.min(6, head.rotation));
     const manualTilt = Math.max(-5, Math.min(5, head.tilt));
     const turn = manualTurn + (head.idleTurn || 0);
     const tilt = manualTilt + (head.idleTilt || 0);
     const lift = head.idleLift || 0;
 
-    if (ui.headMotionGroup) {
-      const x = turn * 2.2;
-      const scaleX = 1 - Math.abs(turn) * 0.0035;
-      const scaleY = 1 + Math.abs(turn) * 0.0014;
-      const skew = -turn * 0.42;
+    if (ui.headPart) {
+      const x = turn * 1.35;
+      const y = lift;
+      ui.headPart.style.transform =
+        "translateX(-50%) translate(" + x.toFixed(2) + "px," + y.toFixed(2) + "px) " +
+        "rotate(" + tilt.toFixed(2) + "deg) scale(" + head.scale.toFixed(3) + ")";
+    }
 
-      ui.headMotionGroup.setAttribute(
-        "transform",
-        "translate(" + x.toFixed(2) + " " + lift.toFixed(2) + ") " +
-        "rotate(" + tilt.toFixed(2) + " 627 770) " +
-        "skewX(" + skew.toFixed(2) + ") " +
-        "scale(" + (head.scale * scaleX).toFixed(4) + " " + (head.scale * scaleY).toFixed(4) + ")"
-      );
+    // Inneres Bild bleibt unverformt. Keine Karten-/Skew-Bewegung mehr.
+    if (ui.headMotionGroup) {
+      ui.headMotionGroup.removeAttribute("transform");
     }
 
     if (ui.headTiltValue) {
@@ -959,9 +1130,8 @@ body.menu-open{overflow:hidden}
 
     if (ui.pupilLeft && ui.pupilRight) {
       const pupilRadius = 6 * face.pupilScale;
-      const headEyeOffset = (head.rotation + (head.idleTurn || 0)) * 1.3;
-      ui.pupilLeft.setAttribute("cx", 520 + face.lookX * 4 + headEyeOffset);
-      ui.pupilRight.setAttribute("cx", 735 + face.lookX * 4 + headEyeOffset);
+      ui.pupilLeft.setAttribute("cx", 520 + face.lookX * 4);
+      ui.pupilRight.setAttribute("cx", 735 + face.lookX * 4);
       ui.pupilLeft.setAttribute("cy", 500 + face.lookY * 4);
       ui.pupilRight.setAttribute("cy", 500 + face.lookY * 4);
       ui.pupilLeft.setAttribute("r", 16 * face.pupilScale);
@@ -991,7 +1161,7 @@ body.menu-open{overflow:hidden}
     if (ui.pupilScaleValue) ui.pupilScaleValue.textContent = Math.round(face.pupilScale * 100) + "%";
 
     if (ui.mouthHole && ui.mouthLine) {
-      const cx = 627 + (head.rotation + (head.idleTurn || 0)) * 1.1;
+      const cx = 627;
       const baseY = 728;
       const widthScale = face.mouthWidth / 100;
       const halfWidth = 48 * widthScale;
@@ -1076,14 +1246,14 @@ body.menu-open{overflow:hidden}
 
     const t = now * 0.001;
     const targetTurn =
-      Math.sin(t * 0.72) * 0.42 +
-      Math.sin(t * 0.23 + 1.1) * 0.18;
+      Math.sin(t * 0.72) * 0.20 +
+      Math.sin(t * 0.23 + 1.1) * 0.08;
 
     const targetTilt =
-      Math.sin(t * 0.58 + 0.8) * 0.34 +
-      Math.sin(t * 0.19) * 0.12;
+      Math.sin(t * 0.58 + 0.8) * 0.18 +
+      Math.sin(t * 0.19) * 0.06;
 
-    const targetLift = Math.sin(t * 1.05) * 1.6;
+    const targetLift = Math.sin(t * 1.05) * 0.7;
 
     const ease = 0.055;
     head.idleTurn += ((targetTurn * blend) - head.idleTurn) * ease;
