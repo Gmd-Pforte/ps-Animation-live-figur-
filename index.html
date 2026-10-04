@@ -677,6 +677,70 @@ body.menu-open{overflow:hidden}
   }
 }
 
+
+/* Schritt 10: flache Cutout-Mechanik – ohne Hals, Kreis oder Bildkarte */
+.avatar-stage{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:clamp(600px,74vh,900px);
+  padding:14px 8px 42px;
+}
+
+.avatar-figure{
+  position:relative;
+  width:min(620px,96vw);
+  height:min(690px,68vh);
+  min-height:545px;
+  z-index:2;
+}
+
+.avatar-torso{
+  position:absolute;
+  left:50%;
+  bottom:12px;
+  transform:translateX(-50%);
+  width:360px;
+  height:245px;
+  z-index:1;
+}
+
+.avatar-torso svg{
+  display:block;
+  width:100%;
+  height:100%;
+  overflow:visible;
+}
+
+.avatar-head-module{
+  position:absolute!important;
+  left:50%!important;
+  bottom:176px!important;
+  width:min(445px,76vw)!important;
+  z-index:5!important;
+  transform-origin:50% 88%!important;
+  filter:drop-shadow(0 13px 21px rgba(0,0,0,.24))!important;
+}
+
+.avatar-head-module svg{
+  width:100%;
+  height:auto;
+  display:block;
+  overflow:visible;
+}
+
+#headMotionGroup{
+  transform:none;
+  transform-origin:210px 326px;
+}
+
+@media(max-width:760px){
+  .avatar-stage{min-height:64vh;padding-bottom:32px}
+  .avatar-figure{height:57vh;min-height:500px}
+  .avatar-torso{width:300px;height:205px;bottom:8px}
+  .avatar-head-module{bottom:145px!important;width:min(390px,78vw)!important}
+}
+
 </style>
 </head>
 <body>
@@ -693,63 +757,153 @@ body.menu-open{overflow:hidden}
       <div id="avatarStage" class="avatar-stage" aria-label="Avatar Entwicklungsfläche">
         <div class="stage-grid"></div>
 
-        <div id="avatarFigure" class="avatar-figure" aria-label="PS AI MUSIC Figur">
+        <div id="avatarFigure" class="avatar-figure" aria-label="PS AI MUSIC Cutout Figur">
+
+          <!-- Torso: eigenes, festes Cutout-Teil. Kein Hals. -->
           <div id="torsoPart" class="avatar-torso" aria-label="Avatar Torso">
-            <div class="torso-neck" id="neckPart"></div>
-            <div class="torso-hood torso-hood-left"></div>
-            <div class="torso-hood torso-hood-right"></div>
-            <div class="torso-body">
-              <div class="torso-shirt"></div>
-              <div class="torso-chain"></div>
-              <div class="torso-seam torso-seam-left"></div>
-              <div class="torso-seam torso-seam-right"></div>
-            </div>
+            <svg viewBox="0 0 420 280" role="img" aria-label="Schwarzer Hoodie Torso">
+              <path d="M72 270
+                       Q54 242 58 165
+                       Q61 101 110 68
+                       Q145 44 182 39
+                       Q210 35 238 39
+                       Q275 44 310 68
+                       Q359 101 362 165
+                       Q366 242 348 270 Z"
+                    fill="#11161d" stroke="#05080c" stroke-width="10"/>
+
+              <path d="M106 92
+                       Q144 53 210 53
+                       Q276 53 314 92
+                       Q289 78 258 85
+                       Q239 91 210 116
+                       Q181 91 162 85
+                       Q131 78 106 92 Z"
+                    fill="#20262e" stroke="#070a0e" stroke-width="8"/>
+
+              <path d="M161 91
+                       Q181 111 210 119
+                       Q239 111 259 91
+                       L276 270
+                       L144 270 Z"
+                    fill="#070a10"/>
+
+              <path d="M140 116 Q164 138 210 141 Q256 138 280 116"
+                    fill="none" stroke="#aeb8c3" stroke-width="5" stroke-linecap="round"/>
+              <path d="M144 123 Q166 148 210 151 Q254 148 276 123"
+                    fill="none" stroke="#6f7882" stroke-width="3" stroke-linecap="round"/>
+
+              <path d="M90 111 Q65 126 62 180 Q60 232 73 259"
+                    fill="none" stroke="#1d242c" stroke-width="13" stroke-linecap="round"/>
+              <path d="M330 111 Q355 126 358 180 Q360 232 347 259"
+                    fill="none" stroke="#1d242c" stroke-width="13" stroke-linecap="round"/>
+            </svg>
           </div>
 
-        <div id="headPart" class="avatar-head-module" aria-label="Avatar Kopf">
-          <svg viewBox="0 0 1254 1254" role="img" aria-label="PS AI MUSIC Cartoon Kopf">
-            <defs>
-              <clipPath id="eyeClipLeft"><ellipse cx="520" cy="500" rx="88" ry="72"/></clipPath>
-              <clipPath id="eyeClipRight"><ellipse cx="735" cy="500" rx="88" ry="72"/></clipPath>
-              <clipPath id="portraitClip">
-                <ellipse cx="627" cy="505" rx="405" ry="465"/>
-              </clipPath>
-            </defs>
+          <!-- Kopf: eigenes transparentes Cutout-Teil. -->
+          <div id="headPart" class="avatar-head-module" aria-label="Avatar Kopf">
+            <svg viewBox="0 0 420 360" role="img" aria-label="PS AI MUSIC Cartoon Kopf">
+              <defs>
+                <clipPath id="eyeClipLeft"><ellipse cx="155" cy="164" rx="38" ry="31"/></clipPath>
+                <clipPath id="eyeClipRight"><ellipse cx="265" cy="164" rx="38" ry="31"/></clipPath>
+              </defs>
 
-            <g id="headMotionGroup" clip-path="url(#portraitClip)">
-            <image href="data:image/webp;base64,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" x="0" y="0" width="1254" height="1254" preserveAspectRatio="xMidYMid meet"/>
+              <g id="headMotionGroup">
+                <!-- Ohren -->
+                <ellipse cx="76" cy="169" rx="27" ry="42" fill="#efad73" stroke="#18120f" stroke-width="7"/>
+                <ellipse cx="344" cy="169" rx="27" ry="42" fill="#efad73" stroke="#18120f" stroke-width="7"/>
+                <path d="M73 159 Q58 170 74 187" fill="none" stroke="#b8784d" stroke-width="5" stroke-linecap="round"/>
+                <path d="M347 159 Q362 170 346 187" fill="none" stroke="#b8784d" stroke-width="5" stroke-linecap="round"/>
 
-            <g id="eyesModule">
-              <ellipse id="eyeWhiteLeft" cx="520" cy="500" rx="88" ry="72" fill="#fff"/>
-              <ellipse id="eyeWhiteRight" cx="735" cy="500" rx="88" ry="72" fill="#fff"/>
+                <!-- Gesicht -->
+                <ellipse cx="210" cy="166" rx="137" ry="145" fill="#efad73" stroke="#17120f" stroke-width="8"/>
 
-              <g clip-path="url(#eyeClipLeft)">
-                <circle id="pupilLeft" cx="520" cy="500" r="16" fill="#000"/>
-                <rect id="lidTopLeft" x="425" y="420" width="190" height="0" fill="#efad73"/>
-                <rect id="lidBottomLeft" x="425" y="580" width="190" height="0" fill="#efad73"/>
+                <!-- Cap -->
+                <path d="M89 105
+                         Q91 37 145 19
+                         Q210 -2 275 19
+                         Q329 37 331 105
+                         Q289 80 210 80
+                         Q131 80 89 105 Z"
+                      fill="#20252c" stroke="#07090c" stroke-width="9"/>
+                <path d="M102 90 Q210 62 318 90 Q285 114 210 118 Q135 114 102 90 Z"
+                      fill="#101419" stroke="#07090c" stroke-width="8"/>
+                <path d="M210 12 L210 77" stroke="#0a0d11" stroke-width="5"/>
+                <path d="M143 25 Q133 55 135 83" fill="none" stroke="#0a0d11" stroke-width="5"/>
+                <path d="M277 25 Q287 55 285 83" fill="none" stroke="#0a0d11" stroke-width="5"/>
+
+                <!-- Bart -->
+                <path d="M88 178
+                         Q97 236 122 280
+                         Q149 325 210 346
+                         Q271 325 298 280
+                         Q323 236 332 178
+                         Q309 207 279 220
+                         Q249 234 210 235
+                         Q171 234 141 220
+                         Q111 207 88 178 Z"
+                      fill="#352821" stroke="#17120f" stroke-width="7"/>
+                <path d="M110 194 Q102 233 127 272" fill="none" stroke="#72645d" stroke-width="6" stroke-linecap="round"/>
+                <path d="M310 194 Q318 233 293 272" fill="none" stroke="#72645d" stroke-width="6" stroke-linecap="round"/>
+                <path d="M153 248 Q170 292 210 325 Q250 292 267 248"
+                      fill="none" stroke="#6f625b" stroke-width="7" stroke-linecap="round"/>
+                <path d="M176 269 Q191 303 210 317 Q229 303 244 269"
+                      fill="none" stroke="#211914" stroke-width="7" stroke-linecap="round"/>
+
+                <!-- Augenbrauen -->
+                <path d="M111 119 Q153 98 190 118" fill="none" stroke="#2b1c15" stroke-width="11" stroke-linecap="round"/>
+                <path d="M230 118 Q267 98 309 119" fill="none" stroke="#2b1c15" stroke-width="11" stroke-linecap="round"/>
+
+                <!-- Augen -->
+                <g id="eyesModule">
+                  <ellipse cx="155" cy="164" rx="40" ry="33" fill="#fff"/>
+                  <ellipse cx="265" cy="164" rx="40" ry="33" fill="#fff"/>
+
+                  <g clip-path="url(#eyeClipLeft)">
+                    <circle id="pupilLeft" cx="155" cy="164" r="7.5" fill="#000"/>
+                    <rect id="lidTopLeft" x="114" y="129" width="82" height="0" fill="#efad73"/>
+                    <rect id="lidBottomLeft" x="114" y="198" width="82" height="0" fill="#efad73"/>
+                  </g>
+
+                  <g clip-path="url(#eyeClipRight)">
+                    <circle id="pupilRight" cx="265" cy="164" r="7.5" fill="#000"/>
+                    <rect id="lidTopRight" x="224" y="129" width="82" height="0" fill="#efad73"/>
+                    <rect id="lidBottomRight" x="224" y="198" width="82" height="0" fill="#efad73"/>
+                  </g>
+                </g>
+
+                <!-- Brille -->
+                <g fill="none" stroke="#0a0b0d" stroke-width="9">
+                  <rect x="99" y="132" width="106" height="70" rx="28"/>
+                  <rect x="215" y="132" width="106" height="70" rx="28"/>
+                  <path d="M205 157 Q210 151 215 157"/>
+                  <path d="M99 151 L69 143"/>
+                  <path d="M321 151 L351 143"/>
+                </g>
+
+                <!-- Nase -->
+                <path d="M210 167 L199 205 Q210 214 221 205"
+                      fill="none" stroke="#b9794e" stroke-width="6" stroke-linecap="round"/>
+
+                <!-- Schnurrbart -->
+                <path d="M163 226 Q184 205 210 219 Q236 205 257 226
+                         Q236 237 210 233 Q184 237 163 226 Z"
+                      fill="#211814"/>
+
+                <!-- Reaktiver Mund: kein alter Mund darunter -->
+                <g id="mouthModule">
+                  <ellipse id="mouthHole" cx="210" cy="247" rx="0" ry="0" fill="#070707"/>
+                  <ellipse id="tongueShape" cx="210" cy="254" rx="0" ry="0" fill="#c9656c" opacity="0"/>
+                  <path id="mouthLine" d="M184 247 Q210 247 236 247"
+                        fill="none" stroke="#090909" stroke-width="6" stroke-linecap="round"/>
+                </g>
               </g>
-
-              <g clip-path="url(#eyeClipRight)">
-                <circle id="pupilRight" cx="735" cy="500" r="16" fill="#000"/>
-                <rect id="lidTopRight" x="640" y="420" width="190" height="0" fill="#efad73"/>
-                <rect id="lidBottomRight" x="640" y="580" width="190" height="0" fill="#efad73"/>
-              </g>
-            </g>
-
-            <g id="mouthModule">
-              <rect id="mouthCover" x="545" y="700" width="164" height="54" rx="27" fill="#efad73"/>
-              <ellipse id="mouthHole" cx="627" cy="728" rx="0" ry="0" fill="#090909"/>
-              <ellipse id="tongueShape" cx="627" cy="742" rx="0" ry="0" fill="#cf6b70" opacity="0"/>
-              <path id="mouthLine" d="M584 728 Q627 728 670 728"
-                    fill="none" stroke="#111" stroke-width="8" stroke-linecap="round"/>
-            </g>
-            </g>
-          </svg>
-        </div>
+            </svg>
+          </div>
         </div>
 
         <div class="stage-caption">
-          <strong>Schritt 9:</strong> Kopf + Torso getrennt</div>
+          <strong>Schritt 10:</strong> Echter Cutout-Kopf + Torso</div>
       </div>
     </section>
 
@@ -777,7 +931,7 @@ body.menu-open{overflow:hidden}
 
           <section class="touch-card">
             <div class="touch-card-head">
-              <strong>🧢 Kopf am Hals</strong>
+              <strong>🧢 Kopf</strong>
               <span id="headTouchValue">0° / 0°</span>
             </div>
             <div id="headPad" class="touch-pad" aria-label="Kopf steuern">
@@ -907,7 +1061,7 @@ body.menu-open{overflow:hidden}
           <div class="progress-row done"><span>Kopf</span><strong>✓</strong></div>
           <div class="progress-row done"><span>Augen</span><strong>✓</strong></div>
           <div class="progress-row done"><span>Mund</span><strong>✓</strong></div>
-          <div class="progress-row done"><span>Torso</span><strong>✓</strong></div>
+          <div class="progress-row done"><span>Cutout-Torso</span><strong>✓</strong></div>
           <div class="progress-row"><span>Arme</span><strong>○</strong></div>
           <div class="progress-row"><span>Beine</span><strong>○</strong></div>
           <div class="progress-row"><span>Idle / Leben</span><strong>○</strong></div>
@@ -915,7 +1069,7 @@ body.menu-open{overflow:hidden}
       </article>
         </section>
 
-        <div class="menu-version">Version <strong>0.09</strong></div>
+        <div class="menu-version">Version <strong>0.10</strong></div>
       </div>
     </aside>
 
@@ -925,7 +1079,7 @@ body.menu-open{overflow:hidden}
 (() => {
   "use strict";
 
-  const VERSION = "0.09";
+  const VERSION = "0.10";
 
   const avatarState = {
     version: VERSION,
@@ -1094,7 +1248,7 @@ body.menu-open{overflow:hidden}
   function renderAvatar() {
     const head = avatarState.head;
 
-    // Cutout-Prinzip: Torso bleibt fest, der Kopf ist ein eigenes Teil.
+    // Einfache Cutout-Mechanik: Torso fest, Kopf als starres Einzelteil.
     const manualTurn = Math.max(-6, Math.min(6, head.rotation));
     const manualTilt = Math.max(-5, Math.min(5, head.tilt));
     const turn = manualTurn + (head.idleTurn || 0);
@@ -1102,14 +1256,12 @@ body.menu-open{overflow:hidden}
     const lift = head.idleLift || 0;
 
     if (ui.headPart) {
-      const x = turn * 1.35;
-      const y = lift;
+      const x = turn * 1.05;
       ui.headPart.style.transform =
-        "translateX(-50%) translate(" + x.toFixed(2) + "px," + y.toFixed(2) + "px) " +
-        "rotate(" + tilt.toFixed(2) + "deg) scale(" + head.scale.toFixed(3) + ")";
+        "translateX(-50%) translate(" + x.toFixed(2) + "px," + lift.toFixed(2) + "px) " +
+        "rotate(" + tilt.toFixed(2) + "deg)";
     }
 
-    // Inneres Bild bleibt unverformt. Keine Karten-/Skew-Bewegung mehr.
     if (ui.headMotionGroup) {
       ui.headMotionGroup.removeAttribute("transform");
     }
@@ -1130,28 +1282,28 @@ body.menu-open{overflow:hidden}
 
     if (ui.pupilLeft && ui.pupilRight) {
       const pupilRadius = 6 * face.pupilScale;
-      ui.pupilLeft.setAttribute("cx", 520 + face.lookX * 4);
-      ui.pupilRight.setAttribute("cx", 735 + face.lookX * 4);
-      ui.pupilLeft.setAttribute("cy", 500 + face.lookY * 4);
-      ui.pupilRight.setAttribute("cy", 500 + face.lookY * 4);
-      ui.pupilLeft.setAttribute("r", 16 * face.pupilScale);
-      ui.pupilRight.setAttribute("r", 16 * face.pupilScale);
+      ui.pupilLeft.setAttribute("cx", 155 + face.lookX * 2.0);
+      ui.pupilRight.setAttribute("cx", 265 + face.lookX * 2.0);
+      ui.pupilLeft.setAttribute("cy", 164 + face.lookY * 2.0);
+      ui.pupilRight.setAttribute("cy", 164 + face.lookY * 2.0);
+      ui.pupilLeft.setAttribute("r", 7.5 * face.pupilScale);
+      ui.pupilRight.setAttribute("r", 7.5 * face.pupilScale);
     }
 
-    const maxLid = 72;
+    const maxLid = 31;
     const leftClose = Math.max(0, Math.min(100, face.blinkLeft)) / 100 * maxLid;
     const rightClose = Math.max(0, Math.min(100, face.blinkRight)) / 100 * maxLid;
 
     if (ui.lidTopLeft && ui.lidBottomLeft) {
       ui.lidTopLeft.setAttribute("height", leftClose);
       ui.lidBottomLeft.setAttribute("height", leftClose);
-      ui.lidBottomLeft.setAttribute("y", 580 - leftClose);
+      ui.lidBottomLeft.setAttribute("y", 198 - leftClose);
     }
 
     if (ui.lidTopRight && ui.lidBottomRight) {
       ui.lidTopRight.setAttribute("height", rightClose);
       ui.lidBottomRight.setAttribute("height", rightClose);
-      ui.lidBottomRight.setAttribute("y", 580 - rightClose);
+      ui.lidBottomRight.setAttribute("y", 198 - rightClose);
     }
 
     if (ui.lookXValue) ui.lookXValue.textContent = Math.round(face.lookX);
@@ -1161,11 +1313,11 @@ body.menu-open{overflow:hidden}
     if (ui.pupilScaleValue) ui.pupilScaleValue.textContent = Math.round(face.pupilScale * 100) + "%";
 
     if (ui.mouthHole && ui.mouthLine) {
-      const cx = 627;
-      const baseY = 728;
+      const cx = 210;
+      const baseY = 247;
       const widthScale = face.mouthWidth / 100;
-      const halfWidth = 48 * widthScale;
-      const openRy = (face.mouthOpen / 100) * 28;
+      const halfWidth = 26 * widthScale;
+      const openRy = (face.mouthOpen / 100) * 15;
       const leftY = baseY - face.mouthCornerLeft * 0.55;
       const rightY = baseY - face.mouthCornerRight * 0.55;
       const controlY = baseY - ((face.mouthCornerLeft + face.mouthCornerRight) / 2) * 0.40;
@@ -1177,7 +1329,7 @@ body.menu-open{overflow:hidden}
       if (ui.tongueShape) {
         ui.tongueShape.setAttribute("rx", halfWidth * 0.48);
         ui.tongueShape.setAttribute("ry", openRy * 0.34);
-        ui.tongueShape.setAttribute("cy", baseY + 12 + openRy * 0.25);
+        ui.tongueShape.setAttribute("cy", baseY + 6 + openRy * 0.25);
         ui.tongueShape.setAttribute("opacity", face.mouthOpen > 20 ? "0.86" : "0");
       }
 
@@ -1246,14 +1398,14 @@ body.menu-open{overflow:hidden}
 
     const t = now * 0.001;
     const targetTurn =
-      Math.sin(t * 0.72) * 0.20 +
-      Math.sin(t * 0.23 + 1.1) * 0.08;
+      Math.sin(t * 0.72) * 0.10 +
+      Math.sin(t * 0.23 + 1.1) * 0.04;
 
     const targetTilt =
-      Math.sin(t * 0.58 + 0.8) * 0.18 +
-      Math.sin(t * 0.19) * 0.06;
+      Math.sin(t * 0.58 + 0.8) * 0.10 +
+      Math.sin(t * 0.19) * 0.03;
 
-    const targetLift = Math.sin(t * 1.05) * 0.7;
+    const targetLift = Math.sin(t * 1.05) * 0.35;
 
     const ease = 0.055;
     head.idleTurn += ((targetTurn * blend) - head.idleTurn) * ease;
@@ -1656,8 +1808,8 @@ body.menu-open{overflow:hidden}
     });
 
     bindTouchPad(ui.headPad, (x,y) => {
-      avatarState.head.rotation = (x - 0.5) * 12;
-      avatarState.head.tilt = (y - 0.5) * 10;
+      avatarState.head.rotation = (x - 0.5) * 10;
+      avatarState.head.tilt = (y - 0.5) * 8;
       avatarState.head.lastInteractionAt = performance.now();
     });
 
