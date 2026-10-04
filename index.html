@@ -741,6 +741,64 @@ body.menu-open{overflow:hidden}
   .avatar-head-module{bottom:145px!important;width:min(390px,78vw)!important}
 }
 
+
+/* Schritt 11: vollständiger statischer Grundkörper */
+.avatar-stage{
+  min-height:clamp(700px,80vh,980px);
+  padding:12px 8px 38px;
+}
+
+.avatar-figure{
+  position:relative;
+  width:min(640px,96vw);
+  height:min(820px,76vh);
+  min-height:650px;
+}
+
+.avatar-body{
+  position:absolute;
+  left:50%;
+  bottom:8px;
+  transform:translateX(-50%);
+  width:min(360px,60vw);
+  z-index:1;
+}
+
+.avatar-body svg{
+  display:block;
+  width:100%;
+  height:auto;
+  overflow:visible;
+}
+
+.avatar-head-module{
+  position:absolute!important;
+  left:50%!important;
+  bottom:405px!important;
+  width:min(430px,72vw)!important;
+  z-index:5!important;
+  transform-origin:50% 88%!important;
+}
+
+@media(max-width:760px){
+  .avatar-stage{
+    min-height:72vh;
+    padding-bottom:30px;
+  }
+  .avatar-figure{
+    height:66vh;
+    min-height:610px;
+  }
+  .avatar-body{
+    width:min(330px,65vw);
+    bottom:4px;
+  }
+  .avatar-head-module{
+    width:min(380px,76vw)!important;
+    bottom:360px!important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -759,44 +817,131 @@ body.menu-open{overflow:hidden}
 
         <div id="avatarFigure" class="avatar-figure" aria-label="PS AI MUSIC Cutout Figur">
 
-          <!-- Torso: eigenes, festes Cutout-Teil. Kein Hals. -->
-          <div id="torsoPart" class="avatar-torso" aria-label="Avatar Torso">
-            <svg viewBox="0 0 420 280" role="img" aria-label="Schwarzer Hoodie Torso">
-              <path d="M72 270
-                       Q54 242 58 165
-                       Q61 101 110 68
-                       Q145 44 182 39
-                       Q210 35 238 39
-                       Q275 44 310 68
-                       Q359 101 362 165
-                       Q366 242 348 270 Z"
-                    fill="#11161d" stroke="#05080c" stroke-width="10"/>
+          <!-- Kompletter Grundkörper: starr, Kopf bleibt eigenes Teil. -->
+          <div id="torsoPart" class="avatar-body" aria-label="Avatar Körper">
+            <svg viewBox="0 0 420 620" role="img" aria-label="PS AI MUSIC Ganzkörper">
+              <!-- hintere Arme -->
+              <g id="leftArmBase">
+                <path d="M105 112
+                         Q76 124 61 168
+                         Q48 210 50 280
+                         Q52 335 73 365
+                         Q84 378 101 367
+                         Q116 356 111 335
+                         Q98 289 103 235
+                         Q108 179 132 153 Z"
+                      fill="#11161c" stroke="#05080c" stroke-width="9"/>
+                <ellipse cx="88" cy="374" rx="25" ry="28" fill="#efad73" stroke="#17110e" stroke-width="6"/>
+              </g>
 
-              <path d="M106 92
-                       Q144 53 210 53
-                       Q276 53 314 92
-                       Q289 78 258 85
-                       Q239 91 210 116
-                       Q181 91 162 85
-                       Q131 78 106 92 Z"
+              <g id="rightArmBase">
+                <path d="M315 112
+                         Q344 124 359 168
+                         Q372 210 370 280
+                         Q368 335 347 365
+                         Q336 378 319 367
+                         Q304 356 309 335
+                         Q322 289 317 235
+                         Q312 179 288 153 Z"
+                      fill="#11161c" stroke="#05080c" stroke-width="9"/>
+                <ellipse cx="332" cy="374" rx="25" ry="28" fill="#efad73" stroke="#17110e" stroke-width="6"/>
+              </g>
+
+              <!-- Oberkörper / Hoodie -->
+              <path d="M112 100
+                       Q150 64 210 62
+                       Q270 64 308 100
+                       Q332 123 339 171
+                       L330 344
+                       Q324 375 292 387
+                       L128 387
+                       Q96 375 90 344
+                       L81 171
+                       Q88 123 112 100 Z"
+                    fill="#12171d" stroke="#05080c" stroke-width="10"/>
+
+              <!-- Hoodie-Kragen -->
+              <path d="M112 115
+                       Q145 75 210 79
+                       Q275 75 308 115
+                       Q276 104 253 116
+                       Q231 127 210 146
+                       Q189 127 167 116
+                       Q144 104 112 115 Z"
                     fill="#20262e" stroke="#070a0e" stroke-width="8"/>
 
-              <path d="M161 91
-                       Q181 111 210 119
-                       Q239 111 259 91
-                       L276 270
-                       L144 270 Z"
-                    fill="#070a10"/>
+              <!-- schwarzes Shirt -->
+              <path d="M158 129
+                       Q180 148 210 153
+                       Q240 148 262 129
+                       L273 377
+                       L147 377 Z"
+                    fill="#070910"/>
 
-              <path d="M140 116 Q164 138 210 141 Q256 138 280 116"
-                    fill="none" stroke="#aeb8c3" stroke-width="5" stroke-linecap="round"/>
-              <path d="M144 123 Q166 148 210 151 Q254 148 276 123"
+              <!-- Kette -->
+              <path d="M154 151
+                       Q164 204 210 217
+                       Q256 204 266 151"
+                    fill="none" stroke="#b8c0c8" stroke-width="5" stroke-linecap="round"/>
+              <path d="M158 156
+                       Q170 198 210 209
+                       Q250 198 262 156"
                     fill="none" stroke="#6f7882" stroke-width="3" stroke-linecap="round"/>
 
-              <path d="M90 111 Q65 126 62 180 Q60 232 73 259"
-                    fill="none" stroke="#1d242c" stroke-width="13" stroke-linecap="round"/>
-              <path d="M330 111 Q355 126 358 180 Q360 232 347 259"
-                    fill="none" stroke="#1d242c" stroke-width="13" stroke-linecap="round"/>
+              <!-- Bund -->
+              <path d="M130 375 Q210 389 290 375 L298 407 Q210 420 122 407 Z"
+                    fill="#0b0e12" stroke="#05080c" stroke-width="7"/>
+
+              <!-- Jeans Hüfte -->
+              <path d="M130 405
+                       Q210 419 290 405
+                       L292 450
+                       Q210 463 128 450 Z"
+                    fill="#476fae" stroke="#27466f" stroke-width="8"/>
+
+              <!-- linkes Jeansbein -->
+              <path d="M128 443
+                       L202 450
+                       L195 566
+                       Q194 583 177 587
+                       L142 587
+                       Q125 582 126 565 Z"
+                    fill="#4f79bc" stroke="#294b79" stroke-width="8"/>
+              <path d="M142 475 Q170 468 197 476" fill="none" stroke="#648bd0" stroke-width="5" opacity=".75"/>
+
+              <!-- rechtes Jeansbein -->
+              <path d="M218 450
+                       L292 443
+                       L294 565
+                       Q295 582 278 587
+                       L243 587
+                       Q226 583 225 566 Z"
+                    fill="#4f79bc" stroke="#294b79" stroke-width="8"/>
+              <path d="M223 476 Q250 468 278 475" fill="none" stroke="#648bd0" stroke-width="5" opacity=".75"/>
+
+              <!-- Schuhe links -->
+              <path d="M123 572
+                       Q143 560 188 565
+                       Q204 568 210 589
+                       L207 606
+                       Q164 614 118 604
+                       Q108 596 112 585
+                       Q115 578 123 572 Z"
+                    fill="#f5f7fb" stroke="#c8ced7" stroke-width="7"/>
+              <path d="M137 586 L190 590" stroke="#aeb5bf" stroke-width="4" stroke-linecap="round"/>
+              <path d="M132 597 L193 601" stroke="#aeb5bf" stroke-width="4" stroke-linecap="round"/>
+
+              <!-- Schuhe rechts -->
+              <path d="M297 572
+                       Q277 560 232 565
+                       Q216 568 210 589
+                       L213 606
+                       Q256 614 302 604
+                       Q312 596 308 585
+                       Q305 578 297 572 Z"
+                    fill="#f5f7fb" stroke="#c8ced7" stroke-width="7"/>
+              <path d="M283 586 L230 590" stroke="#aeb5bf" stroke-width="4" stroke-linecap="round"/>
+              <path d="M288 597 L227 601" stroke="#aeb5bf" stroke-width="4" stroke-linecap="round"/>
             </svg>
           </div>
 
@@ -903,7 +1048,7 @@ body.menu-open{overflow:hidden}
         </div>
 
         <div class="stage-caption">
-          <strong>Schritt 10:</strong> Echter Cutout-Kopf + Torso</div>
+          <strong>Schritt 11:</strong> Kompletter Grundkörper</div>
       </div>
     </section>
 
@@ -1061,15 +1206,15 @@ body.menu-open{overflow:hidden}
           <div class="progress-row done"><span>Kopf</span><strong>✓</strong></div>
           <div class="progress-row done"><span>Augen</span><strong>✓</strong></div>
           <div class="progress-row done"><span>Mund</span><strong>✓</strong></div>
-          <div class="progress-row done"><span>Cutout-Torso</span><strong>✓</strong></div>
-          <div class="progress-row"><span>Arme</span><strong>○</strong></div>
-          <div class="progress-row"><span>Beine</span><strong>○</strong></div>
+          <div class="progress-row done"><span>Grundkörper</span><strong>✓</strong></div>
+          <div class="progress-row"><span>Arme beweglich</span><strong>○</strong></div>
+          <div class="progress-row done"><span>Beine</span><strong>✓</strong></div>
           <div class="progress-row"><span>Idle / Leben</span><strong>○</strong></div>
         </div>
       </article>
         </section>
 
-        <div class="menu-version">Version <strong>0.10</strong></div>
+        <div class="menu-version">Version <strong>0.11</strong></div>
       </div>
     </aside>
 
@@ -1079,7 +1224,7 @@ body.menu-open{overflow:hidden}
 (() => {
   "use strict";
 
-  const VERSION = "0.10";
+  const VERSION = "0.11";
 
   const avatarState = {
     version: VERSION,
