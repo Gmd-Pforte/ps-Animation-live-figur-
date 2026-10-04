@@ -1794,6 +1794,29 @@ body.remote-stage-mode .avatar-stage{
 body.remote-stage-clean .remote-stage-dock{display:none}
 body.remote-stage-clean .remote-stage-open{display:block}
 
+
+/* REMOTE SPEECH BUBBLE */
+.remote-speech-bubble{
+  position:absolute;z-index:18;left:50%;top:5.5%;transform:translate(-50%,-8px) scale(.96);
+  width:min(78%,620px);padding:15px 18px;border:4px solid #0b0d10;border-radius:22px;
+  background:#fff;color:#11151a;box-shadow:0 12px 30px rgba(0,0,0,.24);
+  opacity:0;visibility:hidden;transition:opacity .14s ease,transform .14s ease;
+  pointer-events:none
+}
+.remote-speech-bubble:after{
+  content:"";position:absolute;left:50%;bottom:-22px;transform:translateX(-50%);
+  width:0;height:0;border-left:16px solid transparent;border-right:16px solid transparent;border-top:23px solid #0b0d10
+}
+.remote-speech-bubble:before{
+  content:"";position:absolute;z-index:2;left:50%;bottom:-15px;transform:translateX(-50%);
+  width:0;height:0;border-left:12px solid transparent;border-right:12px solid transparent;border-top:18px solid #fff
+}
+.remote-speech-bubble.show{opacity:1;visibility:visible;transform:translate(-50%,0) scale(1)}
+.remote-speech-text{font:900 clamp(16px,3.2vw,28px)/1.24 system-ui,-apple-system,Segoe UI,sans-serif;text-align:center;overflow-wrap:anywhere}
+@media(max-width:620px){
+  .remote-speech-bubble{top:7%;width:86%;padding:12px 14px;border-width:3px;border-radius:18px}
+}
+
 </style>
 </head>
 <body class="remote-stage-mode">
@@ -1977,6 +2000,10 @@ body.remote-stage-clean .remote-stage-open{display:block}
         <img id="stageBackgroundMedia" class="stage-background-media" alt="" aria-hidden="true">
         <div id="stageBackgroundShade" class="stage-background-shade"></div>
         <div id="stageGrid" class="stage-grid"></div>
+
+        <div id="remoteSpeechBubble" class="remote-speech-bubble" aria-live="polite">
+          <div id="remoteSpeechText" class="remote-speech-text"></div>
+        </div>
 
         <div id="avatarFigure" class="avatar-figure" aria-label="PS AI MUSIC Cutout Figur">
 
@@ -2938,6 +2965,13 @@ body.remote-stage-clean .remote-stage-open{display:block}
       bodyY: 0
     },
 
+    textSpeech: {
+      active: false,
+      text: "",
+      startedAt: 0,
+      duration: 0
+    },
+
     brain: {
       enabled: true,
       mode: "natural",
@@ -3001,6 +3035,8 @@ body.remote-stage-clean .remote-stage-open{display:block}
     answerNewLabel: document.getElementById("answerNewLabel"),
     answerAddButton: document.getElementById("answerAddButton"),
     responseAudio: document.getElementById("responseAudio"),
+    remoteSpeechBubble: document.getElementById("remoteSpeechBubble"),
+    remoteSpeechText: document.getElementById("remoteSpeechText"),
     liveAnswerBar: document.getElementById("liveAnswerBar"),
     liveAnswerCharacter: document.getElementById("liveAnswerCharacter"),
     liveAnswerButtons: document.getElementById("liveAnswerButtons"),
@@ -4888,6 +4924,7 @@ body.remote-stage-clean .remote-stage-open{display:block}
     updateWalk(now);
     updateDance(now);
     updateResponseReaction(now);
+    updateTextSpeech(now);
     renderAvatar();
     updateEngineUi(now);
 
@@ -5210,7 +5247,7 @@ body.remote-stage-clean .remote-stage-open{display:block}
       ui.audioMeterFill.style.width = Math.round(Math.min(1, rms * 8) * 100) + "%";
     }
 
-    if (audioLipSyncEnabled && !responseAudioSpeaking) {
+    if (audioLipSyncEnabled && !responseAudioSpeaking && !avatarState.textSpeech?.active) {
       const open = Math.max(0, Math.min(100, smoothedAudioMouth * 100));
       avatarState.face.mouthOpen = open;
 
@@ -5449,6 +5486,77 @@ body.remote-stage-clean .remote-stage-open{display:block}
     r.headLean=0;r.headY=0;r.leftArm=0;r.rightArm=0;r.bodyX=0;r.bodyY=0;
 
     noteManualControl(r.duration+450);
+  }
+
+  function speechReactionType(text){
+    const normalized=String(text||"").trim().toLowerCase();
+    if(/^(ja|jap|jep|yes|genau|klar)[.!? ]*$/.test(normalized)) return "yes";
+    if(/^(nein|nee|nö|no)[.!? ]*$/.test(normalized)) return "no";
+    if(/^(hallo|hi|hey|moin|servus|guten tag)\b/.test(normalized)) return "hello";
+    return "talk";
+  }
+
+  function showRemoteSpeech(text){
+    const clean=String(text||"").replace(/\s+/g," ").trim().slice(0,280);
+    if(!clean) return false;
+
+    const duration=Math.max(2200,Math.min(9000,1500+clean.length*47));
+    const t=avatarState.textSpeech;
+    t.active=true;
+    t.text=clean;
+    t.startedAt=performance.now();
+    t.duration=duration;
+
+    if(ui.remoteSpeechText) ui.remoteSpeechText.textContent=clean;
+    if(ui.remoteSpeechBubble) ui.remoteSpeechBubble.classList.add("show");
+
+    const type=speechReactionType(clean);
+    if(type==="yes"){
+      triggerResponseReaction("ja","Ja",duration);
+    }else if(type==="no"){
+      triggerResponseReaction("nein","Nein",duration);
+    }else{
+      triggerResponseReaction(type==="hello"?"hallo":"text",clean,duration);
+      if(type==="hello"){
+        avatarState.responseReaction.leftArm=18;
+      }
+    }
+
+    noteManualControl(duration+500);
+    return true;
+  }
+
+  function hideRemoteSpeech(){
+    const t=avatarState.textSpeech;
+    t.active=false;
+    t.text="";
+    avatarState.face.mouthOpen=0;
+    avatarState.face.mouthWidth=100;
+    if(ui.remoteSpeechBubble) ui.remoteSpeechBubble.classList.remove("show");
+  }
+
+  function updateTextSpeech(now){
+    const t=avatarState.textSpeech;
+    if(!t?.active) return;
+
+    const elapsed=now-t.startedAt;
+    if(elapsed>=t.duration){
+      hideRemoteSpeech();
+      return;
+    }
+
+    const progress=elapsed/t.duration;
+    const envelope=Math.min(1,Math.min(progress*7,(1-progress)*7));
+    const syllable=Math.abs(Math.sin(elapsed*0.018)+.42*Math.sin(elapsed*0.031+1.2));
+    const open=Math.max(7,Math.min(72,(12+syllable*37)*envelope));
+
+    avatarState.face.mouthOpen=open;
+    avatarState.face.mouthWidth=96+Math.sin(elapsed*.009)*7;
+
+    const type=speechReactionType(t.text);
+    if(type==="hello" && avatarState.responseReaction){
+      avatarState.responseReaction.leftArm=Math.max(avatarState.responseReaction.leftArm||0,20*Math.abs(Math.sin(elapsed*.008))*envelope);
+    }
   }
 
   function updateResponseReaction(now){
@@ -7174,6 +7282,59 @@ body.remote-stage-clean .remote-stage-open{display:block}
 
     ctx.restore();
   }
+  function wrapRecorderText(ctx,text,maxWidth){
+    const words=String(text||"").split(/\s+/).filter(Boolean);
+    const lines=[];let line="";
+    for(const word of words){
+      const test=line?line+" "+word:word;
+      if(ctx.measureText(test).width>maxWidth && line){
+        lines.push(line);line=word;
+      }else{
+        line=test;
+      }
+    }
+    if(line) lines.push(line);
+    return lines.slice(0,6);
+  }
+
+  function drawRecordedSpeechBubble(ctx){
+    const t=avatarState.textSpeech;
+    if(!t?.active||!t.text) return;
+
+    ctx.save();
+    ctx.font="900 25px Arial";
+    ctx.textAlign="center";
+    ctx.textBaseline="middle";
+
+    const maxWidth=540;
+    const lines=wrapRecorderText(ctx,t.text,maxWidth-44);
+    const lineHeight=31;
+    const boxH=Math.max(72,34+lines.length*lineHeight);
+    const x=360-maxWidth/2;
+    const y=38;
+    const radius=22;
+
+    ctx.beginPath();
+    if(ctx.roundRect) ctx.roundRect(x,y,maxWidth,boxH,radius);
+    else{
+      ctx.moveTo(x+radius,y);ctx.lineTo(x+maxWidth-radius,y);ctx.quadraticCurveTo(x+maxWidth,y,x+maxWidth,y+radius);
+      ctx.lineTo(x+maxWidth,y+boxH-radius);ctx.quadraticCurveTo(x+maxWidth,y+boxH,x+maxWidth-radius,y+boxH);
+      ctx.lineTo(x+radius,y+boxH);ctx.quadraticCurveTo(x,y+boxH,x,y+boxH-radius);
+      ctx.lineTo(x,y+radius);ctx.quadraticCurveTo(x,y,x+radius,y);ctx.closePath();
+    }
+    ctx.fillStyle="#ffffff";ctx.fill();
+    ctx.strokeStyle="#0b0d10";ctx.lineWidth=5;ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(338,y+boxH-1);ctx.lineTo(360,y+boxH+24);ctx.lineTo(382,y+boxH-1);
+    ctx.fillStyle="#ffffff";ctx.fill();ctx.strokeStyle="#0b0d10";ctx.lineWidth=5;ctx.stroke();
+
+    ctx.fillStyle="#11151a";
+    const startY=y+boxH/2-(lines.length-1)*lineHeight/2;
+    lines.forEach((line,i)=>ctx.fillText(line,360,startY+i*lineHeight));
+    ctx.restore();
+  }
+
   function paintRecorderFrame() {
     if (!recorderCtx || !recorderCanvas) return;
     drawRecordingBackground(recorderCtx,recorderCanvas.width,recorderCanvas.height);
@@ -7188,6 +7349,8 @@ body.remote-stage-clean .remote-stage-open{display:block}
     drawRecordedBody(recorderCtx);
     drawRecordedHead(recorderCtx);
     recorderCtx.restore();
+
+    drawRecordedSpeechBubble(recorderCtx);
   }
 
   async function prepareRecorderAudioTrack() {
@@ -7769,6 +7932,8 @@ body.remote-stage-clean .remote-stage-open{display:block}
     switchCharacter,
     playAnswerClip,
     playRemoteAnswerUrl,
+    showRemoteSpeech,
+    hideRemoteSpeech,
     characterDisplayName,
     loadRemoteAudio,
     playRemoteAudio,
@@ -7866,6 +8031,10 @@ function applyRemoteCommand(command={}){
       String(command.id||"antwort"),
       String(command.label||command.id||"Antwort")
     );
+  }else if(action==="speak_text"){
+    engine.showRemoteSpeech(String(command.text||""));
+  }else if(action==="speech_clear"){
+    engine.hideRemoteSpeech();
   }else if(action==="dance"){
     s.walk.enabled=false;s.walk.left=0;s.walk.right=0;
     s.dance.enabled=!!command.enabled;
@@ -7948,6 +8117,7 @@ function applyRemoteCommand(command={}){
     s.leftLeg.hip=0;s.rightLeg.hip=0;
     s.walk.enabled=false;s.walk.left=0;s.walk.right=0;
     s.dance.enabled=false;
+    engine.hideRemoteSpeech();
     engine.render();
   }else if(action==="ping"){
     announce();
