@@ -860,14 +860,14 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.19.1: Touch-Fix – JS darf den Kopf transformieren */
+/* v0.19.2: Touch-Fix – JS darf den Kopf transformieren */
 .avatar-head-module{
   will-change:transform;
   transition:transform 70ms linear;
 }
 
 
-/* v0.19.1: Kopfneigung über festen Cutout-Anker */
+/* v0.19.2: Kopfneigung über festen Cutout-Anker */
 .head-anchor{
   transform-origin:0 0;
   will-change:transform;
@@ -944,7 +944,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.19.1: Aufnahme sichtbar unter den Touchfeldern */
+/* v0.19.2: Aufnahme sichtbar unter den Touchfeldern */
 .record-workspace{
   margin-top:14px;
   border:1px solid rgba(255,255,255,.07);
@@ -992,7 +992,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.19.1: gleiche Figur auf Handy, Desktop und Aufnahme */
+/* v0.19.2: gleiche Figur auf Handy, Desktop und Aufnahme */
 .avatar-body{
   width:min(330px,65vw)!important;
   bottom:4px!important;
@@ -1018,7 +1018,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.19.1: sichtbare Arm-Regler auf der Hauptseite */
+/* v0.19.2: sichtbare Arm-Regler auf der Hauptseite */
 .arm-main-controls{
   margin-top:14px;
   border:1px solid rgba(39,200,255,.22);
@@ -1130,7 +1130,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.19.1: drei Charaktere */
+/* v0.19.2: drei Charaktere */
 .character-buttons{
   grid-template-columns:repeat(3,minmax(0,1fr));
 }
@@ -1877,7 +1877,7 @@ body.menu-open{overflow:hidden}
           <button id="recordSave" type="button" disabled>⬇ Speichern</button>
         </div>
 
-        <p class="record-note">Die Steuerfelder und das Menü werden nicht mit aufgenommen. Geladene MP3/WAV-Dateien werden als Tonspur mit aufgezeichnet, sobald beim Start „🔊 Tonspur aktiv“ erscheint.</p>
+        <p class="record-note">Eine geladene MP3/WAV startet beim Aufnahme-Button automatisch bei 0:00. Wenn Android die Spur freigibt, erscheint „🔊 MP3 aktiv“ und der Ton landet direkt im Video.</p>
       </section>
     </section>
   
@@ -1996,7 +1996,7 @@ body.menu-open{overflow:hidden}
       </article>
         </section>
 
-        <div class="menu-version">Version <strong>0.19.1</strong></div>
+        <div class="menu-version">Version <strong>0.19.2</strong></div>
       </div>
     </aside>
 
@@ -2006,7 +2006,7 @@ body.menu-open{overflow:hidden}
 (() => {
   "use strict";
 
-  const VERSION = "0.19.1";
+  const VERSION = "0.19.2";
 
   const avatarState = {
     version: VERSION,
@@ -3964,7 +3964,7 @@ body.menu-open{overflow:hidden}
     if (ui.menuButton) ui.menuButton.setAttribute("aria-expanded", open ? "true" : "false");
   }
 
-  // --- Figurenaufnahme v0.19.1 -------------------------------------------
+  // --- Figurenaufnahme v0.19.2 -------------------------------------------
   // Direkter Canvas-Renderer: keine langsame SVG->Bitmap-Konvertierung pro Frame.
   let avatarRecorder = null;
   let recorderChunks = [];
@@ -3977,6 +3977,10 @@ body.menu-open{overflow:hidden}
   let recorderClockTimer = null;
   let recorderStartedAt = 0;
   let recorderAudioDestination = null;
+  let recorderMediaElementStream = null;
+  let recorderCapturedAudioTrack = null;
+  let recorderAutoStartedAudio = false;
+  let recorderAudioRoute = "";
   let recorderStopping = false;
 
   const BODY_PATHS = {
@@ -4544,6 +4548,118 @@ body.menu-open{overflow:hidden}
     drawRecordedHead(recorderCtx);
   }
 
+  async function prepareRecorderAudioTrack() {
+    recorderAudioRoute = "";
+    recorderAutoStartedAudio = false;
+    recorderMediaElementStream = null;
+    recorderCapturedAudioTrack = null;
+
+    if (!ui.speechAudio || !ui.speechAudio.src) return null;
+
+    // Android erzeugt bei einem pausierten <audio> teilweise noch keinen
+    // captureStream-Audiotrack. Deshalb einmal aus dem echten User-Klick
+    // heraus kurz starten und anschließend wieder auf 0 setzen.
+    try {
+      ui.speechAudio.pause();
+      ui.speechAudio.currentTime = 0;
+
+      if (ensureAudioGraph() && audioContext && audioContext.state === "suspended") {
+        try { await audioContext.resume(); } catch (_) {}
+      }
+
+      try {
+        await ui.speechAudio.play();
+        await new Promise(resolve => setTimeout(resolve, 120));
+      } catch (playError) {
+        console.warn("Audio prime play failed:", playError);
+      }
+
+      // 1. Wahl: echter Stream des Audioelements.
+      const captureFn = ui.speechAudio.captureStream || ui.speechAudio.mozCaptureStream;
+      if (captureFn) {
+        try {
+          recorderMediaElementStream = captureFn.call(ui.speechAudio);
+
+          // Track kann auf Mobilgeräten einen Moment später auftauchen.
+          let audioTrack = recorderMediaElementStream.getAudioTracks()[0] || null;
+          if (!audioTrack) {
+            await new Promise(resolve => setTimeout(resolve, 160));
+            audioTrack = recorderMediaElementStream.getAudioTracks()[0] || null;
+          }
+
+          if (audioTrack) {
+            recorderCapturedAudioTrack = audioTrack.clone();
+            recorderAudioRoute = "HTML-Audio";
+          }
+        } catch (captureError) {
+          console.warn("HTML audio captureStream failed:", captureError);
+        }
+      }
+
+      // 2. Wahl: WebAudio-Route als Fallback.
+      if (!recorderCapturedAudioTrack && ensureAudioGraph()) {
+        try {
+          recorderAudioDestination = audioContext.createMediaStreamDestination();
+          audioSource.connect(recorderAudioDestination);
+
+          let webAudioTrack = recorderAudioDestination.stream.getAudioTracks()[0] || null;
+          if (!webAudioTrack) {
+            await new Promise(resolve => setTimeout(resolve, 80));
+            webAudioTrack = recorderAudioDestination.stream.getAudioTracks()[0] || null;
+          }
+
+          if (webAudioTrack) {
+            recorderCapturedAudioTrack = webAudioTrack.clone();
+            recorderAudioRoute = "WebAudio";
+          }
+        } catch (routeError) {
+          console.warn("WebAudio recorder route failed:", routeError);
+        }
+      }
+
+      // Das kurze technische Anspielen darf nicht im Video landen.
+      ui.speechAudio.pause();
+      try { ui.speechAudio.currentTime = 0; } catch (_) {}
+
+      return recorderCapturedAudioTrack;
+    } catch (error) {
+      console.warn("prepareRecorderAudioTrack:", error);
+      try {
+        ui.speechAudio.pause();
+        ui.speechAudio.currentTime = 0;
+      } catch (_) {}
+      return null;
+    }
+  }
+
+  async function startRecorderAudioPlayback() {
+    if (!ui.speechAudio || !ui.speechAudio.src || !recorderCapturedAudioTrack) return false;
+
+    try {
+      if (audioContext && audioContext.state === "suspended") {
+        try { await audioContext.resume(); } catch (_) {}
+      }
+
+      ui.speechAudio.currentTime = 0;
+      await ui.speechAudio.play();
+      recorderAutoStartedAudio = true;
+
+      stopAudioLipSyncLoop(false);
+      audioLipSyncLoop();
+
+      if (ui.audioPlay) ui.audioPlay.textContent = "⏸ Pause";
+      if (ui.audioStatus) {
+        const fileName = ui.audioFile?.files?.[0]?.name || ui.talkAudioFile?.files?.[0]?.name || "Audio";
+        ui.audioStatus.textContent = fileName + " · läuft mit Aufnahme";
+      }
+      return true;
+    } catch (error) {
+      console.warn("Recorder audio autoplay failed:", error);
+      recorderAutoStartedAudio = false;
+      return false;
+    }
+  }
+
   function preferredRecorderMime(hasAudio=false) {
     if (!window.MediaRecorder) return "";
 
@@ -4593,32 +4709,14 @@ body.menu-open{overflow:hidden}
 
       const canvasStream=recorderCanvas.captureStream(30);
       const tracks=[...canvasStream.getVideoTracks()];
-      let recorderHasAudio=false;
 
-      // Geladene MP3/WAV direkt aus der Audioquelle in den Recorder schicken.
-      // Der Analyzer bleibt parallel für Mund/Brain zuständig.
-      if(ui.speechAudio && ui.speechAudio.src && ensureAudioGraph()){
-        if(audioContext.state==="suspended"){
-          try{await audioContext.resume();}catch(_){}
-        }
+      // Audiotrack vorbereiten. Bei Android muss das Audioelement dafür
+      // teilweise einmal kurz tatsächlich abgespielt worden sein.
+      const preparedAudioTrack = await prepareRecorderAudioTrack();
+      const recorderHasAudio = !!preparedAudioTrack;
 
-        try{
-          recorderAudioDestination=audioContext.createMediaStreamDestination();
-
-          // Direkter Pfad ist auf Android zuverlässiger als:
-          // analyser -> MediaStreamDestination.
-          audioSource.connect(recorderAudioDestination);
-
-          const captureTracks=recorderAudioDestination.stream.getAudioTracks();
-          if(captureTracks.length){
-            tracks.push(...captureTracks);
-            recorderHasAudio=true;
-          }
-        }catch(audioError){
-          console.warn("Recorder audio route failed:",audioError);
-          recorderHasAudio=false;
-          recorderAudioDestination=null;
-        }
+      if (preparedAudioTrack) {
+        tracks.push(preparedAudioTrack);
       }
 
       recorderStream=new MediaStream(tracks);
@@ -4643,15 +4741,34 @@ body.menu-open{overflow:hidden}
         if(recorderPaintTimer){clearInterval(recorderPaintTimer);recorderPaintTimer=null;}
         if(recorderClockTimer){clearInterval(recorderClockTimer);recorderClockTimer=null;}
 
+        const hadAudio = !!(recorderStream && recorderStream.getAudioTracks().length);
+
+        if (recorderAutoStartedAudio && ui.speechAudio) {
+          try {
+            ui.speechAudio.pause();
+            ui.speechAudio.currentTime = 0;
+          } catch (_) {}
+          recorderAutoStartedAudio = false;
+          stopAudioLipSyncLoop();
+          if (ui.audioPlay) ui.audioPlay.textContent = "▶ Abspielen";
+        }
+
         if(recorderStream){
           recorderStream.getTracks().forEach(track=>track.stop());
           recorderStream=null;
+        }
+
+        if(recorderCapturedAudioTrack){
+          try{recorderCapturedAudioTrack.stop();}catch(_){}
+          recorderCapturedAudioTrack=null;
         }
 
         if(recorderAudioDestination && audioSource){
           try{audioSource.disconnect(recorderAudioDestination);}catch(_){}
           recorderAudioDestination=null;
         }
+
+        recorderMediaElementStream=null;
 
         const type=avatarRecorder.mimeType||"video/webm";
         recorderBlob=new Blob(recorderChunks,{type});
@@ -4665,9 +4782,6 @@ body.menu-open{overflow:hidden}
         if(ui.recordStop) ui.recordStop.disabled=true;
 
         const seconds=Math.max(1,Math.round((performance.now()-recorderStartedAt)/1000));
-        const hadAudio = avatarRecorder && avatarRecorder.stream
-          ? avatarRecorder.stream.getAudioTracks().length > 0
-          : false;
         setRecorderStatus(
           "Aufnahme fertig · "+seconds+" s · "+Math.round(recorderBlob.size/1024)+" KB"+
           (hadAudio ? " · 🔊 mit Ton" : " · ohne Ton")
@@ -4685,12 +4799,20 @@ body.menu-open{overflow:hidden}
       if(ui.recordSave) ui.recordSave.disabled=true;
 
       const audioTrackCount=recorderStream.getAudioTracks().length;
-      setRecorderStatus(
-        audioTrackCount
-          ? "● Aufnahme läuft · 🔊 Tonspur aktiv"
-          : "● Aufnahme läuft · ohne Ton"
-      );
       avatarRecorder.start(1000);
+
+      let audioStarted=false;
+      if(audioTrackCount){
+        audioStarted=await startRecorderAudioPlayback();
+      }
+
+      setRecorderStatus(
+        audioTrackCount && audioStarted
+          ? "● Aufnahme läuft · 🔊 MP3 aktiv · " + (recorderAudioRoute || "Audio")
+          : audioTrackCount
+            ? "● Aufnahme läuft · 🔊 Tonspur vorhanden, Audio-Start blockiert"
+            : "● Aufnahme läuft · Browser liefert keine MP3-Tonspur"
+      );
 
       // Feste Malfrequenz unabhängig vom Browser-UI.
       recorderPaintTimer=setInterval(paintRecorderFrame,33);
@@ -4715,6 +4837,10 @@ body.menu-open{overflow:hidden}
   function stopAvatarRecording() {
     if(!avatarRecorder || avatarRecorder.state==="inactive" || recorderStopping) return;
     recorderStopping=true;
+
+    if (recorderAutoStartedAudio && ui.speechAudio) {
+      try { ui.speechAudio.pause(); } catch (_) {}
+    }
 
     if(ui.recordStop) ui.recordStop.disabled=true;
     setRecorderStatus("Aufnahme wird abgeschlossen …");
