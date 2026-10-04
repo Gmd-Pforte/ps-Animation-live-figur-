@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#050b12">
+  <title>PS AI MUSIC – Avatar Development</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">PS AI MUSIC</p>
+        <h1>Avatar Development</h1>
+      </div>
+      <div class="version-badge">v0.01</div>
+    </header>
+
+    <section class="stage-card">
+      <div class="stage-header">
+        <div>
+          <h2>Entwicklungsfläche</h2>
+          <p>Diese Fläche bleibt bestehen. Hier wächst die Figur Schritt für Schritt.</p>
+        </div>
+        <div class="engine-status">
+          <span id="engineDot" class="status-dot"></span>
+          <span id="engineLabel">Engine startet …</span>
+        </div>
+      </div>
+
+      <div id="avatarStage" class="avatar-stage" aria-label="Avatar Entwicklungsfläche">
+        <div class="empty-stage">
+          <div class="stage-mark">PS</div>
+          <h3>Noch keine Figur</h3>
+          <p>Schritt 1: Grundmotor und Entwicklungsumgebung.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="dashboard">
+      <article class="panel">
+        <h2>Engine</h2>
+        <div class="stat-grid">
+          <div>
+            <span class="stat-label">Status</span>
+            <strong id="engineState">STARTING</strong>
+          </div>
+          <div>
+            <span class="stat-label">Frames</span>
+            <strong id="frameCount">0</strong>
+          </div>
+          <div>
+            <span class="stat-label">FPS</span>
+            <strong id="fpsValue">0</strong>
+          </div>
+          <div>
+            <span class="stat-label">Version</span>
+            <strong id="versionValue">0.01</strong>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <h2>Entwicklungsstand</h2>
+        <div class="progress-list">
+          <div class="progress-row done"><span>Grundmotor</span><strong>✓</strong></div>
+          <div class="progress-row"><span>Kopf</span><strong>○</strong></div>
+          <div class="progress-row"><span>Augen</span><strong>○</strong></div>
+          <div class="progress-row"><span>Mund</span><strong>○</strong></div>
+          <div class="progress-row"><span>Körper</span><strong>○</strong></div>
+          <div class="progress-row"><span>Arme</span><strong>○</strong></div>
+          <div class="progress-row"><span>Beine</span><strong>○</strong></div>
+          <div class="progress-row"><span>Idle / Leben</span><strong>○</strong></div>
+        </div>
+      </article>
+    </section>
+
+    <footer>
+      <span id="heartbeatText">Warte auf Engine …</span>
+    </footer>
+  </main>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
