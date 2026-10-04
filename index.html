@@ -860,14 +860,14 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.15.1: Touch-Fix – JS darf den Kopf transformieren */
+/* v0.16: Touch-Fix – JS darf den Kopf transformieren */
 .avatar-head-module{
   will-change:transform;
   transition:transform 70ms linear;
 }
 
 
-/* v0.15.1: Kopfneigung über festen Cutout-Anker */
+/* v0.16: Kopfneigung über festen Cutout-Anker */
 .head-anchor{
   transform-origin:0 0;
   will-change:transform;
@@ -944,7 +944,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.15.1: Aufnahme sichtbar unter den Touchfeldern */
+/* v0.16: Aufnahme sichtbar unter den Touchfeldern */
 .record-workspace{
   margin-top:14px;
   border:1px solid rgba(255,255,255,.07);
@@ -992,7 +992,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.15.1: gleiche Figur auf Handy, Desktop und Aufnahme */
+/* v0.16: gleiche Figur auf Handy, Desktop und Aufnahme */
 .avatar-body{
   width:min(330px,65vw)!important;
   bottom:4px!important;
@@ -1018,7 +1018,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.15.1: sichtbare Arm-Regler auf der Hauptseite */
+/* v0.16: sichtbare Arm-Regler auf der Hauptseite */
 .arm-main-controls{
   margin-top:14px;
   border:1px solid rgba(39,200,255,.22);
@@ -1073,6 +1073,62 @@ body.menu-open{overflow:hidden}
   touch-action:pan-x;
 }
 
+
+/* Schritt 16: Charakter-Auswahl */
+.character-selector{
+  margin:12px 0 14px;
+  border:1px solid rgba(39,200,255,.18);
+  background:linear-gradient(180deg,rgba(39,200,255,.045),rgba(0,0,0,.13));
+  border-radius:18px;
+  padding:12px;
+}
+.character-selector-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:10px;
+}
+.character-selector-head>div{
+  display:grid;
+  gap:2px;
+}
+.character-selector-head strong{
+  font-size:15px;
+}
+.character-selector-help{
+  color:var(--muted);
+  font-size:11px;
+}
+.character-buttons{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+}
+.character-button{
+  min-height:54px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  border-radius:14px;
+  border:1px solid #28506a;
+  background:#091925;
+  color:var(--text);
+  font-weight:900;
+}
+.character-button.active{
+  border-color:var(--accent);
+  background:var(--accent-soft);
+  box-shadow:0 0 18px rgba(39,200,255,.10);
+}
+.character-icon{
+  font-size:23px;
+}
+@media(max-width:560px){
+  .character-button{min-height:58px}
+}
+
 </style>
 </head>
 <body>
@@ -1084,6 +1140,26 @@ body.menu-open{overflow:hidden}
       </div>
       <button id="menuButton" class="menu-button" type="button" aria-label="Menü öffnen" aria-expanded="false">☰</button>
     </header>
+
+    <section class="character-selector" aria-label="Charakter auswählen">
+      <div class="character-selector-head">
+        <div>
+          <span class="mini-label">CHARAKTER</span>
+          <strong id="activeCharacterName">PS Avatar</strong>
+        </div>
+        <span class="character-selector-help">Figur wechseln</span>
+      </div>
+      <div class="character-buttons">
+        <button id="avatarHumanButton" class="character-button active" type="button" data-character="human">
+          <span class="character-icon">🧔</span>
+          <span>PS Avatar</span>
+        </button>
+        <button id="avatarBearButton" class="character-button" type="button" data-character="bear">
+          <span class="character-icon">🐻</span>
+          <span>PS Bär</span>
+        </button>
+      </div>
+    </section>
 
     <section class="stage-card">
       <div id="avatarStage" class="avatar-stage" aria-label="Avatar Entwicklungsfläche">
@@ -1324,7 +1400,7 @@ body.menu-open{overflow:hidden}
         </div>
 
         <div class="stage-caption">
-          <strong>Schritt 15.1:</strong> Arm-Regler auf Hauptseite</div>
+          <strong>Schritt 16:</strong> Zwei wechselbare Charaktere</div>
       </div>
     </section>
 
@@ -1568,12 +1644,13 @@ body.menu-open{overflow:hidden}
           <div class="progress-row done"><span>Arme beweglich</span><strong>✓</strong></div>
           <div class="progress-row done"><span>Beine</span><strong>✓</strong></div>
           <div class="progress-row done"><span>Aufnahme</span><strong>✓</strong></div>
+          <div class="progress-row done"><span>2 Charaktere</span><strong>✓</strong></div>
           <div class="progress-row"><span>Idle / Leben</span><strong>○</strong></div>
         </div>
       </article>
         </section>
 
-        <div class="menu-version">Version <strong>0.15.1</strong></div>
+        <div class="menu-version">Version <strong>0.16</strong></div>
       </div>
     </aside>
 
@@ -1583,10 +1660,11 @@ body.menu-open{overflow:hidden}
 (() => {
   "use strict";
 
-  const VERSION = "0.15.1";
+  const VERSION = "0.16";
 
   const avatarState = {
     version: VERSION,
+    character: "human",
 
     engine: {
       running: false,
@@ -1664,6 +1742,9 @@ body.menu-open{overflow:hidden}
     fpsValue: document.getElementById("fpsValue"),
     heartbeatText: document.getElementById("heartbeatText"),
     versionValue: document.getElementById("versionValue"),
+    avatarHumanButton: document.getElementById("avatarHumanButton"),
+    avatarBearButton: document.getElementById("avatarBearButton"),
+    activeCharacterName: document.getElementById("activeCharacterName"),
     headPart: document.getElementById("headPart"),
     headAnchor: document.getElementById("headAnchor"),
     headMotionGroup: document.getElementById("headMotionGroup"),
@@ -1768,6 +1849,215 @@ body.menu-open{overflow:hidden}
 
     target[finalKey] = value;
     return true;
+  }
+
+  // --- Charakter-System --------------------------------------------------
+  const humanCharacterTemplate = {
+    body: ui.torsoPart ? ui.torsoPart.innerHTML : "",
+    head: ui.headPart ? ui.headPart.innerHTML : ""
+  };
+
+  const bearCharacterTemplate = {
+    body: `
+      <svg viewBox="0 0 420 620" role="img" aria-label="PS AI MUSIC Bär Ganzkörper">
+        <defs>
+          <linearGradient id="bearLogoGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#ff4fd8"/>
+            <stop offset="55%" stop-color="#8c66ff"/>
+            <stop offset="100%" stop-color="#35d8ff"/>
+          </linearGradient>
+        </defs>
+
+        <g id="leftArmBase">
+          <path d="M105 112 Q76 124 61 168 Q48 210 50 280 Q52 335 73 365
+                   Q84 378 101 367 Q116 356 111 335 Q98 289 103 235 Q108 179 132 153 Z"
+                fill="#11161c" stroke="#05080c" stroke-width="9"/>
+          <ellipse cx="88" cy="374" rx="27" ry="30" fill="#a9652b" stroke="#4d2a13" stroke-width="6"/>
+          <path d="M71 371 Q88 389 105 371" fill="none" stroke="#7d451f" stroke-width="4" stroke-linecap="round"/>
+        </g>
+
+        <g id="rightArmBase">
+          <path d="M315 112 Q344 124 359 168 Q372 210 370 280 Q368 335 347 365
+                   Q336 378 319 367 Q304 356 309 335 Q322 289 317 235 Q312 179 288 153 Z"
+                fill="#11161c" stroke="#05080c" stroke-width="9"/>
+          <ellipse cx="332" cy="374" rx="27" ry="30" fill="#a9652b" stroke="#4d2a13" stroke-width="6"/>
+          <path d="M315 371 Q332 389 349 371" fill="none" stroke="#7d451f" stroke-width="4" stroke-linecap="round"/>
+        </g>
+
+        <path d="M112 100 Q150 64 210 62 Q270 64 308 100 Q332 123 339 171
+                 L330 344 Q324 375 292 387 L128 387 Q96 375 90 344 L81 171
+                 Q88 123 112 100 Z"
+              fill="#11161d" stroke="#05080c" stroke-width="10"/>
+
+        <path d="M112 115 Q145 75 210 79 Q275 75 308 115
+                 Q276 104 253 116 Q231 127 210 146 Q189 127 167 116
+                 Q144 104 112 115 Z"
+              fill="#20262e" stroke="#070a0e" stroke-width="8"/>
+
+        <path d="M161 128 Q184 148 210 153 Q236 148 259 128 L270 368 L150 368 Z"
+              fill="#090b10"/>
+
+        <!-- Neon PS AI MUSIC Markierung -->
+        <g transform="translate(210 225)">
+          <path d="M-63 -18 Q-42 -42 -18 -25 Q0 -53 20 -25 Q47 -42 65 -16
+                   Q40 -3 24 14 Q4 35 -13 17 Q-29 0 -63 -18 Z"
+                fill="none" stroke="url(#bearLogoGrad)" stroke-width="6" stroke-linecap="round"/>
+          <path d="M-78 18 H-61 M-89 27 H-69 M62 18 H79 M70 28 H92"
+                stroke="url(#bearLogoGrad)" stroke-width="5" stroke-linecap="round"/>
+          <text x="0" y="64" text-anchor="middle" fill="url(#bearLogoGrad)"
+                font-size="27" font-weight="900" font-family="Arial, sans-serif">PS AI MUSIC</text>
+        </g>
+
+        <path d="M130 375 Q210 389 290 375 L298 407 Q210 420 122 407 Z"
+              fill="#0b0e12" stroke="#05080c" stroke-width="7"/>
+
+        <path d="M130 405 Q210 419 290 405 L292 450 Q210 463 128 450 Z"
+              fill="#476fae" stroke="#27466f" stroke-width="8"/>
+
+        <path d="M128 443 L202 450 L195 566 Q194 583 177 587 L142 587
+                 Q125 582 126 565 Z"
+              fill="#4f79bc" stroke="#294b79" stroke-width="8"/>
+        <path d="M218 450 L292 443 L294 565 Q295 582 278 587 L243 587
+                 Q226 583 225 566 Z"
+              fill="#4f79bc" stroke="#294b79" stroke-width="8"/>
+        <path d="M142 475 Q170 468 197 476" fill="none" stroke="#648bd0" stroke-width="5" opacity=".75"/>
+        <path d="M223 476 Q250 468 278 475" fill="none" stroke="#648bd0" stroke-width="5" opacity=".75"/>
+
+        <path d="M123 572 Q143 560 188 565 Q204 568 210 589 L207 606
+                 Q164 614 118 604 Q108 596 112 585 Q115 578 123 572 Z"
+              fill="#f5f7fb" stroke="#c8ced7" stroke-width="7"/>
+        <path d="M297 572 Q277 560 232 565 Q216 568 210 589 L213 606
+                 Q256 614 302 604 Q312 596 308 585 Q305 578 297 572 Z"
+              fill="#f5f7fb" stroke="#c8ced7" stroke-width="7"/>
+        <path d="M137 586 L190 590 M132 597 L193 601 M283 586 L230 590 M288 597 L227 601"
+              fill="none" stroke="#aeb5bf" stroke-width="4" stroke-linecap="round"/>
+      </svg>
+    `,
+    head: `
+      <svg viewBox="0 0 420 360" role="img" aria-label="PS AI MUSIC Bär Kopf">
+        <defs>
+          <clipPath id="eyeClipLeft"><ellipse cx="155" cy="164" rx="38" ry="31"/></clipPath>
+          <clipPath id="eyeClipRight"><ellipse cx="265" cy="164" rx="38" ry="31"/></clipPath>
+        </defs>
+
+        <g id="headMotionGroup">
+          <!-- Bärenohren -->
+          <circle cx="78" cy="132" r="45" fill="#a9652b" stroke="#4d2a13" stroke-width="8"/>
+          <circle cx="78" cy="132" r="24" fill="#7f451f"/>
+          <circle cx="342" cy="132" r="45" fill="#a9652b" stroke="#4d2a13" stroke-width="8"/>
+          <circle cx="342" cy="132" r="24" fill="#7f451f"/>
+
+          <!-- Kopf -->
+          <ellipse cx="210" cy="174" rx="145" ry="148" fill="#a9652b" stroke="#4d2a13" stroke-width="8"/>
+          <path d="M89 184 Q99 259 142 310 Q171 341 210 350 Q249 341 278 310
+                   Q321 259 331 184 Q306 221 273 232 Q242 243 210 244
+                   Q178 243 147 232 Q114 221 89 184 Z"
+                fill="#955524" opacity=".58"/>
+
+          <!-- Cap -->
+          <path d="M89 105 Q91 37 145 19 Q210 -2 275 19 Q329 37 331 105
+                   Q289 80 210 80 Q131 80 89 105 Z"
+                fill="#20252c" stroke="#07090c" stroke-width="9"/>
+          <path d="M102 90 Q210 62 318 90 Q285 114 210 118 Q135 114 102 90 Z"
+                fill="#101419" stroke="#07090c" stroke-width="8"/>
+          <path d="M210 12 L210 77" stroke="#0a0d11" stroke-width="5"/>
+          <path d="M143 25 Q133 55 135 83 M277 25 Q287 55 285 83"
+                fill="none" stroke="#0a0d11" stroke-width="5"/>
+
+          <!-- Augen -->
+          <g id="eyesModule">
+            <ellipse cx="155" cy="164" rx="40" ry="33" fill="#fff"/>
+            <ellipse cx="265" cy="164" rx="40" ry="33" fill="#fff"/>
+
+            <g clip-path="url(#eyeClipLeft)">
+              <circle id="pupilLeft" cx="155" cy="164" r="7.5" fill="#000"/>
+              <rect id="lidTopLeft" x="114" y="129" width="82" height="0" fill="#a9652b"/>
+              <rect id="lidBottomLeft" x="114" y="198" width="82" height="0" fill="#a9652b"/>
+            </g>
+            <g clip-path="url(#eyeClipRight)">
+              <circle id="pupilRight" cx="265" cy="164" r="7.5" fill="#000"/>
+              <rect id="lidTopRight" x="224" y="129" width="82" height="0" fill="#a9652b"/>
+              <rect id="lidBottomRight" x="224" y="198" width="82" height="0" fill="#a9652b"/>
+            </g>
+          </g>
+
+          <!-- Brille -->
+          <g fill="none" stroke="#090b0d" stroke-width="9">
+            <rect x="99" y="132" width="106" height="70" rx="28"/>
+            <rect x="215" y="132" width="106" height="70" rx="28"/>
+            <path d="M205 157 Q210 151 215 157"/>
+            <path d="M99 151 L69 143"/>
+            <path d="M321 151 L351 143"/>
+          </g>
+
+          <!-- Schnauze -->
+          <ellipse cx="210" cy="230" rx="72" ry="58" fill="#d8954e" stroke="#6b3b1c" stroke-width="6"/>
+          <ellipse cx="210" cy="207" rx="29" ry="22" fill="#111318"/>
+          <ellipse cx="202" cy="200" rx="8" ry="5" fill="#4b4f55" opacity=".75"/>
+          <path d="M210 226 L210 239" stroke="#23150d" stroke-width="6" stroke-linecap="round"/>
+
+          <!-- Dynamischer Mund -->
+          <g id="mouthModule">
+            <ellipse id="mouthHole" cx="210" cy="247" rx="0" ry="0" fill="#070707"/>
+            <ellipse id="tongueShape" cx="210" cy="254" rx="0" ry="0" fill="#c9656c" opacity="0"/>
+            <path id="mouthLine" d="M184 247 Q210 260 236 247"
+                  fill="none" stroke="#23150d" stroke-width="6" stroke-linecap="round"/>
+          </g>
+        </g>
+      </svg>
+    `
+  };
+
+  function refreshCharacterRefs() {
+    ui.headMotionGroup = document.getElementById("headMotionGroup");
+    ui.leftArmBase = document.getElementById("leftArmBase");
+    ui.rightArmBase = document.getElementById("rightArmBase");
+    ui.pupilLeft = document.getElementById("pupilLeft");
+    ui.pupilRight = document.getElementById("pupilRight");
+    ui.lidTopLeft = document.getElementById("lidTopLeft");
+    ui.lidBottomLeft = document.getElementById("lidBottomLeft");
+    ui.lidTopRight = document.getElementById("lidTopRight");
+    ui.lidBottomRight = document.getElementById("lidBottomRight");
+    ui.mouthCover = document.getElementById("mouthCover");
+    ui.mouthHole = document.getElementById("mouthHole");
+    ui.tongueShape = document.getElementById("tongueShape");
+    ui.mouthLine = document.getElementById("mouthLine");
+  }
+
+  function switchCharacter(character) {
+    if (character !== "human" && character !== "bear") return;
+    if (!ui.torsoPart || !ui.headPart) return;
+
+    avatarState.character = character;
+
+    const template = character === "bear"
+      ? bearCharacterTemplate
+      : humanCharacterTemplate;
+
+    ui.torsoPart.innerHTML = template.body;
+    ui.headPart.innerHTML = template.head;
+    refreshCharacterRefs();
+
+    if (ui.avatarHumanButton) {
+      ui.avatarHumanButton.classList.toggle("active", character === "human");
+    }
+    if (ui.avatarBearButton) {
+      ui.avatarBearButton.classList.toggle("active", character === "bear");
+    }
+    if (ui.activeCharacterName) {
+      ui.activeCharacterName.textContent = character === "bear" ? "PS Bär" : "PS Avatar";
+    }
+
+    renderAvatar();
+  }
+
+  function bindCharacterSelector() {
+    if (ui.avatarHumanButton) {
+      ui.avatarHumanButton.addEventListener("click", () => switchCharacter("human"));
+    }
+    if (ui.avatarBearButton) {
+      ui.avatarBearButton.addEventListener("click", () => switchCharacter("bear"));
+    }
   }
 
   function renderAvatar() {
@@ -2557,7 +2847,7 @@ body.menu-open{overflow:hidden}
     if (ui.menuButton) ui.menuButton.setAttribute("aria-expanded", open ? "true" : "false");
   }
 
-  // --- Figurenaufnahme v0.15.1 -------------------------------------------
+  // --- Figurenaufnahme v0.16 -------------------------------------------
   // Direkter Canvas-Renderer: keine langsame SVG->Bitmap-Konvertierung pro Frame.
   let avatarRecorder = null;
   let recorderChunks = [];
@@ -2640,7 +2930,170 @@ body.menu-open{overflow:hidden}
     }
   }
 
+  function drawRecordedBearBody(ctx) {
+    const s=0.7857;
+    const x=360-210*s;
+    const y=900-620*s;
+
+    ctx.save();
+    ctx.translate(x,y);
+    ctx.scale(s,s);
+
+    const leftArmAngle=Math.max(0,Math.min(105,avatarState.leftArm.shoulder||0));
+    const rightArmAngle=Math.max(-105,Math.min(0,avatarState.rightArm.shoulder||0));
+
+    ctx.save();
+    ctx.translate(112,112);
+    ctx.rotate(leftArmAngle*Math.PI/180);
+    ctx.translate(-112,-112);
+    fillStrokePath(ctx,BODY_PATHS.leftArm,"#11161c","#05080c",9);
+    ctx.beginPath();ctx.ellipse(88,374,27,30,0,0,Math.PI*2);
+    ctx.fillStyle="#a9652b";ctx.fill();ctx.strokeStyle="#4d2a13";ctx.lineWidth=6;ctx.stroke();
+    ctx.restore();
+
+    ctx.save();
+    ctx.translate(308,112);
+    ctx.rotate(rightArmAngle*Math.PI/180);
+    ctx.translate(-308,-112);
+    fillStrokePath(ctx,BODY_PATHS.rightArm,"#11161c","#05080c",9);
+    ctx.beginPath();ctx.ellipse(332,374,27,30,0,0,Math.PI*2);
+    ctx.fillStyle="#a9652b";ctx.fill();ctx.strokeStyle="#4d2a13";ctx.lineWidth=6;ctx.stroke();
+    ctx.restore();
+
+    fillStrokePath(ctx,BODY_PATHS.torso,"#11161d","#05080c",10);
+    fillStrokePath(ctx,BODY_PATHS.collar,"#20262e","#070a0e",8);
+    fillStrokePath(ctx,BODY_PATHS.shirt,"#090b10",null,0);
+
+    const grad=ctx.createLinearGradient(145,0,280,0);
+    grad.addColorStop(0,"#ff4fd8");
+    grad.addColorStop(.55,"#8c66ff");
+    grad.addColorStop(1,"#35d8ff");
+
+    ctx.strokeStyle=grad;ctx.lineWidth=6;ctx.lineCap="round";
+    ctx.beginPath();
+    ctx.moveTo(147,211);ctx.quadraticCurveTo(170,182,192,202);
+    ctx.quadraticCurveTo(210,176,229,202);ctx.quadraticCurveTo(254,182,275,213);
+    ctx.stroke();
+
+    ctx.fillStyle=grad;
+    ctx.font="900 26px Arial";
+    ctx.textAlign="center";
+    ctx.fillText("PS AI MUSIC",210,286);
+
+    fillStrokePath(ctx,BODY_PATHS.waist,"#0b0e12","#05080c",7);
+    fillStrokePath(ctx,BODY_PATHS.hips,"#476fae","#27466f",8);
+    fillStrokePath(ctx,BODY_PATHS.leftLeg,"#4f79bc","#294b79",8);
+    fillStrokePath(ctx,BODY_PATHS.rightLeg,"#4f79bc","#294b79",8);
+
+    ctx.beginPath();ctx.moveTo(142,475);ctx.quadraticCurveTo(170,468,197,476);
+    ctx.strokeStyle="#648bd0";ctx.globalAlpha=.75;ctx.lineWidth=5;ctx.stroke();
+    ctx.beginPath();ctx.moveTo(223,476);ctx.quadraticCurveTo(250,468,278,475);ctx.stroke();
+    ctx.globalAlpha=1;
+
+    fillStrokePath(ctx,BODY_PATHS.leftShoe,"#f5f7fb","#c8ced7",7);
+    fillStrokePath(ctx,BODY_PATHS.rightShoe,"#f5f7fb","#c8ced7",7);
+    strokeLine(ctx,[[137,586],[190,590]],"#aeb5bf",4);
+    strokeLine(ctx,[[132,597],[193,601]],"#aeb5bf",4);
+    strokeLine(ctx,[[283,586],[230,590]],"#aeb5bf",4);
+    strokeLine(ctx,[[288,597],[227,601]],"#aeb5bf",4);
+
+    ctx.restore();
+  }
+
+  function drawRecordedBearHead(ctx) {
+    const face=avatarState.face;
+    const head=avatarState.head;
+    const s=0.6548;
+    const anchorX=360;
+    const anchorY=550+(head.idleLift||0);
+    const lean=Math.max(-12,Math.min(12,(head.sideLean||0)+(head.idleLean||0)));
+
+    ctx.save();
+    ctx.translate(anchorX,anchorY);
+    ctx.rotate(lean*Math.PI/180);
+    ctx.scale(s,s);
+    ctx.translate(-210,-360);
+
+    // ears
+    ctx.beginPath();ctx.arc(78,132,45,0,Math.PI*2);
+    ctx.fillStyle="#a9652b";ctx.fill();ctx.strokeStyle="#4d2a13";ctx.lineWidth=8;ctx.stroke();
+    ctx.beginPath();ctx.arc(78,132,24,0,Math.PI*2);ctx.fillStyle="#7f451f";ctx.fill();
+    ctx.beginPath();ctx.arc(342,132,45,0,Math.PI*2);
+    ctx.fillStyle="#a9652b";ctx.fill();ctx.strokeStyle="#4d2a13";ctx.lineWidth=8;ctx.stroke();
+    ctx.beginPath();ctx.arc(342,132,24,0,Math.PI*2);ctx.fillStyle="#7f451f";ctx.fill();
+
+    // head
+    ctx.beginPath();ctx.ellipse(210,174,145,148,0,0,Math.PI*2);
+    ctx.fillStyle="#a9652b";ctx.fill();ctx.strokeStyle="#4d2a13";ctx.lineWidth=8;ctx.stroke();
+
+    // cap
+    fillStrokePath(ctx,HEAD_PATHS.cap,"#20252c","#07090c",9);
+    fillStrokePath(ctx,HEAD_PATHS.brim,"#101419","#07090c",8);
+    strokeLine(ctx,[[210,12],[210,77]],"#0a0d11",5);
+
+    // eyes
+    ctx.beginPath();ctx.ellipse(155,164,40,33,0,0,Math.PI*2);ctx.fillStyle="#fff";ctx.fill();
+    ctx.beginPath();ctx.ellipse(265,164,40,33,0,0,Math.PI*2);ctx.fill();
+
+    const pxOffset=(face.lookX||0)*2+(head.sideLean||0)*0.12;
+    const pyOffset=(face.lookY||0)*2;
+    ctx.beginPath();ctx.arc(155+pxOffset,164+pyOffset,7.5*(face.pupilScale||1),0,Math.PI*2);ctx.fillStyle="#000";ctx.fill();
+    ctx.beginPath();ctx.arc(265+pxOffset,164+pyOffset,7.5*(face.pupilScale||1),0,Math.PI*2);ctx.fill();
+
+    const maxLid=31;
+    const lc=Math.max(0,Math.min(100,face.blinkLeft||0))/100*maxLid;
+    const rc=Math.max(0,Math.min(100,face.blinkRight||0))/100*maxLid;
+    ctx.save();ctx.beginPath();ctx.ellipse(155,164,40,33,0,0,Math.PI*2);ctx.clip();
+    ctx.fillStyle="#a9652b";ctx.fillRect(114,129,82,lc);ctx.fillRect(114,198-lc,82,lc);ctx.restore();
+    ctx.save();ctx.beginPath();ctx.ellipse(265,164,40,33,0,0,Math.PI*2);ctx.clip();
+    ctx.fillStyle="#a9652b";ctx.fillRect(224,129,82,rc);ctx.fillRect(224,198-rc,82,rc);ctx.restore();
+
+    // glasses
+    ctx.strokeStyle="#090b0d";ctx.lineWidth=9;
+    ctx.beginPath(); if(ctx.roundRect) ctx.roundRect(99,132,106,70,28); else ctx.rect(99,132,106,70); ctx.stroke();
+    ctx.beginPath(); if(ctx.roundRect) ctx.roundRect(215,132,106,70,28); else ctx.rect(215,132,106,70); ctx.stroke();
+    strokeLine(ctx,[[205,157],[210,151],[215,157]],"#090b0d",9);
+    strokeLine(ctx,[[99,151],[69,143]],"#090b0d",9);
+    strokeLine(ctx,[[321,151],[351,143]],"#090b0d",9);
+
+    // muzzle + nose
+    ctx.beginPath();ctx.ellipse(210,230,72,58,0,0,Math.PI*2);
+    ctx.fillStyle="#d8954e";ctx.fill();ctx.strokeStyle="#6b3b1c";ctx.lineWidth=6;ctx.stroke();
+    ctx.beginPath();ctx.ellipse(210,207,29,22,0,0,Math.PI*2);ctx.fillStyle="#111318";ctx.fill();
+    ctx.beginPath();ctx.ellipse(202,200,8,5,0,0,Math.PI*2);ctx.fillStyle="#4b4f55";ctx.fill();
+    strokeLine(ctx,[[210,226],[210,239]],"#23150d",6);
+
+    // mouth
+    const widthScale=(face.mouthWidth||100)/100;
+    const halfWidth=26*widthScale;
+    const openRy=(face.mouthOpen||0)/100*15;
+    const baseY=247;
+
+    if(openRy>0.25){
+      ctx.beginPath();ctx.ellipse(210,baseY+4,halfWidth*.82,openRy,0,0,Math.PI*2);
+      ctx.fillStyle="#070707";ctx.fill();
+      if((face.mouthOpen||0)>20){
+        ctx.globalAlpha=.86;
+        ctx.beginPath();ctx.ellipse(210,baseY+6+openRy*.25,halfWidth*.48,openRy*.34,0,0,Math.PI*2);
+        ctx.fillStyle="#c9656c";ctx.fill();ctx.globalAlpha=1;
+      }
+    }
+
+    const leftY=baseY-(face.mouthCornerLeft||0)*.55;
+    const rightY=baseY-(face.mouthCornerRight||0)*.55;
+    const controlY=baseY-(((face.mouthCornerLeft||0)+(face.mouthCornerRight||0))/2)*.40;
+    ctx.beginPath();ctx.moveTo(210-halfWidth,leftY);ctx.quadraticCurveTo(210,controlY+10,210+halfWidth,rightY);
+    ctx.strokeStyle="#23150d";ctx.lineWidth=6;ctx.lineCap="round";ctx.stroke();
+
+    ctx.restore();
+  }
+
   function drawRecordedBody(ctx) {
+    if (avatarState.character === "bear") {
+      drawRecordedBearBody(ctx);
+      return;
+    }
+
     // entspricht ca. 330px Körperbreite im Live-Avatar
     const s=0.7857;
     const x=360-210*s;
@@ -2703,6 +3156,11 @@ body.menu-open{overflow:hidden}
   }
 
   function drawRecordedHead(ctx) {
+    if (avatarState.character === "bear") {
+      drawRecordedBearHead(ctx);
+      return;
+    }
+
     const face=avatarState.face;
     const head=avatarState.head;
     // entspricht ca. 275px Kopfbreite im Live-Avatar
@@ -3009,6 +3467,7 @@ body.menu-open{overflow:hidden}
   bindEyeControls();
   bindTouchControls();
   bindAudioLipSync();
+  bindCharacterSelector();
   bindAvatarRecorder();
   bindMenu();
   renderAvatar();
