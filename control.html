@@ -109,6 +109,16 @@ radial-gradient(circle at center,#0d2534,#071018 70%);background-size:25% 25%,25
   .speech-quick{grid-template-columns:repeat(2,1fr)}
 }
 
+
+.overlay-mode-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}
+.overlay-mode{min-height:44px;border:1px solid #334858;border-radius:10px;background:#09141c;color:#e7f2f8;font-weight:900}
+.overlay-mode.active{border-color:var(--cyan);background:rgba(39,200,255,.11)}
+.overlay-mode.green{box-shadow:inset 0 0 0 2px rgba(0,255,0,.08)}
+.overlay-mode.pink{box-shadow:inset 0 0 0 2px rgba(255,0,255,.08)}
+.overlay-option-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px}
+.overlay-option-grid button{min-height:42px;border:1px solid #3b4b56;border-radius:10px;background:#0b141b;color:#cfdce4;font-weight:850}
+.overlay-option-grid button.active{border-color:#6fd8ff;background:rgba(39,200,255,.10);color:#fff}
+
 </style>
 </head>
 <body>
@@ -286,6 +296,21 @@ radial-gradient(circle at center,#0d2534,#071018 70%);background-size:25% 25%,25
         <label class="range"><span>Abdunkeln <strong id="backgroundDimValue">0%</strong></span><input id="backgroundDim" type="range" min="0" max="70" value="0"></label>
       </div>
     </article>
+
+    <article class="card">
+      <div class="card-head"><strong>🪄 Live Overlay</strong><span id="overlayStatus">Normal</span></div>
+      <div class="overlay-mode-grid">
+        <button class="overlay-mode active" type="button" data-overlay-mode="normal">Normal</button>
+        <button class="overlay-mode" type="button" data-overlay-mode="transparent">Transparent</button>
+        <button class="overlay-mode green" type="button" data-overlay-mode="green">Grün</button>
+        <button class="overlay-mode pink" type="button" data-overlay-mode="pink">Pink</button>
+      </div>
+      <div class="overlay-option-grid">
+        <button id="overlayShadow" type="button">Schatten AUS</button>
+        <button id="overlayBubble" class="active" type="button">Sprechblase AN</button>
+      </div>
+      <p class="subtle">Overlay ist nur ein zusätzlicher Live-Modus. Mit „Normal“ kommt dein vorheriger Grid/Bild/GIF-Hintergrund sofort wieder zurück.</p>
+    </article>
   </section>
 
   <section class="panel" data-panel="designer" hidden>
@@ -333,6 +358,9 @@ let channel=null,room="",connected=false,dance=false,walk=false,danceStyle="groo
 let currentBackgroundUrl="";
 let currentCharacter="human";
 let recentSpeechTexts=[];
+let overlayMode="normal";
+let overlayShadow=false;
+let overlayBubble=true;
 
 function cleanRoom(value){return String(value||"").toUpperCase().replace(/[^A-Z0-9_-]/g,"").slice(0,24)}
 function generateRoom(){const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789",bytes=new Uint8Array(8);crypto.getRandomValues(bytes);let out="PS-";for(const b of bytes)out+=chars[b%chars.length];return out}
@@ -371,6 +399,13 @@ function setStageOnline(snapshot={}){
   if(audio.loaded){
     $("audioUploadStatus").classList.add("ok");
     $("audioUploadStatus").textContent=audio.playing?"Tablet: Audio läuft 🔊":"Tablet: Audio geladen";
+  }
+
+  if(snapshot.overlay){
+    overlayMode=snapshot.overlay.mode||"normal";
+    overlayShadow=!!snapshot.overlay.shadow;
+    overlayBubble=snapshot.overlay.bubble!==false;
+    syncOverlayUi();
   }
 }
 async function sendCommand(payload,quiet=false){
@@ -528,6 +563,43 @@ function resetTouchUi(){
   for(const id of ["leftArm","rightArm","leftLeg","rightLeg"])$(id).value=0;
   for(const id of ["leftArmValue","rightArmValue","leftLegValue","rightLegValue"])$(id).textContent="0°";
 }
+
+function syncOverlayUi(){
+  document.querySelectorAll("[data-overlay-mode]").forEach(btn=>{
+    btn.classList.toggle("active",btn.dataset.overlayMode===overlayMode);
+  });
+  const names={normal:"Normal",transparent:"Transparent",green:"Greenscreen Grün",pink:"Greenscreen Pink"};
+  if($("overlayStatus")) $("overlayStatus").textContent=names[overlayMode]||"Normal";
+
+  if($("overlayShadow")){
+    $("overlayShadow").classList.toggle("active",overlayShadow);
+    $("overlayShadow").textContent=overlayShadow?"Schatten AN":"Schatten AUS";
+  }
+  if($("overlayBubble")){
+    $("overlayBubble").classList.toggle("active",overlayBubble);
+    $("overlayBubble").textContent=overlayBubble?"Sprechblase AN":"Sprechblase AUS";
+  }
+}
+
+document.querySelectorAll("[data-overlay-mode]").forEach(btn=>btn.addEventListener("click",()=>{
+  overlayMode=btn.dataset.overlayMode;
+  syncOverlayUi();
+  sendCommand({action:"overlay_mode",mode:overlayMode});
+}));
+
+$("overlayShadow").addEventListener("click",()=>{
+  overlayShadow=!overlayShadow;
+  syncOverlayUi();
+  sendCommand({action:"overlay_shadow",enabled:overlayShadow});
+});
+
+$("overlayBubble").addEventListener("click",()=>{
+  overlayBubble=!overlayBubble;
+  syncOverlayUi();
+  sendCommand({action:"overlay_bubble",enabled:overlayBubble});
+});
+
+syncOverlayUi();
 
 // Storage upload
 function safeFileName(name){
