@@ -2157,7 +2157,7 @@ body.menu-open{overflow:hidden}
             <label><span>Nase <strong data-designer-value="noseSize">100%</strong></span><input type="range" min="75" max="125" value="100" data-designer-key="noseSize"></label>
             <label><span>Nase Höhe <strong data-designer-value="noseY">0</strong></span><input type="range" min="-12" max="14" value="0" data-designer-key="noseY"></label>
             <label><span>Mundgröße <strong data-designer-value="mouthSize">100%</strong></span><input type="range" min="75" max="135" value="100" data-designer-key="mouthSize"></label>
-            <label><span>Mund Höhe <strong data-designer-value="mouthY">0</strong></span><input type="range" min="-14" max="18" value="0" data-designer-key="mouthY"></label>
+            <label><span>Mund hoch / runter <strong data-designer-value="mouthY">0</strong></span><input type="range" min="-20" max="24" value="0" step="1" data-designer-key="mouthY"></label>
             <label><span>Bartgröße <strong data-designer-value="beardSize">100%</strong></span><input type="range" min="75" max="120" value="100" data-designer-key="beardSize"></label>
             <label><span>Bart Höhe <strong data-designer-value="beardY">0</strong></span><input type="range" min="-14" max="18" value="0" data-designer-key="beardY"></label>
           </div>
@@ -3228,6 +3228,14 @@ body.menu-open{overflow:hidden}
       ui.psHumanBodySvg.style.transform="scaleX("+(d.bodyWidth/100)+")";
     }
     // Originalbild-Kopf bleibt unverändert. Keine Gesichts-/Cap-/Bart-Skalierung.
+    // Nur der animierte Mund darf im Designer fein hoch/runter verschoben werden.
+    const mouthModule=ui.headPart?.querySelector("#mouthModule")||null;
+    if(mouthModule){
+      setSvgTransform(
+        mouthModule,
+        svgAround(210,239,d.mouthSize/100,d.mouthSize/100,0,d.mouthY)
+      );
+    }
   }
   function applyCurrentAvatarDesigner(){
     const d=avatarState.designer||DESIGNER_DEFAULTS;
