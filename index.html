@@ -416,6 +416,29 @@ footer {
 .toggle-row input{width:23px;height:23px;accent-color:var(--accent)}
 @media(max-width:760px){.touch-grid{grid-template-columns:1fr}.touch-pad{aspect-ratio:1.35/1}.touch-card{padding:11px}.avatar-stage{min-height:420px}.avatar-head-module{width:min(360px,84vw)}}
 
+
+/* Schritt 6: lokales Audio-Lip-Sync */
+.audio-lipsync{margin-top:14px;border:1px solid rgba(39,200,255,.20);background:linear-gradient(180deg,rgba(39,200,255,.055),rgba(0,0,0,.12));border-radius:16px;padding:12px}
+.audio-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.audio-head>div{display:grid;gap:3px}
+.audio-head strong{font-size:14px}
+.audio-head span{color:var(--muted);font-size:11px}
+.audio-file-button{display:inline-flex!important;grid-template-columns:none!important;align-items:center!important;margin:0!important;border:1px solid rgba(39,200,255,.35)!important;background:var(--accent-soft)!important;color:var(--text)!important;border-radius:12px!important;padding:0!important;overflow:hidden;cursor:pointer}
+.audio-file-button input{position:absolute;opacity:0;pointer-events:none;width:1px;height:1px}
+.audio-file-button span{display:block;color:var(--text);font-size:12px;font-weight:850;padding:12px 14px}
+.audio-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:12px}
+.audio-actions button{min-height:52px;border-radius:13px;border:1px solid #254a63;background:#091925;color:var(--text);font-weight:800}
+.audio-actions button.active{border-color:var(--accent);background:var(--accent-soft)}
+.audio-actions button:disabled{opacity:.38}
+.audio-meter{height:16px;border-radius:999px;background:#03101a;border:1px solid #21445a;overflow:hidden;margin-top:11px}
+#audioMeterFill{height:100%;width:0%;background:linear-gradient(90deg,#1f9ed4,#37ddff);transition:width 45ms linear}
+.audio-mode{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:11px;flex-wrap:wrap;color:var(--muted);font-size:11px}
+.audio-mode>div{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;flex:1;max-width:360px}
+.audio-mode button{min-height:40px;border-radius:10px;border:1px solid #254a63;background:#091925;color:var(--text);font-size:11px;font-weight:750}
+.audio-mode button.active{border-color:var(--accent);background:var(--accent-soft)}
+.audio-note{margin:10px 0 0;color:#7890a1;font-size:10px;line-height:1.45}
+@media(max-width:520px){.audio-actions{grid-template-columns:1fr 1fr}.audio-actions #audioLipSyncToggle{grid-column:1/-1}.audio-file-button{width:100%;justify-content:center}.audio-head{align-items:stretch}.audio-mode{align-items:stretch;flex-direction:column}.audio-mode>div{max-width:none}}
+
 </style>
 </head>
 <body>
@@ -425,7 +448,7 @@ footer {
         <p class="eyebrow">PS AI MUSIC</p>
         <h1>Avatar Development</h1>
       </div>
-      <div class="version-badge">v0.05</div>
+      <div class="version-badge">v0.06</div>
     </header>
 
     <section class="stage-card">
@@ -480,7 +503,7 @@ footer {
         </div>
 
         <div class="stage-caption">
-          <strong>Schritt 5:</strong> Touch-Steuerung + Mund</div>
+          <strong>Schritt 6:</strong> Touch + Audio-Lip-Sync</div>
       </div>
     </section>
 
@@ -587,6 +610,42 @@ footer {
           <label><input id="autoBlink" type="checkbox" checked><span>Automatisch blinzeln</span></label>
           <label><input id="autoTalk" type="checkbox"><span>Sprechen testen</span></label>
         </div>
+
+        <section class="audio-lipsync">
+          <div class="audio-head">
+            <div>
+              <strong>🎙️ Audio-Lip-Sync</strong>
+              <span id="audioStatus">Keine Audiodatei gewählt</span>
+            </div>
+            <label class="audio-file-button">
+              <input id="audioFile" type="file" accept="audio/*">
+              <span>＋ Audio wählen</span>
+            </label>
+          </div>
+
+          <audio id="speechAudio" preload="metadata"></audio>
+
+          <div class="audio-actions">
+            <button id="audioPlay" type="button" disabled>▶ Abspielen</button>
+            <button id="audioStop" type="button" disabled>■ Stop</button>
+            <button id="audioLipSyncToggle" type="button" class="active" disabled>👄 Lip-Sync AN</button>
+          </div>
+
+          <div class="audio-meter" aria-label="Audio Pegel">
+            <div id="audioMeterFill"></div>
+          </div>
+
+          <div class="audio-mode">
+            <span>Reaktion</span>
+            <div>
+              <button type="button" data-audio-strength="soft">Sanft</button>
+              <button type="button" data-audio-strength="normal" class="active">Normal</button>
+              <button type="button" data-audio-strength="strong">Stark</button>
+            </div>
+          </div>
+
+          <p class="audio-note">Die Audiodatei bleibt auf deinem Gerät. Die Seite liest nur den Tonpegel für die Mundbewegung.</p>
+        </section>
       </article>
     </section>
 
@@ -599,7 +658,7 @@ footer {
 (() => {
   "use strict";
 
-  const VERSION = "0.05";
+  const VERSION = "0.06";
 
   const avatarState = {
     version: VERSION,
@@ -715,7 +774,14 @@ footer {
     mouthCover: document.getElementById("mouthCover"),
     mouthHole: document.getElementById("mouthHole"),
     tongueShape: document.getElementById("tongueShape"),
-    mouthLine: document.getElementById("mouthLine")
+    mouthLine: document.getElementById("mouthLine"),
+    audioFile: document.getElementById("audioFile"),
+    speechAudio: document.getElementById("speechAudio"),
+    audioPlay: document.getElementById("audioPlay"),
+    audioStop: document.getElementById("audioStop"),
+    audioLipSyncToggle: document.getElementById("audioLipSyncToggle"),
+    audioStatus: document.getElementById("audioStatus"),
+    audioMeterFill: document.getElementById("audioMeterFill")
   };
 
   function registerPart(name, element) {
@@ -868,7 +934,7 @@ footer {
       ui.heartbeatText.textContent =
         "Engine läuft · Frame " +
         avatarState.engine.frame.toLocaleString("de-DE") +
-        " · Touch-Steuerung + Mund aktiv";
+        " · Touch + Audio-Lip-Sync aktiv";
     }
   }
 
@@ -1041,6 +1107,177 @@ footer {
   }
 
   let talkTimer = null;
+  let audioContext = null;
+  let audioSource = null;
+  let audioAnalyser = null;
+  let audioData = null;
+  let audioAnimationFrame = null;
+  let audioObjectUrl = null;
+  let audioLipSyncEnabled = true;
+  let audioStrength = 1.0;
+  let smoothedAudioMouth = 0;
+
+  function ensureAudioGraph() {
+    if (!ui.speechAudio) return false;
+
+    if (!audioContext) {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) {
+        if (ui.audioStatus) ui.audioStatus.textContent = "Web Audio wird von diesem Browser nicht unterstützt";
+        return false;
+      }
+      audioContext = new AudioCtx();
+      audioAnalyser = audioContext.createAnalyser();
+      audioAnalyser.fftSize = 1024;
+      audioAnalyser.smoothingTimeConstant = 0.45;
+      audioData = new Uint8Array(audioAnalyser.fftSize);
+    }
+
+    if (!audioSource) {
+      audioSource = audioContext.createMediaElementSource(ui.speechAudio);
+      audioSource.connect(audioAnalyser);
+      audioAnalyser.connect(audioContext.destination);
+    }
+    return true;
+  }
+
+  function stopAudioLipSyncLoop(resetMouth = true) {
+    if (audioAnimationFrame) {
+      cancelAnimationFrame(audioAnimationFrame);
+      audioAnimationFrame = null;
+    }
+    if (ui.audioMeterFill) ui.audioMeterFill.style.width = "0%";
+
+    if (resetMouth) {
+      smoothedAudioMouth = 0;
+      avatarState.face.mouthOpen = 0;
+      avatarState.face.mouthWidth = 100;
+      renderAvatar();
+    }
+  }
+
+  function audioLipSyncLoop() {
+    if (!audioAnalyser || !ui.speechAudio || ui.speechAudio.paused || ui.speechAudio.ended) {
+      stopAudioLipSyncLoop(false);
+      return;
+    }
+
+    audioAnalyser.getByteTimeDomainData(audioData);
+
+    let sum = 0;
+    for (let i = 0; i < audioData.length; i++) {
+      const sample = (audioData[i] - 128) / 128;
+      sum += sample * sample;
+    }
+
+    const rms = Math.sqrt(sum / audioData.length);
+    const raw = Math.max(0, Math.min(1, (rms - 0.012) * 9.5 * audioStrength));
+    smoothedAudioMouth += (raw - smoothedAudioMouth) * (raw > smoothedAudioMouth ? 0.46 : 0.20);
+
+    if (ui.audioMeterFill) {
+      ui.audioMeterFill.style.width = Math.round(Math.min(1, rms * 8) * 100) + "%";
+    }
+
+    if (audioLipSyncEnabled) {
+      const open = Math.max(0, Math.min(100, smoothedAudioMouth * 100));
+      avatarState.face.mouthOpen = open;
+
+      // Kleine Breitenänderung verhindert simples "Klappmaul".
+      const pulse = Math.sin(performance.now() * 0.022) * Math.min(10, open * 0.12);
+      avatarState.face.mouthWidth = 96 + open * 0.12 + pulse;
+      renderAvatar();
+    }
+
+    audioAnimationFrame = requestAnimationFrame(audioLipSyncLoop);
+  }
+
+  function setAudioStrength(mode) {
+    audioStrength = mode === "soft" ? 0.72 : mode === "strong" ? 1.38 : 1.0;
+    document.querySelectorAll("[data-audio-strength]").forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.audioStrength === mode);
+    });
+  }
+
+  function bindAudioLipSync() {
+    if (!ui.audioFile || !ui.speechAudio) return;
+
+    ui.audioFile.addEventListener("change", () => {
+      const file = ui.audioFile.files && ui.audioFile.files[0];
+      if (!file) return;
+
+      if (audioObjectUrl) URL.revokeObjectURL(audioObjectUrl);
+      audioObjectUrl = URL.createObjectURL(file);
+      ui.speechAudio.src = audioObjectUrl;
+      ui.speechAudio.load();
+
+      if (ui.audioStatus) ui.audioStatus.textContent = file.name;
+      if (ui.audioPlay) ui.audioPlay.disabled = false;
+      if (ui.audioStop) ui.audioStop.disabled = false;
+      if (ui.audioLipSyncToggle) ui.audioLipSyncToggle.disabled = false;
+    });
+
+    if (ui.audioPlay) {
+      ui.audioPlay.addEventListener("click", async () => {
+        if (!ui.speechAudio.src) return;
+        if (!ensureAudioGraph()) return;
+
+        if (audioContext.state === "suspended") await audioContext.resume();
+
+        if (ui.speechAudio.paused) {
+          // Audio-Lip-Sync hat Vorrang vor dem künstlichen Sprechtest.
+          if (ui.autoTalk && ui.autoTalk.checked) {
+            ui.autoTalk.checked = false;
+            setAutoTalk(false);
+          }
+          await ui.speechAudio.play();
+          ui.audioPlay.textContent = "⏸ Pause";
+          if (ui.audioStatus) ui.audioStatus.textContent = (ui.audioFile.files[0]?.name || "Audio") + " · läuft";
+          stopAudioLipSyncLoop(false);
+          audioLipSyncLoop();
+        } else {
+          ui.speechAudio.pause();
+          ui.audioPlay.textContent = "▶ Weiter";
+          if (ui.audioStatus) ui.audioStatus.textContent = (ui.audioFile.files[0]?.name || "Audio") + " · pausiert";
+          stopAudioLipSyncLoop();
+        }
+      });
+    }
+
+    if (ui.audioStop) {
+      ui.audioStop.addEventListener("click", () => {
+        ui.speechAudio.pause();
+        ui.speechAudio.currentTime = 0;
+        ui.audioPlay.textContent = "▶ Abspielen";
+        if (ui.audioStatus) ui.audioStatus.textContent = ui.audioFile.files[0]?.name || "Audio gestoppt";
+        stopAudioLipSyncLoop();
+      });
+    }
+
+    if (ui.audioLipSyncToggle) {
+      ui.audioLipSyncToggle.addEventListener("click", () => {
+        audioLipSyncEnabled = !audioLipSyncEnabled;
+        ui.audioLipSyncToggle.classList.toggle("active", audioLipSyncEnabled);
+        ui.audioLipSyncToggle.textContent = audioLipSyncEnabled ? "👄 Lip-Sync AN" : "👄 Lip-Sync AUS";
+        if (!audioLipSyncEnabled) {
+          avatarState.face.mouthOpen = 0;
+          avatarState.face.mouthWidth = 100;
+          renderAvatar();
+        }
+      });
+    }
+
+    document.querySelectorAll("[data-audio-strength]").forEach(btn => {
+      btn.addEventListener("click", () => setAudioStrength(btn.dataset.audioStrength));
+    });
+
+    ui.speechAudio.addEventListener("ended", () => {
+      ui.audioPlay.textContent = "▶ Abspielen";
+      if (ui.audioStatus) ui.audioStatus.textContent = (ui.audioFile.files[0]?.name || "Audio") + " · fertig";
+      stopAudioLipSyncLoop();
+    });
+
+    setAudioStrength("normal");
+  }
 
   function setMouthMood(mode) {
     document.querySelectorAll("[data-mouth]").forEach(btn => {
@@ -1165,6 +1402,7 @@ footer {
   bindHeadControls();
   bindEyeControls();
   bindTouchControls();
+  bindAudioLipSync();
   renderAvatar();
 
   window.PSAvatarEngine = {
