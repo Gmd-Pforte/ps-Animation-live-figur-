@@ -1,7 +1,7 @@
 (() => {
   "use strict";
 
-  const VERSION = "0.02";
+  const VERSION = "0.03";
 
   const avatarState = {
     version: VERSION,
@@ -18,6 +18,8 @@
       lookY: 0,
       blinkLeft: 0,
       blinkRight: 0,
+      pupilScale: 1,
+      autoBlink: true,
       mouthOpen: 0,
       mouthWidth: 100
     },
@@ -77,7 +79,25 @@
     headTiltValue: document.getElementById("headTiltValue"),
     headTurnValue: document.getElementById("headTurnValue"),
     headScaleValue: document.getElementById("headScaleValue"),
-    headReset: document.getElementById("headReset")
+    headReset: document.getElementById("headReset"),
+    lookX: document.getElementById("lookX"),
+    lookY: document.getElementById("lookY"),
+    blinkLeft: document.getElementById("blinkLeft"),
+    blinkRight: document.getElementById("blinkRight"),
+    pupilScale: document.getElementById("pupilScale"),
+    autoBlink: document.getElementById("autoBlink"),
+    blinkNow: document.getElementById("blinkNow"),
+    lookXValue: document.getElementById("lookXValue"),
+    lookYValue: document.getElementById("lookYValue"),
+    blinkLeftValue: document.getElementById("blinkLeftValue"),
+    blinkRightValue: document.getElementById("blinkRightValue"),
+    pupilScaleValue: document.getElementById("pupilScaleValue"),
+    pupilLeft: document.getElementById("pupilLeft"),
+    pupilRight: document.getElementById("pupilRight"),
+    lidTopLeft: document.getElementById("lidTopLeft"),
+    lidBottomLeft: document.getElementById("lidBottomLeft"),
+    lidTopRight: document.getElementById("lidTopRight"),
+    lidBottomRight: document.getElementById("lidBottomRight")
   };
 
   function registerPart(name, element) {
@@ -128,6 +148,40 @@
     if (ui.headScaleValue) {
       ui.headScaleValue.textContent = Math.round(head.scale * 100) + "%";
     }
+
+    const face = avatarState.face;
+
+    if (ui.pupilLeft && ui.pupilRight) {
+      const pupilRadius = 6 * face.pupilScale;
+      ui.pupilLeft.setAttribute("cx", 139 + face.lookX);
+      ui.pupilRight.setAttribute("cx", 221 + face.lookX);
+      ui.pupilLeft.setAttribute("cy", 174 + face.lookY);
+      ui.pupilRight.setAttribute("cy", 174 + face.lookY);
+      ui.pupilLeft.setAttribute("r", pupilRadius);
+      ui.pupilRight.setAttribute("r", pupilRadius);
+    }
+
+    const maxLid = 18;
+    const leftClose = Math.max(0, Math.min(100, face.blinkLeft)) / 100 * maxLid;
+    const rightClose = Math.max(0, Math.min(100, face.blinkRight)) / 100 * maxLid;
+
+    if (ui.lidTopLeft && ui.lidBottomLeft) {
+      ui.lidTopLeft.setAttribute("height", leftClose);
+      ui.lidBottomLeft.setAttribute("height", leftClose);
+      ui.lidBottomLeft.setAttribute("y", 192 - leftClose);
+    }
+
+    if (ui.lidTopRight && ui.lidBottomRight) {
+      ui.lidTopRight.setAttribute("height", rightClose);
+      ui.lidBottomRight.setAttribute("height", rightClose);
+      ui.lidBottomRight.setAttribute("y", 192 - rightClose);
+    }
+
+    if (ui.lookXValue) ui.lookXValue.textContent = Math.round(face.lookX);
+    if (ui.lookYValue) ui.lookYValue.textContent = Math.round(face.lookY);
+    if (ui.blinkLeftValue) ui.blinkLeftValue.textContent = Math.round(face.blinkLeft) + "%";
+    if (ui.blinkRightValue) ui.blinkRightValue.textContent = Math.round(face.blinkRight) + "%";
+    if (ui.pupilScaleValue) ui.pupilScaleValue.textContent = Math.round(face.pupilScale * 100) + "%";
   }
 
   let lastFpsTime = performance.now();
@@ -149,7 +203,7 @@
       ui.heartbeatText.textContent =
         "Engine läuft · Frame " +
         avatarState.engine.frame.toLocaleString("de-DE") +
-        " · bereit für Schritt 2";
+        " · Schritt 3 aktiv: Augen & Pupillen";
     }
   }
 
@@ -201,6 +255,105 @@
     registerPart("head", ui.headPart);
   }
 
+  let blinkTimer = null;
+  let autoBlinkTimer = null;
+
+  function syncEyeControls() {
+    if (ui.lookX) ui.lookX.value = avatarState.face.lookX;
+    if (ui.lookY) ui.lookY.value = avatarState.face.lookY;
+    if (ui.blinkLeft) ui.blinkLeft.value = avatarState.face.blinkLeft;
+    if (ui.blinkRight) ui.blinkRight.value = avatarState.face.blinkRight;
+    if (ui.pupilScale) ui.pupilScale.value = Math.round(avatarState.face.pupilScale * 100);
+    if (ui.autoBlink) ui.autoBlink.checked = avatarState.face.autoBlink;
+  }
+
+  function blinkOnce() {
+    if (blinkTimer) clearInterval(blinkTimer);
+
+    const sequence = [15, 45, 80, 100, 75, 35, 0];
+    let index = 0;
+
+    blinkTimer = setInterval(() => {
+      const value = sequence[index++];
+      avatarState.face.blinkLeft = value;
+      avatarState.face.blinkRight = value;
+
+      if (ui.blinkLeft) ui.blinkLeft.value = value;
+      if (ui.blinkRight) ui.blinkRight.value = value;
+
+      renderAvatar();
+
+      if (index >= sequence.length) {
+        clearInterval(blinkTimer);
+        blinkTimer = null;
+      }
+    }, 45);
+  }
+
+  function scheduleAutoBlink() {
+    if (autoBlinkTimer) clearTimeout(autoBlinkTimer);
+    if (!avatarState.face.autoBlink) return;
+
+    const delay = 2400 + Math.random() * 2600;
+
+    autoBlinkTimer = setTimeout(() => {
+      blinkOnce();
+      scheduleAutoBlink();
+    }, delay);
+  }
+
+  function bindEyeControls() {
+    if (ui.lookX) {
+      ui.lookX.addEventListener("input", () => {
+        avatarState.face.lookX = Number(ui.lookX.value);
+        renderAvatar();
+      });
+    }
+
+    if (ui.lookY) {
+      ui.lookY.addEventListener("input", () => {
+        avatarState.face.lookY = Number(ui.lookY.value);
+        renderAvatar();
+      });
+    }
+
+    if (ui.blinkLeft) {
+      ui.blinkLeft.addEventListener("input", () => {
+        avatarState.face.blinkLeft = Number(ui.blinkLeft.value);
+        renderAvatar();
+      });
+    }
+
+    if (ui.blinkRight) {
+      ui.blinkRight.addEventListener("input", () => {
+        avatarState.face.blinkRight = Number(ui.blinkRight.value);
+        renderAvatar();
+      });
+    }
+
+    if (ui.pupilScale) {
+      ui.pupilScale.addEventListener("input", () => {
+        avatarState.face.pupilScale = Number(ui.pupilScale.value) / 100;
+        renderAvatar();
+      });
+    }
+
+    if (ui.blinkNow) {
+      ui.blinkNow.addEventListener("click", blinkOnce);
+    }
+
+    if (ui.autoBlink) {
+      ui.autoBlink.addEventListener("change", () => {
+        avatarState.face.autoBlink = ui.autoBlink.checked;
+        scheduleAutoBlink();
+      });
+    }
+
+    registerPart("eyes", document.getElementById("eyesModule"));
+    syncEyeControls();
+    scheduleAutoBlink();
+  }
+
   function startEngine() {
     avatarState.engine.running = true;
 
@@ -213,6 +366,7 @@
   }
 
   bindHeadControls();
+  bindEyeControls();
   renderAvatar();
 
   window.PSAvatarEngine = {
