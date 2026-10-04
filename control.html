@@ -56,6 +56,8 @@ radial-gradient(circle at center,#0d2534,#071018 70%);background-size:25% 25%,25
 .touch-pad:before,.touch-pad:after{content:"";position:absolute;background:rgba(255,255,255,.10)}.touch-pad:before{width:1px;top:0;bottom:0;left:50%}.touch-pad:after{height:1px;left:0;right:0;top:50%}
 .pad-knob{position:absolute;width:34px;height:34px;border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%);border:2px solid #bfeeff;background:rgba(39,200,255,.28);box-shadow:0 0 14px rgba(39,200,255,.22);pointer-events:none}
 .touch-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}.touch-actions button{min-height:40px;border:1px solid #304b5c;border-radius:9px;background:#091821;color:#fff;font-weight:850;font-size:9px}
+.face-expression-actions{grid-template-columns:repeat(3,1fr)}
+.face-expression-actions button.active{border-color:var(--cyan);background:rgba(39,200,255,.10)}
 .slider-block{display:grid;gap:8px}.slider-block label{display:grid;gap:4px;color:var(--muted);font-size:9px}.slider-block label span{display:flex;justify-content:space-between}.slider-block strong{color:var(--cyan)}.slider-block input{width:100%;accent-color:var(--cyan)}
 
 .upload-box{display:grid;gap:8px;padding:10px;border:1px dashed #344b5c;border-radius:13px;background:#071019}
@@ -229,6 +231,11 @@ radial-gradient(circle at center,#0d2534,#071018 70%);background-size:25% 25%,25
           <div class="pad-title"><strong>👄 Mund</strong><span id="mouthPadValue">0%</span></div>
           <div id="mouthPad" class="touch-pad"><span id="mouthKnob" class="pad-knob"></span></div>
           <div class="touch-actions"><button id="mouthClose" style="grid-column:1/-1">Mund schließen</button></div>
+          <div class="touch-actions face-expression-actions">
+            <button type="button" data-expression="sad">🙁 Traurig</button>
+            <button type="button" data-expression="neutral" class="active">😐 Neutral</button>
+            <button type="button" data-expression="smile">🙂 Lächeln</button>
+          </div>
         </div>
       </div>
     </article>
@@ -542,6 +549,10 @@ const centerMouth=bindPad("mouthPad","mouthKnob",(x,y)=>{const width=Math.round(
 document.querySelectorAll("[data-blink]").forEach(btn=>btn.addEventListener("click",()=>sendCommand({action:"blink",side:btn.dataset.blink})));
 $("headCenter").addEventListener("click",()=>{centerHead();$("headPadValue").textContent="0°";sendCommand({action:"head",lean:0,tilt:0})});
 $("mouthClose").addEventListener("click",()=>{centerMouth();$("mouthPadValue").textContent="0%";sendCommand({action:"mouth",open:0,width:100})});
+document.querySelectorAll("[data-expression]").forEach(btn=>btn.addEventListener("click",()=>{
+  document.querySelectorAll("[data-expression]").forEach(b=>b.classList.toggle("active",b===btn));
+  sendCommand({action:"expression",mode:btn.dataset.expression});
+}));
 
 function bindSlider(id,valueId,action,builder){
   const el=$(id),out=$(valueId);
