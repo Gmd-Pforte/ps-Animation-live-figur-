@@ -860,14 +860,14 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.17: Touch-Fix – JS darf den Kopf transformieren */
+/* v0.17.1: Touch-Fix – JS darf den Kopf transformieren */
 .avatar-head-module{
   will-change:transform;
   transition:transform 70ms linear;
 }
 
 
-/* v0.17: Kopfneigung über festen Cutout-Anker */
+/* v0.17.1: Kopfneigung über festen Cutout-Anker */
 .head-anchor{
   transform-origin:0 0;
   will-change:transform;
@@ -944,7 +944,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.17: Aufnahme sichtbar unter den Touchfeldern */
+/* v0.17.1: Aufnahme sichtbar unter den Touchfeldern */
 .record-workspace{
   margin-top:14px;
   border:1px solid rgba(255,255,255,.07);
@@ -992,7 +992,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.17: gleiche Figur auf Handy, Desktop und Aufnahme */
+/* v0.17.1: gleiche Figur auf Handy, Desktop und Aufnahme */
 .avatar-body{
   width:min(330px,65vw)!important;
   bottom:4px!important;
@@ -1018,7 +1018,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.17: sichtbare Arm-Regler auf der Hauptseite */
+/* v0.17.1: sichtbare Arm-Regler auf der Hauptseite */
 .arm-main-controls{
   margin-top:14px;
   border:1px solid rgba(39,200,255,.22);
@@ -1130,7 +1130,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.17: drei Charaktere */
+/* v0.17.1: drei Charaktere */
 .character-buttons{
   grid-template-columns:repeat(3,minmax(0,1fr));
 }
@@ -1179,7 +1179,7 @@ body.menu-open{overflow:hidden}
         </button>
         <button id="avatarGullButton" class="character-button" type="button" data-character="gull">
           <span class="character-icon">🐦</span>
-          <span>PS Möwe</span>
+          <span>BreuerBeatz</span>
         </button>
       </div>
     </section>
@@ -1423,7 +1423,7 @@ body.menu-open{overflow:hidden}
         </div>
 
         <div class="stage-caption">
-          <strong>Schritt 17:</strong> Dritter Charakter · PS Möwe</div>
+          <strong>Schritt 17.1:</strong> Dritter Charakter · BreuerBeatz</div>
       </div>
     </section>
 
@@ -1673,7 +1673,7 @@ body.menu-open{overflow:hidden}
       </article>
         </section>
 
-        <div class="menu-version">Version <strong>0.17</strong></div>
+        <div class="menu-version">Version <strong>0.17.1</strong></div>
       </div>
     </aside>
 
@@ -1683,7 +1683,7 @@ body.menu-open{overflow:hidden}
 (() => {
   "use strict";
 
-  const VERSION = "0.17";
+  const VERSION = "0.17.1";
 
   const avatarState = {
     version: VERSION,
@@ -2034,7 +2034,7 @@ body.menu-open{overflow:hidden}
 
   const gullCharacterTemplate = {
     body: `
-      <svg viewBox="0 0 420 620" role="img" aria-label="PS AI MUSIC Möwe Ganzkörper">
+      <svg viewBox="0 0 420 620" role="img" aria-label="BreuerBeatz Möwe Ganzkörper">
         <defs>
           <linearGradient id="gullWaveGrad" x1="0" y1="0" x2="1" y2="0">
             <stop offset="0%" stop-color="#ffffff"/>
@@ -2103,7 +2103,7 @@ body.menu-open{overflow:hidden}
 
         <text x="210" y="284" text-anchor="middle"
               fill="#bfe1ff" font-size="23" font-weight="900"
-              font-family="Arial, sans-serif">PS AI MUSIC</text>
+              font-family="Arial, sans-serif">BreuerBeatz</text>
 
         <!-- Gürtel / Hose -->
         <path d="M127 374 Q210 389 293 374 L299 408 Q210 421 121 408 Z"
@@ -2135,7 +2135,7 @@ body.menu-open{overflow:hidden}
       </svg>
     `,
     head: `
-      <svg viewBox="0 0 420 360" role="img" aria-label="PS AI MUSIC Möwe Kopf">
+      <svg viewBox="0 0 420 360" role="img" aria-label="BreuerBeatz Möwe Kopf">
         <defs>
           <clipPath id="eyeClipLeft"><ellipse cx="155" cy="164" rx="38" ry="31"/></clipPath>
           <clipPath id="eyeClipRight"><ellipse cx="265" cy="164" rx="38" ry="31"/></clipPath>
@@ -2160,7 +2160,7 @@ body.menu-open{overflow:hidden}
                 fill="#0c1015" stroke="#07090c" stroke-width="8"/>
           <text x="210" y="66" text-anchor="middle"
                 fill="#f0f4f7" font-size="22" font-weight="900"
-                font-family="Arial, sans-serif">PS AI MUSIC</text>
+                font-family="Arial, sans-serif">BreuerBeatz</text>
 
           <!-- Augen -->
           <g id="eyesModule">
@@ -2252,7 +2252,7 @@ body.menu-open{overflow:hidden}
     if (ui.activeCharacterName) {
       ui.activeCharacterName.textContent =
         character === "bear" ? "PS Bär" :
-        character === "gull" ? "PS Möwe" :
+        character === "gull" ? "BreuerBeatz" :
         "PS Avatar";
     }
 
@@ -3058,7 +3058,7 @@ body.menu-open{overflow:hidden}
     if (ui.menuButton) ui.menuButton.setAttribute("aria-expanded", open ? "true" : "false");
   }
 
-  // --- Figurenaufnahme v0.17 -------------------------------------------
+  // --- Figurenaufnahme v0.17.1 -------------------------------------------
   // Direkter Canvas-Renderer: keine langsame SVG->Bitmap-Konvertierung pro Frame.
   let avatarRecorder = null;
   let recorderChunks = [];
@@ -3340,7 +3340,7 @@ body.menu-open{overflow:hidden}
 
     ctx.strokeStyle="#57a9ff";ctx.lineWidth=6;
     ctx.beginPath();ctx.moveTo(122,270);ctx.quadraticCurveTo(170,290,210,277);ctx.quadraticCurveTo(250,290,298,270);ctx.stroke();
-    ctx.fillStyle="#bfe1ff";ctx.font="900 23px Arial";ctx.textAlign="center";ctx.fillText("PS AI MUSIC",210,315);
+    ctx.fillStyle="#bfe1ff";ctx.font="900 23px Arial";ctx.textAlign="center";ctx.fillText("BreuerBeatz",210,315);
 
     fillStrokePath(ctx,BODY_PATHS.waist,"#081321","#050b13",7);
     fillStrokePath(ctx,BODY_PATHS.hips,"#0d2341","#06101e",8);
@@ -3382,7 +3382,7 @@ body.menu-open{overflow:hidden}
     // cap/beanie
     fillStrokePath(ctx,HEAD_PATHS.cap,"#15191f","#07090c",9);
     fillStrokePath(ctx,HEAD_PATHS.brim,"#0c1015","#07090c",8);
-    ctx.fillStyle="#f0f4f7";ctx.font="900 22px Arial";ctx.textAlign="center";ctx.fillText("PS AI MUSIC",210,66);
+    ctx.fillStyle="#f0f4f7";ctx.font="900 22px Arial";ctx.textAlign="center";ctx.fillText("BreuerBeatz",210,66);
 
     // eyes
     ctx.beginPath();ctx.ellipse(155,164,40,33,0,0,Math.PI*2);ctx.fillStyle="#fff";ctx.fill();
