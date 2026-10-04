@@ -860,14 +860,14 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.21: Touch-Fix – JS darf den Kopf transformieren */
+/* v0.21.1: Touch-Fix – JS darf den Kopf transformieren */
 .avatar-head-module{
   will-change:transform;
   transition:transform 70ms linear;
 }
 
 
-/* v0.21: Kopfneigung über festen Cutout-Anker */
+/* v0.21.1: Kopfneigung über festen Cutout-Anker */
 .head-anchor{
   transform-origin:0 0;
   will-change:transform;
@@ -944,7 +944,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.21: Aufnahme sichtbar unter den Touchfeldern */
+/* v0.21.1: Aufnahme sichtbar unter den Touchfeldern */
 .record-workspace{
   margin-top:14px;
   border:1px solid rgba(255,255,255,.07);
@@ -992,7 +992,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.21: gleiche Figur auf Handy, Desktop und Aufnahme */
+/* v0.21.1: gleiche Figur auf Handy, Desktop und Aufnahme */
 .avatar-body{
   width:min(330px,65vw)!important;
   bottom:4px!important;
@@ -1018,7 +1018,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.21: sichtbare Arm-Regler auf der Hauptseite */
+/* v0.21.1: sichtbare Arm-Regler auf der Hauptseite */
 .arm-main-controls{
   margin-top:14px;
   border:1px solid rgba(39,200,255,.22);
@@ -1130,7 +1130,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.21: vier Charaktere */
+/* v0.21.1: vier Charaktere */
 .character-buttons{
   grid-template-columns:repeat(4,minmax(0,1fr));
 }
@@ -2181,7 +2181,7 @@ body.menu-open{overflow:hidden}
       </article>
         </section>
 
-        <div class="menu-version">Version <strong>0.21</strong></div>
+        <div class="menu-version">Version <strong>0.21.1</strong></div>
       </div>
     </aside>
 
@@ -2191,7 +2191,7 @@ body.menu-open{overflow:hidden}
 (() => {
   "use strict";
 
-  const VERSION = "0.21";
+  const VERSION = "0.21.1";
 
   const avatarState = {
     version: VERSION,
@@ -3004,10 +3004,6 @@ body.menu-open{overflow:hidden}
         <defs>
           <clipPath id="eyeClipLeft"><ellipse cx="155" cy="164" rx="42" ry="30"/></clipPath>
           <clipPath id="eyeClipRight"><ellipse cx="265" cy="164" rx="42" ry="30"/></clipPath>
-          <filter id="maskEyeGlow" x="-80%" y="-80%" width="260%" height="260%">
-            <feGaussianBlur stdDeviation="7" result="blur"/>
-            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
         </defs>
 
         <g id="headMotionGroup">
@@ -3037,16 +3033,16 @@ body.menu-open{overflow:hidden}
           <path d="M312 151 Q270 121 222 148 Q240 190 272 194 Q298 192 312 174 Z"
                 fill="#111016" stroke="#35141d" stroke-width="5"/>
 
-          <g id="eyesModule" filter="url(#maskEyeGlow)">
+          <g id="eyesModule">
             <g clip-path="url(#eyeClipLeft)">
-              <ellipse cx="155" cy="164" rx="36" ry="21" fill="#dff8ff"/>
-              <circle id="pupilLeft" cx="155" cy="164" r="12" fill="#ffffff"/>
+              <ellipse cx="155" cy="164" rx="36" ry="21" fill="#ffffff"/>
+              <circle id="pupilLeft" cx="155" cy="164" r="7.5" fill="#000000"/>
               <rect id="lidTopLeft" x="112" y="132" width="86" height="0" fill="#705b61"/>
               <rect id="lidBottomLeft" x="112" y="196" width="86" height="0" fill="#705b61"/>
             </g>
             <g clip-path="url(#eyeClipRight)">
-              <ellipse cx="265" cy="164" rx="36" ry="21" fill="#dff8ff"/>
-              <circle id="pupilRight" cx="265" cy="164" r="12" fill="#ffffff"/>
+              <ellipse cx="265" cy="164" rx="36" ry="21" fill="#ffffff"/>
+              <circle id="pupilRight" cx="265" cy="164" r="7.5" fill="#000000"/>
               <rect id="lidTopRight" x="222" y="132" width="86" height="0" fill="#705b61"/>
               <rect id="lidBottomRight" x="222" y="196" width="86" height="0" fill="#705b61"/>
             </g>
@@ -4493,7 +4489,7 @@ body.menu-open{overflow:hidden}
     if (ui.menuButton) ui.menuButton.setAttribute("aria-expanded", open ? "true" : "false");
   }
 
-  // --- Figurenaufnahme v0.21 -------------------------------------------
+  // --- Figurenaufnahme v0.21.1 -------------------------------------------
   // Direkter Canvas-Renderer: keine langsame SVG->Bitmap-Konvertierung pro Frame.
   let avatarRecorder = null;
   let recorderChunks = [];
@@ -5018,15 +5014,12 @@ body.menu-open{overflow:hidden}
     const pxOffset=getEffectiveLookX()*1.45+getEffectiveHeadLean()*0.10;
     const pyOffset=getEffectiveLookY()*1.45;
 
-    // glow layers
-    ctx.save();
-    ctx.shadowColor="#dff8ff";ctx.shadowBlur=24;
-    ctx.beginPath();ctx.ellipse(155+pxOffset,164+pyOffset,29,16,0,0,Math.PI*2);ctx.fillStyle="#dff8ff";ctx.fill();
-    ctx.beginPath();ctx.ellipse(265+pxOffset,164+pyOffset,29,16,0,0,Math.PI*2);ctx.fill();
-    ctx.shadowBlur=10;
-    ctx.beginPath();ctx.arc(155+pxOffset,164+pyOffset,11,0,Math.PI*2);ctx.fillStyle="#fff";ctx.fill();
-    ctx.beginPath();ctx.arc(265+pxOffset,164+pyOffset,11,0,Math.PI*2);ctx.fill();
-    ctx.restore();
+    // normale weiße Augen mit schwarzen Pupillen
+    ctx.beginPath();ctx.ellipse(155,164,36,21,0,0,Math.PI*2);ctx.fillStyle="#ffffff";ctx.fill();
+    ctx.beginPath();ctx.ellipse(265,164,36,21,0,0,Math.PI*2);ctx.fillStyle="#ffffff";ctx.fill();
+
+    ctx.beginPath();ctx.arc(155+pxOffset,164+pyOffset,7.5*(face.pupilScale||1),0,Math.PI*2);ctx.fillStyle="#000000";ctx.fill();
+    ctx.beginPath();ctx.arc(265+pxOffset,164+pyOffset,7.5*(face.pupilScale||1),0,Math.PI*2);ctx.fillStyle="#000000";ctx.fill();
 
     // lids for blink
     const maxLid=29;
