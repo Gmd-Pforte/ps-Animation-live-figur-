@@ -860,14 +860,14 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.18: Touch-Fix – JS darf den Kopf transformieren */
+/* v0.19: Touch-Fix – JS darf den Kopf transformieren */
 .avatar-head-module{
   will-change:transform;
   transition:transform 70ms linear;
 }
 
 
-/* v0.18: Kopfneigung über festen Cutout-Anker */
+/* v0.19: Kopfneigung über festen Cutout-Anker */
 .head-anchor{
   transform-origin:0 0;
   will-change:transform;
@@ -944,7 +944,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.18: Aufnahme sichtbar unter den Touchfeldern */
+/* v0.19: Aufnahme sichtbar unter den Touchfeldern */
 .record-workspace{
   margin-top:14px;
   border:1px solid rgba(255,255,255,.07);
@@ -992,7 +992,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.18: gleiche Figur auf Handy, Desktop und Aufnahme */
+/* v0.19: gleiche Figur auf Handy, Desktop und Aufnahme */
 .avatar-body{
   width:min(330px,65vw)!important;
   bottom:4px!important;
@@ -1018,7 +1018,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.18: sichtbare Arm-Regler auf der Hauptseite */
+/* v0.19: sichtbare Arm-Regler auf der Hauptseite */
 .arm-main-controls{
   margin-top:14px;
   border:1px solid rgba(39,200,255,.22);
@@ -1130,7 +1130,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.18: drei Charaktere */
+/* v0.19: drei Charaktere */
 .character-buttons{
   grid-template-columns:repeat(3,minmax(0,1fr));
 }
@@ -1226,6 +1226,162 @@ body.menu-open{overflow:hidden}
 }
 @media(max-width:560px){
   .brain-modes button{font-size:11px;padding:6px 3px}
+}
+
+
+/* Schritt 19: Avatar Talk v1 */
+.talk-panel{
+  margin-top:14px;
+  border:1px solid rgba(101,230,166,.22);
+  background:linear-gradient(180deg,rgba(101,230,166,.065),rgba(0,0,0,.16));
+  border-radius:18px;
+  padding:13px;
+}
+.talk-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:11px;
+}
+.talk-head>div{display:grid;gap:2px}
+.talk-head strong{font-size:15px}
+.talk-status{
+  color:#65e6a6;
+  font-size:11px;
+  font-weight:800;
+  text-align:right;
+}
+.talk-field{
+  display:grid;
+  gap:6px;
+  margin-top:10px;
+  color:var(--muted);
+  font-size:11px;
+}
+.talk-field input[type="text"],
+.talk-field textarea,
+.talk-field select{
+  width:100%;
+  border:1px solid #2d3d4e;
+  background:#07111b;
+  color:var(--text);
+  border-radius:11px;
+  padding:11px;
+  font:inherit;
+  outline:none;
+}
+.talk-field textarea{
+  resize:vertical;
+  min-height:92px;
+  line-height:1.45;
+}
+.talk-field input:focus,
+.talk-field textarea:focus,
+.talk-field select:focus{
+  border-color:#65e6a6;
+}
+.talk-quick{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:8px;
+}
+.talk-quick button{
+  min-height:34px;
+  border:1px solid #2d4850;
+  border-radius:999px;
+  background:#091820;
+  color:var(--text);
+  padding:6px 10px;
+  font-size:11px;
+  font-weight:800;
+}
+.talk-wide{
+  width:100%;
+  min-height:44px;
+  margin-top:9px;
+  border:1px solid #2f6255;
+  background:#092019;
+  color:var(--text);
+  border-radius:11px;
+  font-weight:900;
+}
+.talk-wide:disabled{opacity:.42}
+.talk-voice-row{
+  display:grid;
+  grid-template-columns:minmax(0,1.5fr) minmax(130px,.7fr);
+  gap:10px;
+}
+.talk-rate-field input[type="range"]{
+  width:100%;
+  min-height:37px;
+  accent-color:#65e6a6;
+}
+.talk-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:11px;
+}
+.talk-actions button{
+  min-height:48px;
+  border:1px solid #2f6255;
+  background:#092019;
+  color:var(--text);
+  border-radius:12px;
+  font-weight:900;
+}
+.talk-actions button:last-child{
+  border-color:#5a3640;
+  background:#211016;
+}
+.talk-own-audio{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:13px;
+  padding-top:12px;
+  border-top:1px solid rgba(255,255,255,.07);
+}
+.talk-own-audio>div{
+  display:grid;
+  gap:3px;
+}
+.talk-own-audio strong{font-size:13px}
+.talk-own-audio span{
+  color:var(--muted);
+  font-size:10px;
+}
+.talk-audio-file{
+  position:relative;
+  overflow:hidden;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:40px;
+  border:1px solid #315268;
+  background:#091925;
+  color:var(--text);
+  border-radius:11px;
+  padding:7px 11px;
+  font-size:11px;
+  font-weight:900;
+}
+.talk-audio-file input{
+  position:absolute;
+  inset:0;
+  opacity:0;
+}
+.talk-note{
+  margin:10px 0 0;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.45;
+}
+@media(max-width:620px){
+  .talk-voice-row{grid-template-columns:1fr}
 }
 
 </style>
@@ -1503,7 +1659,7 @@ body.menu-open{overflow:hidden}
         </div>
 
         <div class="stage-caption">
-          <strong>Schritt 18:</strong> Avatar Brain v1</div>
+          <strong>Schritt 19:</strong> Avatar Talk v1</div>
       </div>
     </section>
 
@@ -1631,6 +1787,69 @@ body.menu-open{overflow:hidden}
           </div>
 
           <p class="brain-note">Der Brain steuert Blick, Kopf und kleine Armgesten. Bei Audio reagiert er stärker auf den Pegel. Berührst du die Steuerung selbst, hält er sich kurz zurück.</p>
+        </section>
+
+        <section class="talk-panel" aria-label="Avatar Talk">
+          <div class="talk-head">
+            <div>
+              <span class="mini-label">AVATAR TALK v1</span>
+              <strong>Frage · Antwort · Stimme</strong>
+            </div>
+            <span id="talkStatus" class="talk-status">Bereit</span>
+          </div>
+
+          <label class="talk-field">
+            <span>Frage</span>
+            <input id="talkQuestion" type="text" autocomplete="off"
+                   placeholder="z. B. Wer bist du?">
+          </label>
+
+          <div class="talk-quick">
+            <button type="button" data-talk-question="Wer bist du?">Wer bist du?</button>
+            <button type="button" data-talk-question="Was kannst du?">Was kannst du?</button>
+            <button type="button" data-talk-question="Welche Musik machst du?">Musik?</button>
+          </div>
+
+          <button id="talkFindAnswer" class="talk-wide" type="button">✨ Antwort finden</button>
+
+          <label class="talk-field">
+            <span>Antwort · kann vor dem Sprechen geändert werden</span>
+            <textarea id="talkAnswer" rows="4">Hallo! Stell mir eine Frage oder schreibe hier direkt einen Text hinein.</textarea>
+          </label>
+
+          <div class="talk-voice-row">
+            <label class="talk-field">
+              <span>Browser-Stimme</span>
+              <select id="talkVoice">
+                <option value="">Stimmen werden geladen …</option>
+              </select>
+            </label>
+
+            <label class="talk-field talk-rate-field">
+              <span>Tempo <strong id="talkRateValue">1.00×</strong></span>
+              <input id="talkRate" type="range" min="0.75" max="1.20" value="1" step="0.05">
+            </label>
+          </div>
+
+          <div class="talk-actions">
+            <button id="talkSpeak" type="button">🔊 Text sprechen</button>
+            <button id="talkStop" type="button">■ Stop</button>
+          </div>
+
+          <div class="talk-own-audio">
+            <div>
+              <strong>🎙️ Eigene Aufnahme</strong>
+              <span id="talkAudioName">Keine Aufnahme gewählt</span>
+            </div>
+            <label class="talk-audio-file">
+              <input id="talkAudioFile" type="file" accept="audio/*">
+              <span>＋ MP3/WAV</span>
+            </label>
+          </div>
+
+          <button id="talkPlayOwnAudio" class="talk-wide" type="button" disabled>▶ Eigene Aufnahme abspielen</button>
+
+          <p class="talk-note">Browser-Stimme: beliebigen Text vorlesen. Eigene Aufnahme: echte Stimme mit echtem Audio-Lip-Sync. Die Antworten sind vorerst feste Regeln und können später erweitert werden.</p>
         </section>
     </section>
 
@@ -1772,11 +1991,12 @@ body.menu-open{overflow:hidden}
           <div class="progress-row done"><span>Aufnahme</span><strong>✓</strong></div>
           <div class="progress-row done"><span>3 Charaktere</span><strong>✓</strong></div>
           <div class="progress-row done"><span>Avatar Brain v1</span><strong>✓</strong></div>
+          <div class="progress-row done"><span>Avatar Talk v1</span><strong>✓</strong></div>
         </div>
       </article>
         </section>
 
-        <div class="menu-version">Version <strong>0.18</strong></div>
+        <div class="menu-version">Version <strong>0.19</strong></div>
       </div>
     </aside>
 
@@ -1786,7 +2006,7 @@ body.menu-open{overflow:hidden}
 (() => {
   "use strict";
 
-  const VERSION = "0.18";
+  const VERSION = "0.19";
 
   const avatarState = {
     version: VERSION,
@@ -1947,6 +2167,18 @@ body.menu-open{overflow:hidden}
     brainToggle: document.getElementById("brainToggle"),
     brainStatus: document.getElementById("brainStatus"),
     brainDot: document.getElementById("brainDot"),
+    talkQuestion: document.getElementById("talkQuestion"),
+    talkAnswer: document.getElementById("talkAnswer"),
+    talkFindAnswer: document.getElementById("talkFindAnswer"),
+    talkVoice: document.getElementById("talkVoice"),
+    talkRate: document.getElementById("talkRate"),
+    talkRateValue: document.getElementById("talkRateValue"),
+    talkSpeak: document.getElementById("talkSpeak"),
+    talkStop: document.getElementById("talkStop"),
+    talkStatus: document.getElementById("talkStatus"),
+    talkAudioFile: document.getElementById("talkAudioFile"),
+    talkAudioName: document.getElementById("talkAudioName"),
+    talkPlayOwnAudio: document.getElementById("talkPlayOwnAudio"),
     touchReset: document.getElementById("touchReset"),
     blinkLeftTouch: document.getElementById("blinkLeftTouch"),
     blinkRightTouch: document.getElementById("blinkRightTouch"),
@@ -3247,6 +3479,313 @@ body.menu-open{overflow:hidden}
     setAudioStrength("normal");
   }
 
+  // --- Avatar Talk v1 ----------------------------------------------------
+  let talkVoices = [];
+  let talkUtterance = null;
+  let talkSpeechTimer = null;
+  let talkOwnAudioUrl = null;
+
+  const TALK_RESPONSES = {
+    human: {
+      name: "Ich bin PS AI MUSIC. Musik, Gefühl und inzwischen auch ein ziemlich beweglicher Avatar.",
+      skills: "Ich kann sprechen, blinzeln, den Kopf bewegen, meine Arme benutzen und sogar auf Audio reagieren.",
+      music: "Bei mir dreht sich viel um emotionale Musik. Mal ruhig und traurig, mal deutlich härter.",
+      hello: "Hey! Schön, dass du da bist.",
+      feeling: "Mir geht es gut. Der Avatar Brain hält mich schließlich ordentlich auf Trab."
+    },
+    bear: {
+      name: "Ich bin der PS Bär. Ein bisschen gemütlich, aber inzwischen erstaunlich beweglich.",
+      skills: "Ich kann sprechen, schauen, blinzeln, den Kopf neigen und mit meinen Armen gestikulieren.",
+      music: "Ich gehöre zur PS AI MUSIC Familie. Bei mir darf Musik ruhig Gefühl und Druck zugleich haben.",
+      hello: "Hey! Der PS Bär ist am Start.",
+      feeling: "Alles bestens. Solange niemand meinen Honig versteckt."
+    },
+    gull: {
+      name: "Ich bin BreuerBeatz. Die Möwe mit Rennanzug und eindeutig zu viel Energie.",
+      skills: "Ich kann sprechen, schauen, meinen Kopf bewegen und mit den Flügelarmen gestikulieren.",
+      music: "BreuerBeatz steht für Musik, Energie und natürlich eine ordentliche Portion Küstenchaos.",
+      hello: "Moin! BreuerBeatz meldet sich.",
+      feeling: "Läuft. Wind von vorne ist schließlich nur zusätzliches Tempo."
+    }
+  };
+
+  function normalizeTalkText(text) {
+    return String(text||"")
+      .toLocaleLowerCase("de-DE")
+      .replace(/[?!.,;:]/g," ")
+      .replace(/\s+/g," ")
+      .trim();
+  }
+
+  function findTalkAnswer(question) {
+    const q = normalizeTalkText(question);
+    const set = TALK_RESPONSES[avatarState.character] || TALK_RESPONSES.human;
+
+    if (!q) return "Schreib mir zuerst eine Frage.";
+    if (q.includes("wer bist") || q.includes("wie heißt") || q.includes("wie heisst") || q === "name") return set.name;
+    if (q.includes("was kannst") || q.includes("kannst du")) return set.skills;
+    if (q.includes("musik") || q.includes("song") || q.includes("sound")) return set.music;
+    if (q.includes("hallo") || q.includes("hey") || q.includes("moin") || q.includes("guten tag")) return set.hello;
+    if (q.includes("wie geht") || q.includes("geht es dir")) return set.feeling;
+
+    return "Dafür habe ich noch keine feste Antwort hinterlegt. Du kannst meine Antwort hier einfach selbst eintragen und ich spreche sie trotzdem.";
+  }
+
+  function updateTalkStatus(text) {
+    if (ui.talkStatus) ui.talkStatus.textContent = text;
+  }
+
+  function loadTalkVoices() {
+    if (!("speechSynthesis" in window) || !ui.talkVoice) return;
+
+    const voices = window.speechSynthesis.getVoices() || [];
+    talkVoices = voices.slice();
+
+    const previous = ui.talkVoice.value;
+    ui.talkVoice.innerHTML = "";
+
+    const german = voices.filter(v => /^de([_-]|$)/i.test(v.lang));
+    const others = voices.filter(v => !/^de([_-]|$)/i.test(v.lang));
+    const ordered = [...german,...others];
+
+    if (!ordered.length) {
+      const option = document.createElement("option");
+      option.value = "";
+      option.textContent = "Systemstimme";
+      ui.talkVoice.appendChild(option);
+      return;
+    }
+
+    ordered.forEach(voice => {
+      const option = document.createElement("option");
+      option.value = voice.voiceURI;
+      option.textContent = voice.name + " · " + voice.lang;
+      ui.talkVoice.appendChild(option);
+    });
+
+    if (previous && ordered.some(v => v.voiceURI === previous)) {
+      ui.talkVoice.value = previous;
+    } else {
+      const preferred = ordered.find(v => /^de-DE$/i.test(v.lang)) || german[0] || ordered[0];
+      if (preferred) ui.talkVoice.value = preferred.voiceURI;
+    }
+  }
+
+  function stopBrowserTalk(resetMouth=true) {
+    if ("speechSynthesis" in window) {
+      try { window.speechSynthesis.cancel(); } catch (_) {}
+    }
+    talkUtterance = null;
+
+    if (talkSpeechTimer) {
+      clearInterval(talkSpeechTimer);
+      talkSpeechTimer = null;
+    }
+
+    brainAudioEnergy = 0;
+
+    if (resetMouth) {
+      avatarState.face.mouthOpen = 0;
+      avatarState.face.mouthWidth = 100;
+      renderAvatar();
+    }
+  }
+
+  function startSyntheticTalkAnimation() {
+    if (talkSpeechTimer) clearInterval(talkSpeechTimer);
+
+    let phase = 0;
+    talkSpeechTimer = setInterval(() => {
+      phase += 1;
+      const wave = (Math.sin(phase*1.31)+1)/2;
+      const jitter = Math.random()*22;
+      avatarState.face.mouthOpen = Math.min(82,16 + wave*42 + jitter);
+      avatarState.face.mouthWidth = 92 + Math.sin(phase*.77)*9;
+      brainAudioEnergy = 0.32 + wave*0.28;
+      renderAvatar();
+    },115);
+  }
+
+  function speakTalkAnswer() {
+    const text = (ui.talkAnswer?.value || "").trim();
+    if (!text) {
+      updateTalkStatus("Kein Text zum Sprechen");
+      return;
+    }
+
+    if (!("speechSynthesis" in window) || typeof SpeechSynthesisUtterance === "undefined") {
+      updateTalkStatus("Browser-Stimme wird hier nicht unterstützt");
+      return;
+    }
+
+    // Lokales Audio stoppen, falls es gerade läuft.
+    if (ui.speechAudio && !ui.speechAudio.paused) {
+      ui.speechAudio.pause();
+      stopAudioLipSyncLoop();
+    }
+
+    stopBrowserTalk(false);
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    const selectedUri = ui.talkVoice?.value;
+    const voice = talkVoices.find(v => v.voiceURI === selectedUri);
+    if (voice) {
+      utterance.voice = voice;
+      utterance.lang = voice.lang || "de-DE";
+    } else {
+      utterance.lang = "de-DE";
+    }
+    utterance.rate = Number(ui.talkRate?.value || 1);
+    utterance.pitch = 1;
+    utterance.volume = 1;
+
+    utterance.onstart = () => {
+      updateTalkStatus("🔊 spricht");
+      startSyntheticTalkAnimation();
+
+      // Brain darf beim Sprechen bewusst etwas lebendiger reagieren.
+      if (avatarState.brain?.enabled) {
+        avatarState.brain.nextDecisionAt = 0;
+      }
+    };
+
+    utterance.onend = () => {
+      stopBrowserTalk();
+      updateTalkStatus("Fertig");
+    };
+
+    utterance.onerror = () => {
+      stopBrowserTalk();
+      updateTalkStatus("Sprachausgabe fehlgeschlagen");
+    };
+
+    talkUtterance = utterance;
+    window.speechSynthesis.speak(utterance);
+  }
+
+  function stopAllTalk() {
+    stopBrowserTalk();
+
+    if (ui.speechAudio && !ui.speechAudio.paused) {
+      ui.speechAudio.pause();
+      ui.speechAudio.currentTime = 0;
+      stopAudioLipSyncLoop();
+    }
+
+    updateTalkStatus("Gestoppt");
+  }
+
+  async function playOwnTalkAudio() {
+    if (!ui.speechAudio || !ui.speechAudio.src) {
+      updateTalkStatus("Keine Aufnahme gewählt");
+      return;
+    }
+
+    stopBrowserTalk();
+
+    if (!ensureAudioGraph()) {
+      updateTalkStatus("Audio konnte nicht vorbereitet werden");
+      return;
+    }
+
+    try {
+      if (audioContext && audioContext.state === "suspended") await audioContext.resume();
+
+      ui.speechAudio.currentTime = 0;
+      await ui.speechAudio.play();
+      stopAudioLipSyncLoop(false);
+      audioLipSyncLoop();
+      updateTalkStatus("🎙️ eigene Aufnahme läuft");
+    } catch (error) {
+      console.error("Own talk audio:",error);
+      updateTalkStatus("Aufnahme konnte nicht abgespielt werden");
+    }
+  }
+
+  function bindAvatarTalk() {
+    if (ui.talkFindAnswer) {
+      ui.talkFindAnswer.addEventListener("click",() => {
+        const answer = findTalkAnswer(ui.talkQuestion?.value || "");
+        if (ui.talkAnswer) ui.talkAnswer.value = answer;
+        updateTalkStatus("Antwort gefunden");
+      });
+    }
+
+    document.querySelectorAll("[data-talk-question]").forEach(btn => {
+      btn.addEventListener("click",() => {
+        if (ui.talkQuestion) ui.talkQuestion.value = btn.dataset.talkQuestion || "";
+        if (ui.talkAnswer) ui.talkAnswer.value = findTalkAnswer(btn.dataset.talkQuestion || "");
+        updateTalkStatus("Antwort gefunden");
+      });
+    });
+
+    if (ui.talkQuestion) {
+      ui.talkQuestion.addEventListener("keydown",event => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          if (ui.talkAnswer) ui.talkAnswer.value = findTalkAnswer(ui.talkQuestion.value);
+          updateTalkStatus("Antwort gefunden");
+        }
+      });
+    }
+
+    if (ui.talkSpeak) ui.talkSpeak.addEventListener("click",speakTalkAnswer);
+    if (ui.talkStop) ui.talkStop.addEventListener("click",stopAllTalk);
+
+    if (ui.talkRate) {
+      ui.talkRate.addEventListener("input",() => {
+        if (ui.talkRateValue) ui.talkRateValue.textContent = Number(ui.talkRate.value).toFixed(2) + "×";
+      });
+    }
+
+    if (ui.talkAudioFile) {
+      ui.talkAudioFile.addEventListener("change",() => {
+        const file = ui.talkAudioFile.files && ui.talkAudioFile.files[0];
+        if (!file) return;
+
+        if (talkOwnAudioUrl) URL.revokeObjectURL(talkOwnAudioUrl);
+        talkOwnAudioUrl = URL.createObjectURL(file);
+
+        // Dasselbe Audioelement wie beim bisherigen Lip-Sync nutzen.
+        if (audioObjectUrl) URL.revokeObjectURL(audioObjectUrl);
+        audioObjectUrl = talkOwnAudioUrl;
+        ui.speechAudio.src = talkOwnAudioUrl;
+        ui.speechAudio.load();
+
+        if (ui.talkAudioName) ui.talkAudioName.textContent = file.name;
+        if (ui.talkPlayOwnAudio) ui.talkPlayOwnAudio.disabled = false;
+        if (ui.audioStatus) ui.audioStatus.textContent = file.name + " · Avatar Talk";
+        if (ui.audioPlay) ui.audioPlay.disabled = false;
+        if (ui.audioStop) ui.audioStop.disabled = false;
+        if (ui.audioLipSyncToggle) ui.audioLipSyncToggle.disabled = false;
+
+        updateTalkStatus("Eigene Aufnahme geladen");
+      });
+    }
+
+    if (ui.talkPlayOwnAudio) {
+      ui.talkPlayOwnAudio.addEventListener("click",playOwnTalkAudio);
+    }
+
+    if ("speechSynthesis" in window) {
+      loadTalkVoices();
+      window.speechSynthesis.onvoiceschanged = loadTalkVoices;
+    } else {
+      if (ui.talkVoice) {
+        ui.talkVoice.innerHTML = '<option value="">Nicht unterstützt</option>';
+      }
+    }
+
+    // Wenn eigenes Audio endet, Talk-Status ebenfalls aktualisieren.
+    if (ui.speechAudio) {
+      ui.speechAudio.addEventListener("ended",() => {
+        if (talkOwnAudioUrl && ui.speechAudio.src === talkOwnAudioUrl) {
+          updateTalkStatus("Eigene Aufnahme fertig");
+        }
+      });
+    }
+  }
+
   function setMouthMood(mode) {
     document.querySelectorAll("[data-mouth]").forEach(btn => {
       btn.classList.toggle("active", btn.dataset.mouth === mode);
@@ -3425,7 +3964,7 @@ body.menu-open{overflow:hidden}
     if (ui.menuButton) ui.menuButton.setAttribute("aria-expanded", open ? "true" : "false");
   }
 
-  // --- Figurenaufnahme v0.18 -------------------------------------------
+  // --- Figurenaufnahme v0.19 -------------------------------------------
   // Direkter Canvas-Renderer: keine langsame SVG->Bitmap-Konvertierung pro Frame.
   let avatarRecorder = null;
   let recorderChunks = [];
@@ -4200,6 +4739,7 @@ body.menu-open{overflow:hidden}
   bindTouchControls();
   bindAudioLipSync();
   bindAvatarBrain();
+  bindAvatarTalk();
   bindCharacterSelector();
   bindAvatarRecorder();
   bindMenu();
