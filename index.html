@@ -860,14 +860,14 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.19: Touch-Fix – JS darf den Kopf transformieren */
+/* v0.19.1: Touch-Fix – JS darf den Kopf transformieren */
 .avatar-head-module{
   will-change:transform;
   transition:transform 70ms linear;
 }
 
 
-/* v0.19: Kopfneigung über festen Cutout-Anker */
+/* v0.19.1: Kopfneigung über festen Cutout-Anker */
 .head-anchor{
   transform-origin:0 0;
   will-change:transform;
@@ -944,7 +944,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.19: Aufnahme sichtbar unter den Touchfeldern */
+/* v0.19.1: Aufnahme sichtbar unter den Touchfeldern */
 .record-workspace{
   margin-top:14px;
   border:1px solid rgba(255,255,255,.07);
@@ -992,7 +992,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.19: gleiche Figur auf Handy, Desktop und Aufnahme */
+/* v0.19.1: gleiche Figur auf Handy, Desktop und Aufnahme */
 .avatar-body{
   width:min(330px,65vw)!important;
   bottom:4px!important;
@@ -1018,7 +1018,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.19: sichtbare Arm-Regler auf der Hauptseite */
+/* v0.19.1: sichtbare Arm-Regler auf der Hauptseite */
 .arm-main-controls{
   margin-top:14px;
   border:1px solid rgba(39,200,255,.22);
@@ -1130,7 +1130,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.19: drei Charaktere */
+/* v0.19.1: drei Charaktere */
 .character-buttons{
   grid-template-columns:repeat(3,minmax(0,1fr));
 }
@@ -1877,7 +1877,7 @@ body.menu-open{overflow:hidden}
           <button id="recordSave" type="button" disabled>⬇ Speichern</button>
         </div>
 
-        <p class="record-note">Die Steuerfelder und das Menü werden nicht mit aufgenommen. Kopf, Augen, Mund und später die Arme erscheinen im Video.</p>
+        <p class="record-note">Die Steuerfelder und das Menü werden nicht mit aufgenommen. Geladene MP3/WAV-Dateien werden als Tonspur mit aufgezeichnet, sobald beim Start „🔊 Tonspur aktiv“ erscheint.</p>
       </section>
     </section>
   
@@ -1996,7 +1996,7 @@ body.menu-open{overflow:hidden}
       </article>
         </section>
 
-        <div class="menu-version">Version <strong>0.19</strong></div>
+        <div class="menu-version">Version <strong>0.19.1</strong></div>
       </div>
     </aside>
 
@@ -2006,7 +2006,7 @@ body.menu-open{overflow:hidden}
 (() => {
   "use strict";
 
-  const VERSION = "0.19";
+  const VERSION = "0.19.1";
 
   const avatarState = {
     version: VERSION,
@@ -3964,7 +3964,7 @@ body.menu-open{overflow:hidden}
     if (ui.menuButton) ui.menuButton.setAttribute("aria-expanded", open ? "true" : "false");
   }
 
-  // --- Figurenaufnahme v0.19 -------------------------------------------
+  // --- Figurenaufnahme v0.19.1 -------------------------------------------
   // Direkter Canvas-Renderer: keine langsame SVG->Bitmap-Konvertierung pro Frame.
   let avatarRecorder = null;
   let recorderChunks = [];
@@ -4544,13 +4544,23 @@ body.menu-open{overflow:hidden}
     drawRecordedHead(recorderCtx);
   }
 
-  function preferredRecorderMime() {
+  function preferredRecorderMime(hasAudio=false) {
     if (!window.MediaRecorder) return "";
-    const options=[
-      "video/webm;codecs=vp8,opus",
-      "video/webm;codecs=vp8",
-      "video/webm"
-    ];
+
+    // Sobald eine Tonspur vorhanden ist, keinen expliziten reinen VP8-Codec
+    // wählen. Auf einigen Android-Browsern wird sonst die Audiospur verworfen.
+    const options = hasAudio
+      ? [
+          "video/webm;codecs=vp8,opus",
+          "video/webm;codecs=vp9,opus",
+          "video/webm"
+        ]
+      : [
+          "video/webm;codecs=vp8",
+          "video/webm;codecs=vp9",
+          "video/webm"
+        ];
+
     return options.find(type=>MediaRecorder.isTypeSupported(type))||"";
   }
 
@@ -4583,23 +4593,40 @@ body.menu-open{overflow:hidden}
 
       const canvasStream=recorderCanvas.captureStream(30);
       const tracks=[...canvasStream.getVideoTracks()];
+      let recorderHasAudio=false;
 
-      // Audio nur anhängen, wenn eine Datei geladen wurde.
+      // Geladene MP3/WAV direkt aus der Audioquelle in den Recorder schicken.
+      // Der Analyzer bleibt parallel für Mund/Brain zuständig.
       if(ui.speechAudio && ui.speechAudio.src && ensureAudioGraph()){
         if(audioContext.state==="suspended"){
           try{await audioContext.resume();}catch(_){}
         }
-        recorderAudioDestination=audioContext.createMediaStreamDestination();
-        audioAnalyser.connect(recorderAudioDestination);
-        tracks.push(...recorderAudioDestination.stream.getAudioTracks());
+
+        try{
+          recorderAudioDestination=audioContext.createMediaStreamDestination();
+
+          // Direkter Pfad ist auf Android zuverlässiger als:
+          // analyser -> MediaStreamDestination.
+          audioSource.connect(recorderAudioDestination);
+
+          const captureTracks=recorderAudioDestination.stream.getAudioTracks();
+          if(captureTracks.length){
+            tracks.push(...captureTracks);
+            recorderHasAudio=true;
+          }
+        }catch(audioError){
+          console.warn("Recorder audio route failed:",audioError);
+          recorderHasAudio=false;
+          recorderAudioDestination=null;
+        }
       }
 
       recorderStream=new MediaStream(tracks);
 
-      const mimeType=preferredRecorderMime();
+      const mimeType=preferredRecorderMime(recorderHasAudio);
       const options=mimeType
-        ? {mimeType,videoBitsPerSecond:5000000,audioBitsPerSecond:128000}
-        : {videoBitsPerSecond:5000000,audioBitsPerSecond:128000};
+        ? {mimeType,videoBitsPerSecond:5000000,audioBitsPerSecond:160000}
+        : {videoBitsPerSecond:5000000,audioBitsPerSecond:160000};
 
       avatarRecorder=new MediaRecorder(recorderStream,options);
 
@@ -4621,8 +4648,8 @@ body.menu-open{overflow:hidden}
           recorderStream=null;
         }
 
-        if(recorderAudioDestination && audioAnalyser){
-          try{audioAnalyser.disconnect(recorderAudioDestination);}catch(_){}
+        if(recorderAudioDestination && audioSource){
+          try{audioSource.disconnect(recorderAudioDestination);}catch(_){}
           recorderAudioDestination=null;
         }
 
@@ -4638,7 +4665,13 @@ body.menu-open{overflow:hidden}
         if(ui.recordStop) ui.recordStop.disabled=true;
 
         const seconds=Math.max(1,Math.round((performance.now()-recorderStartedAt)/1000));
-        setRecorderStatus("Aufnahme fertig · "+seconds+" s · "+Math.round(recorderBlob.size/1024)+" KB");
+        const hadAudio = avatarRecorder && avatarRecorder.stream
+          ? avatarRecorder.stream.getAudioTracks().length > 0
+          : false;
+        setRecorderStatus(
+          "Aufnahme fertig · "+seconds+" s · "+Math.round(recorderBlob.size/1024)+" KB"+
+          (hadAudio ? " · 🔊 mit Ton" : " · ohne Ton")
+        );
         recorderStopping=false;
       };
 
@@ -4651,7 +4684,12 @@ body.menu-open{overflow:hidden}
       if(ui.recordStop) ui.recordStop.disabled=false;
       if(ui.recordSave) ui.recordSave.disabled=true;
 
-      setRecorderStatus("● Aufnahme läuft");
+      const audioTrackCount=recorderStream.getAudioTracks().length;
+      setRecorderStatus(
+        audioTrackCount
+          ? "● Aufnahme läuft · 🔊 Tonspur aktiv"
+          : "● Aufnahme läuft · ohne Ton"
+      );
       avatarRecorder.start(1000);
 
       // Feste Malfrequenz unabhängig vom Browser-UI.
