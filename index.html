@@ -799,6 +799,66 @@ body.menu-open{overflow:hidden}
   }
 }
 
+
+/* Schritt 12: Kopf exakt am Körper verankert */
+.avatar-figure{
+  position:relative;
+  width:min(640px,96vw);
+  height:min(820px,76vh);
+  min-height:650px;
+  margin:0 auto;
+}
+
+.avatar-body{
+  position:absolute;
+  left:50%;
+  bottom:8px;
+  transform:translateX(-50%);
+  width:min(360px,60vw);
+  z-index:1;
+}
+
+.head-anchor{
+  position:absolute;
+  left:50%;
+  bottom:392px;
+  width:0;
+  height:0;
+  z-index:5;
+}
+
+.avatar-head-module{
+  position:absolute!important;
+  left:0!important;
+  bottom:0!important;
+  width:min(300px,56vw)!important;
+  transform:translateX(-50%)!important;
+  transform-origin:50% 88%!important;
+  filter:drop-shadow(0 10px 16px rgba(0,0,0,.20))!important;
+}
+
+.avatar-head-module svg{
+  display:block;
+  width:100%;
+  height:auto;
+  overflow:visible;
+}
+
+@media(max-width:760px){
+  .avatar-body{
+    width:min(330px,65vw);
+    bottom:4px;
+  }
+
+  .head-anchor{
+    bottom:352px;
+  }
+
+  .avatar-head-module{
+    width:min(275px,58vw)!important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -946,6 +1006,7 @@ body.menu-open{overflow:hidden}
           </div>
 
           <!-- Kopf: eigenes transparentes Cutout-Teil. -->
+          <div id="headAnchor" class="head-anchor">
           <div id="headPart" class="avatar-head-module" aria-label="Avatar Kopf">
             <svg viewBox="0 0 420 360" role="img" aria-label="PS AI MUSIC Cartoon Kopf">
               <defs>
@@ -1045,10 +1106,11 @@ body.menu-open{overflow:hidden}
               </g>
             </svg>
           </div>
+          </div>
         </div>
 
         <div class="stage-caption">
-          <strong>Schritt 11:</strong> Kompletter Grundkörper</div>
+          <strong>Schritt 12:</strong> Kopf sauber am Körper verankert</div>
       </div>
     </section>
 
@@ -1214,7 +1276,7 @@ body.menu-open{overflow:hidden}
       </article>
         </section>
 
-        <div class="menu-version">Version <strong>0.11</strong></div>
+        <div class="menu-version">Version <strong>0.12</strong></div>
       </div>
     </aside>
 
@@ -1224,7 +1286,7 @@ body.menu-open{overflow:hidden}
 (() => {
   "use strict";
 
-  const VERSION = "0.11";
+  const VERSION = "0.12";
 
   const avatarState = {
     version: VERSION,
@@ -1304,6 +1366,7 @@ body.menu-open{overflow:hidden}
     heartbeatText: document.getElementById("heartbeatText"),
     versionValue: document.getElementById("versionValue"),
     headPart: document.getElementById("headPart"),
+    headAnchor: document.getElementById("headAnchor"),
     headMotionGroup: document.getElementById("headMotionGroup"),
     avatarFigure: document.getElementById("avatarFigure"),
     torsoPart: document.getElementById("torsoPart"),
@@ -1401,10 +1464,14 @@ body.menu-open{overflow:hidden}
     const lift = head.idleLift || 0;
 
     if (ui.headPart) {
-      const x = turn * 1.05;
+      const x = turn * 0.7;
+      const y = lift;
+
       ui.headPart.style.transform =
-        "translateX(-50%) translate(" + x.toFixed(2) + "px," + lift.toFixed(2) + "px) " +
-        "rotate(" + tilt.toFixed(2) + "deg)";
+        "translateX(-50%) translate(" +
+        x.toFixed(2) + "px, " +
+        y.toFixed(2) + "px) rotate(" +
+        tilt.toFixed(2) + "deg)";
     }
 
     if (ui.headMotionGroup) {
@@ -1953,8 +2020,8 @@ body.menu-open{overflow:hidden}
     });
 
     bindTouchPad(ui.headPad, (x,y) => {
-      avatarState.head.rotation = (x - 0.5) * 10;
-      avatarState.head.tilt = (y - 0.5) * 8;
+      avatarState.head.rotation = (x - 0.5) * 8;
+      avatarState.head.tilt = (y - 0.5) * 6;
       avatarState.head.lastInteractionAt = performance.now();
     });
 
