@@ -4440,23 +4440,57 @@ body.remote-stage-clean .remote-stage-open{display:block}
 
   const HUMAN_VARIANT_CONFIGS = {
     psgirl:{
-      skin:"#efaa82",beard:"#7c3d4f",cap:"#d72074",hoodie:"#cf216d",jeans:"#315b8d",
+      skin:"#f0aa84",beard:"#7c3d4f",cap:"#d72074",hoodie:"#cf216d",jeans:"#315b8d",
       hideCap:true,hideBeard:true,
       bodyOverlay:`
-        <path d="M151 148 Q210 178 269 148 L270 346 Q210 365 150 346 Z" fill="#d31f72" opacity=".92"/>
-        <path d="M166 190 Q210 174 254 190" fill="none" stroke="#ff8dcc" stroke-width="5" opacity=".8"/>
-        <text x="210" y="268" text-anchor="middle" fill="#fff" font-size="30" font-weight="900" font-family="Arial">PS</text>
+        <!-- femininere Silhouette: schmalere Schultern, Taille, weichere Hüfte -->
+        <path d="M132 132 Q165 104 210 103 Q255 104 288 132
+                 Q272 161 263 195
+                 Q257 224 262 258
+                 Q270 308 286 349
+                 Q248 366 210 368
+                 Q172 366 134 349
+                 Q150 308 158 258
+                 Q163 224 157 195
+                 Q148 161 132 132 Z"
+              fill="#d31f72" stroke="#5a1533" stroke-width="6"/>
+        <path d="M159 150 Q184 133 210 134 Q236 133 261 150
+                 Q244 170 210 174 Q176 170 159 150 Z"
+              fill="#f26ba9" opacity=".82"/>
+        <path d="M168 204 Q210 188 252 204" fill="none" stroke="#ff9bd1" stroke-width="5" opacity=".85"/>
+        <path d="M168 311 Q210 327 252 311" fill="none" stroke="#8f1748" stroke-width="4" opacity=".78"/>
+        <text x="210" y="272" text-anchor="middle" fill="#fff" font-size="28" font-weight="900" font-family="Arial">PS GIRL</text>
       `,
       headOverlay:`
         <g>
-          <path d="M83 115 Q100 42 161 22 Q207 6 255 27 Q313 51 331 121
-                   Q313 104 294 99 Q287 151 303 225 Q280 206 266 179
-                   Q250 130 210 118 Q168 128 151 180 Q135 216 110 233
-                   Q127 159 121 101 Q103 105 83 115 Z"
+          <!-- lange Haare -->
+          <path d="M84 117 Q94 52 151 24 Q205 -2 262 22 Q320 50 334 119
+                   Q319 111 302 106
+                   Q312 160 307 219
+                   Q304 273 275 315
+                   Q283 261 274 209
+                   Q266 157 244 126
+                   Q228 106 210 102
+                   Q190 106 173 127
+                   Q150 158 143 209
+                   Q136 262 145 316
+                   Q114 273 111 218
+                   Q107 161 118 105
+                   Q101 109 84 117 Z"
                 fill="#6b263f" stroke="#32121f" stroke-width="7"/>
-          <path d="M112 85 Q163 31 214 32 Q266 35 309 88" fill="none" stroke="#d14579" stroke-width="6" opacity=".72"/>
-          <path d="M116 119 Q99 155 103 205 M304 119 Q321 155 317 205"
-                fill="none" stroke="#8c3152" stroke-width="11" stroke-linecap="round"/>
+          <path d="M112 86 Q161 33 211 31 Q266 33 309 87"
+                fill="none" stroke="#d14579" stroke-width="6" opacity=".72"/>
+          <path d="M124 126 Q109 163 112 210 M296 126 Q311 163 308 210"
+                fill="none" stroke="#8c3152" stroke-width="10" stroke-linecap="round"/>
+          <!-- weichere Stirn-/Wangenkontur -->
+          <path d="M122 146 Q139 110 169 96 Q210 76 251 97 Q282 112 298 146"
+                fill="none" stroke="#f5ba99" stroke-width="8" opacity=".92" stroke-linecap="round"/>
+          <!-- femininere Brauen -->
+          <path d="M119 126 Q153 111 187 124 M233 124 Q267 111 301 126"
+                fill="none" stroke="#4b2730" stroke-width="6" stroke-linecap="round"/>
+          <!-- Wangen -->
+          <ellipse cx="136" cy="225" rx="20" ry="10" fill="#e9858b" opacity=".22"/>
+          <ellipse cx="284" cy="225" rx="20" ry="10" fill="#e9858b" opacity=".22"/>
         </g>
       `
     },
@@ -4651,7 +4685,16 @@ body.remote-stage-clean .remote-stage-open{display:block}
   }
 
   const variantCharacterTemplates = {
-    psgirl:recolorHumanTemplate(humanCharacterTemplate,HUMAN_VARIANT_CONFIGS.psgirl),
+    psgirl:(()=>{
+      const t=recolorHumanTemplate(humanCharacterTemplate,HUMAN_VARIANT_CONFIGS.psgirl);
+      t.body=t.body
+        .replace('<svg viewBox="0 0 420 620" role="img"','<svg viewBox="0 0 420 620" role="img" style="overflow:visible"')
+        .replace('<g id="leftArmBase">','<g id="leftArmBase" transform="translate(10 0) scale(.90 1)">')
+        .replace('<g id="rightArmBase">','<g id="rightArmBase" transform="translate(-10 0) scale(.90 1)">');
+      t.head=t.head
+        .replace('<svg viewBox="0 0 420 360" role="img"','<svg viewBox="0 0 420 360" role="img" style="overflow:visible"');
+      return t;
+    })(),
     darkviking:recolorHumanTemplate(humanCharacterTemplate,HUMAN_VARIANT_CONFIGS.darkviking),
     viking:recolorHumanTemplate(humanCharacterTemplate,HUMAN_VARIANT_CONFIGS.viking),
     psstreet:recolorHumanTemplate(humanCharacterTemplate,HUMAN_VARIANT_CONFIGS.psstreet),
@@ -4680,8 +4723,16 @@ body.remote-stage-clean .remote-stage-open{display:block}
 
   function drawRecordedVariantBodyOverlay(ctx,character){
     if(character==="psgirl"){
-      ctx.fillStyle="#d31f72";ctx.globalAlpha=.9;ctx.fillRect(162,175,96,135);ctx.globalAlpha=1;
-      ctx.fillStyle="#fff";ctx.font="900 30px Arial";ctx.textAlign="center";ctx.fillText("PS",210,258);
+      ctx.save();
+      ctx.fillStyle="#d31f72";ctx.strokeStyle="#5a1533";ctx.lineWidth=5;
+      ctx.beginPath();
+      ctx.moveTo(146,151);ctx.quadraticCurveTo(177,126,210,126);ctx.quadraticCurveTo(243,126,274,151);
+      ctx.quadraticCurveTo(258,190,260,224);ctx.quadraticCurveTo(263,279,279,334);
+      ctx.quadraticCurveTo(245,349,210,350);ctx.quadraticCurveTo(175,349,141,334);
+      ctx.quadraticCurveTo(157,279,160,224);ctx.quadraticCurveTo(162,190,146,151);ctx.closePath();
+      ctx.fill();ctx.stroke();
+      ctx.fillStyle="#fff";ctx.font="900 26px Arial";ctx.textAlign="center";ctx.fillText("PS GIRL",210,270);
+      ctx.restore();
     }else if(character==="darkviking"){
       ctx.fillStyle="#17212b";ctx.strokeStyle="#526372";ctx.lineWidth=5;ctx.fillRect(158,156,104,175);ctx.strokeRect(158,156,104,175);
       strokeLine(ctx,[[170,202],[250,202]],"#3aaee7",4);strokeLine(ctx,[[178,239],[242,239]],"#73dbff",3);
@@ -4707,8 +4758,24 @@ body.remote-stage-clean .remote-stage-open{display:block}
 
   function drawRecordedVariantHeadOverlay(ctx,character){
     if(character==="psgirl"){
+      ctx.save();
       ctx.fillStyle="#6b263f";ctx.strokeStyle="#32121f";ctx.lineWidth=7;
-      ctx.beginPath();ctx.moveTo(88,119);ctx.quadraticCurveTo(110,42,175,25);ctx.quadraticCurveTo(245,5,316,116);ctx.quadraticCurveTo(286,96,263,104);ctx.quadraticCurveTo(239,76,210,82);ctx.quadraticCurveTo(174,80,151,108);ctx.quadraticCurveTo(123,99,88,119);ctx.fill();ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(84,117);ctx.quadraticCurveTo(95,52,151,24);ctx.quadraticCurveTo(206,-2,262,22);
+      ctx.quadraticCurveTo(320,50,334,119);ctx.quadraticCurveTo(313,106,302,106);
+      ctx.quadraticCurveTo(313,168,306,226);ctx.quadraticCurveTo(302,276,275,315);
+      ctx.quadraticCurveTo(283,257,274,207);ctx.quadraticCurveTo(264,147,244,126);
+      ctx.quadraticCurveTo(228,106,210,102);ctx.quadraticCurveTo(190,106,173,127);
+      ctx.quadraticCurveTo(150,158,143,209);ctx.quadraticCurveTo(136,262,145,316);
+      ctx.quadraticCurveTo(113,274,111,218);ctx.quadraticCurveTo(107,160,118,105);
+      ctx.quadraticCurveTo(101,109,84,117);ctx.closePath();ctx.fill();ctx.stroke();
+      ctx.strokeStyle="#4b2730";ctx.lineWidth=6;ctx.lineCap="round";
+      ctx.beginPath();ctx.moveTo(119,126);ctx.quadraticCurveTo(153,111,187,124);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(233,124);ctx.quadraticCurveTo(267,111,301,126);ctx.stroke();
+      ctx.fillStyle="rgba(233,133,139,.22)";
+      ctx.beginPath();ctx.ellipse(136,225,20,10,0,0,Math.PI*2);ctx.fill();
+      ctx.beginPath();ctx.ellipse(284,225,20,10,0,0,Math.PI*2);ctx.fill();
+      ctx.restore();
     }else if(character==="darkviking"||character==="viking"){
       const dark=character==="darkviking";
       ctx.fillStyle=dark?"#27333d":"#7b603b";ctx.strokeStyle=dark?"#0b1116":"#322818";ctx.lineWidth=8;
