@@ -860,14 +860,14 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.14.2: Touch-Fix – JS darf den Kopf transformieren */
+/* v0.15: Touch-Fix – JS darf den Kopf transformieren */
 .avatar-head-module{
   will-change:transform;
   transition:transform 70ms linear;
 }
 
 
-/* v0.14.2: Kopfneigung über festen Cutout-Anker */
+/* v0.15: Kopfneigung über festen Cutout-Anker */
 .head-anchor{
   transform-origin:0 0;
   will-change:transform;
@@ -944,7 +944,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.14.2: Aufnahme sichtbar unter den Touchfeldern */
+/* v0.15: Aufnahme sichtbar unter den Touchfeldern */
 .record-workspace{
   margin-top:14px;
   border:1px solid rgba(255,255,255,.07);
@@ -992,7 +992,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.14.2: gleiche Figur auf Handy, Desktop und Aufnahme */
+/* v0.15: gleiche Figur auf Handy, Desktop und Aufnahme */
 .avatar-body{
   width:min(330px,65vw)!important;
   bottom:4px!important;
@@ -1002,6 +1002,19 @@ body.menu-open{overflow:hidden}
 }
 .avatar-head-module{
   width:min(275px,58vw)!important;
+}
+
+
+/* Schritt 15: zwei einfache Schulter-Arme */
+.arm-touch-card .arm-pad{
+  aspect-ratio:1.8/1;
+  min-height:118px;
+}
+.arm-pad .touch-knob{
+  top:88%;
+}
+#leftArmBase,#rightArmBase{
+  will-change:transform;
 }
 
 </style>
@@ -1255,7 +1268,7 @@ body.menu-open{overflow:hidden}
         </div>
 
         <div class="stage-caption">
-          <strong>Schritt 14.2:</strong> Gleiche Figur in Live & Video</div>
+          <strong>Schritt 15:</strong> Bewegliche Cutout-Arme</div>
       </div>
     </section>
 
@@ -1304,6 +1317,34 @@ body.menu-open{overflow:hidden}
               <div id="mouthKnob" class="touch-knob"></div>
               <span class="hint top">weiter offen</span><span class="hint bottom">geschlossen</span>
               <span class="hint left">schmal</span><span class="hint right">breit</span>
+            </div>
+          </section>
+
+          <section class="touch-card arm-touch-card">
+            <div class="touch-card-head">
+              <strong>🫲 Arm links</strong>
+              <span id="leftArmTouchValue">0°</span>
+            </div>
+            <div id="leftArmPad" class="touch-pad arm-pad" aria-label="Linken Arm steuern">
+              <div class="axis-y"></div>
+              <div id="leftArmKnob" class="touch-knob"></div>
+              <span class="hint top">hoch</span>
+              <span class="hint bottom">runter</span>
+              <span class="hint left">Schulter</span>
+            </div>
+          </section>
+
+          <section class="touch-card arm-touch-card">
+            <div class="touch-card-head">
+              <strong>🫱 Arm rechts</strong>
+              <span id="rightArmTouchValue">0°</span>
+            </div>
+            <div id="rightArmPad" class="touch-pad arm-pad" aria-label="Rechten Arm steuern">
+              <div class="axis-y"></div>
+              <div id="rightArmKnob" class="touch-knob"></div>
+              <span class="hint top">hoch</span>
+              <span class="hint bottom">runter</span>
+              <span class="hint right">Schulter</span>
             </div>
           </section>
         </div>
@@ -1442,7 +1483,7 @@ body.menu-open{overflow:hidden}
           <div class="progress-row done"><span>Augen</span><strong>✓</strong></div>
           <div class="progress-row done"><span>Mund</span><strong>✓</strong></div>
           <div class="progress-row done"><span>Grundkörper</span><strong>✓</strong></div>
-          <div class="progress-row"><span>Arme beweglich</span><strong>○</strong></div>
+          <div class="progress-row done"><span>Arme beweglich</span><strong>✓</strong></div>
           <div class="progress-row done"><span>Beine</span><strong>✓</strong></div>
           <div class="progress-row done"><span>Aufnahme</span><strong>✓</strong></div>
           <div class="progress-row"><span>Idle / Leben</span><strong>○</strong></div>
@@ -1450,7 +1491,7 @@ body.menu-open{overflow:hidden}
       </article>
         </section>
 
-        <div class="menu-version">Version <strong>0.14.2</strong></div>
+        <div class="menu-version">Version <strong>0.15</strong></div>
       </div>
     </aside>
 
@@ -1460,7 +1501,7 @@ body.menu-open{overflow:hidden}
 (() => {
   "use strict";
 
-  const VERSION = "0.14.2";
+  const VERSION = "0.15";
 
   const avatarState = {
     version: VERSION,
@@ -1547,6 +1588,8 @@ body.menu-open{overflow:hidden}
     avatarFigure: document.getElementById("avatarFigure"),
     torsoPart: document.getElementById("torsoPart"),
     neckPart: document.getElementById("neckPart"),
+    leftArmBase: document.getElementById("leftArmBase"),
+    rightArmBase: document.getElementById("rightArmBase"),
     headTilt: document.getElementById("headTilt"),
     headTurn: document.getElementById("headTurn"),
     headScale: document.getElementById("headScale"),
@@ -1581,6 +1624,12 @@ body.menu-open{overflow:hidden}
     eyeTouchValue: document.getElementById("eyeTouchValue"),
     headTouchValue: document.getElementById("headTouchValue"),
     mouthTouchValue: document.getElementById("mouthTouchValue"),
+    leftArmPad: document.getElementById("leftArmPad"),
+    rightArmPad: document.getElementById("rightArmPad"),
+    leftArmKnob: document.getElementById("leftArmKnob"),
+    rightArmKnob: document.getElementById("rightArmKnob"),
+    leftArmTouchValue: document.getElementById("leftArmTouchValue"),
+    rightArmTouchValue: document.getElementById("rightArmTouchValue"),
     touchReset: document.getElementById("touchReset"),
     blinkLeftTouch: document.getElementById("blinkLeftTouch"),
     blinkRightTouch: document.getElementById("blinkRightTouch"),
@@ -1656,6 +1705,35 @@ body.menu-open{overflow:hidden}
 
     if (ui.headMotionGroup) {
       ui.headMotionGroup.removeAttribute("transform");
+    }
+
+    // Starre Cutout-Arme: pro Seite nur ein Schulter-Drehpunkt.
+    const leftArmAngle = Math.max(0, Math.min(95, avatarState.leftArm.shoulder || 0));
+    const rightArmAngle = Math.max(-95, Math.min(0, avatarState.rightArm.shoulder || 0));
+
+    if (ui.leftArmBase) {
+      ui.leftArmBase.setAttribute("transform", "rotate(" + leftArmAngle.toFixed(2) + " 112 112)");
+    }
+    if (ui.rightArmBase) {
+      ui.rightArmBase.setAttribute("transform", "rotate(" + rightArmAngle.toFixed(2) + " 308 112)");
+    }
+
+    if (ui.leftArmTouchValue) {
+      ui.leftArmTouchValue.textContent = Math.round(Math.abs(leftArmAngle)) + "°";
+    }
+    if (ui.rightArmTouchValue) {
+      ui.rightArmTouchValue.textContent = Math.round(Math.abs(rightArmAngle)) + "°";
+    }
+
+    if (ui.leftArmKnob) {
+      const lift = Math.abs(leftArmAngle) / 95;
+      ui.leftArmKnob.style.left = "50%";
+      ui.leftArmKnob.style.top = (88 - lift * 76) + "%";
+    }
+    if (ui.rightArmKnob) {
+      const lift = Math.abs(rightArmAngle) / 95;
+      ui.rightArmKnob.style.left = "50%";
+      ui.rightArmKnob.style.top = (88 - lift * 76) + "%";
     }
 
     if (ui.headTiltValue) {
@@ -2270,6 +2348,17 @@ body.menu-open{overflow:hidden}
       avatarState.face.mouthOpen = (1 - y) * 100;
     });
 
+    // Einfaches Cutout-Prinzip: hochziehen = Arm hebt sich als ein starres Teil.
+    bindTouchPad(ui.leftArmPad, (x,y) => {
+      const lift = Math.max(0, Math.min(1, 1 - y));
+      avatarState.leftArm.shoulder = lift * 95;
+    });
+
+    bindTouchPad(ui.rightArmPad, (x,y) => {
+      const lift = Math.max(0, Math.min(1, 1 - y));
+      avatarState.rightArm.shoulder = -(lift * 95);
+    });
+
     const holdBlink = (button, side) => {
       if (!button) return;
       const close = (event) => {
@@ -2326,7 +2415,10 @@ body.menu-open{overflow:hidden}
         avatarState.face.mouthCornerRight = 0;
         avatarState.head.rotation = 0;
         avatarState.head.tilt = 0;
+        avatarState.head.sideLean = 0;
         avatarState.head.scale = 1;
+        avatarState.leftArm.shoulder = 0;
+        avatarState.rightArm.shoulder = 0;
         if (ui.autoTalk) ui.autoTalk.checked = false;
         setAutoTalk(false);
         setMouthMood("neutral");
@@ -2344,7 +2436,7 @@ body.menu-open{overflow:hidden}
     if (ui.menuButton) ui.menuButton.setAttribute("aria-expanded", open ? "true" : "false");
   }
 
-  // --- Figurenaufnahme v0.14.2 -------------------------------------------
+  // --- Figurenaufnahme v0.15 -------------------------------------------
   // Direkter Canvas-Renderer: keine langsame SVG->Bitmap-Konvertierung pro Frame.
   let avatarRecorder = null;
   let recorderChunks = [];
@@ -2437,13 +2529,28 @@ body.menu-open{overflow:hidden}
     ctx.translate(x,y);
     ctx.scale(s,s);
 
-    fillStrokePath(ctx,BODY_PATHS.leftArm,"#11161c","#05080c",9);
-    fillStrokePath(ctx,BODY_PATHS.rightArm,"#11161c","#05080c",9);
+    const leftArmAngle=Math.max(0,Math.min(95,avatarState.leftArm.shoulder||0));
+    const rightArmAngle=Math.max(-95,Math.min(0,avatarState.rightArm.shoulder||0));
 
+    // Linker Arm + Hand als ein starres Cutout-Teil.
+    ctx.save();
+    ctx.translate(112,112);
+    ctx.rotate(leftArmAngle*Math.PI/180);
+    ctx.translate(-112,-112);
+    fillStrokePath(ctx,BODY_PATHS.leftArm,"#11161c","#05080c",9);
     ctx.beginPath();ctx.ellipse(88,374,25,28,0,0,Math.PI*2);
     ctx.fillStyle="#efad73";ctx.fill();ctx.strokeStyle="#17110e";ctx.lineWidth=6;ctx.stroke();
+    ctx.restore();
+
+    // Rechter Arm + Hand als ein starres Cutout-Teil.
+    ctx.save();
+    ctx.translate(308,112);
+    ctx.rotate(rightArmAngle*Math.PI/180);
+    ctx.translate(-308,-112);
+    fillStrokePath(ctx,BODY_PATHS.rightArm,"#11161c","#05080c",9);
     ctx.beginPath();ctx.ellipse(332,374,25,28,0,0,Math.PI*2);
     ctx.fillStyle="#efad73";ctx.fill();ctx.strokeStyle="#17110e";ctx.lineWidth=6;ctx.stroke();
+    ctx.restore();
 
     fillStrokePath(ctx,BODY_PATHS.torso,"#12171d","#05080c",10);
     fillStrokePath(ctx,BODY_PATHS.collar,"#20262e","#070a0e",8);
