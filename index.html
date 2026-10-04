@@ -860,14 +860,14 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.24: Touch-Fix – JS darf den Kopf transformieren */
+/* v0.25: Touch-Fix – JS darf den Kopf transformieren */
 .avatar-head-module{
   will-change:transform;
   transition:transform 70ms linear;
 }
 
 
-/* v0.24: Kopfneigung über festen Cutout-Anker */
+/* v0.25: Kopfneigung über festen Cutout-Anker */
 .head-anchor{
   transform-origin:0 0;
   will-change:transform;
@@ -944,7 +944,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.24: Aufnahme sichtbar unter den Touchfeldern */
+/* v0.25: Aufnahme sichtbar unter den Touchfeldern */
 .record-workspace{
   margin-top:14px;
   border:1px solid rgba(255,255,255,.07);
@@ -992,7 +992,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.24: gleiche Figur auf Handy, Desktop und Aufnahme */
+/* v0.25: gleiche Figur auf Handy, Desktop und Aufnahme */
 .avatar-body{
   width:min(330px,65vw)!important;
   bottom:4px!important;
@@ -1018,7 +1018,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.24: sichtbare Arm-Regler auf der Hauptseite */
+/* v0.25: sichtbare Arm-Regler auf der Hauptseite */
 .arm-main-controls{
   margin-top:14px;
   border:1px solid rgba(39,200,255,.22);
@@ -1130,7 +1130,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.24: vier Charaktere */
+/* v0.25: vier Charaktere */
 .character-buttons{
   grid-template-columns:repeat(4,minmax(0,1fr));
 }
@@ -1520,7 +1520,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.24: Recorder-Format */
+/* v0.25: Recorder-Format */
 .record-format-choice{
   display:grid;
   grid-template-columns:auto minmax(150px,1fr);
@@ -1553,7 +1553,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.24: Avatar Designer */
+/* v0.25: Avatar Designer */
 .designer-panel{margin-top:10px;border:1px solid rgba(255,96,190,.22);background:linear-gradient(180deg,rgba(255,67,170,.045),rgba(0,0,0,.16));border-radius:18px;padding:12px}
 .designer-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.designer-head>div{display:grid;gap:2px}.designer-head strong{font-size:16px}
 #designerNotice{font-size:10px;color:var(--muted)}
@@ -1571,6 +1571,19 @@ body.menu-open{overflow:hidden}
 .designer-colors label{min-height:58px;display:grid;place-items:center;gap:4px;padding:5px;border:1px solid rgba(255,255,255,.07);background:rgba(0,0,0,.14);border-radius:11px;color:var(--muted);font-size:9px}
 .designer-colors input[type="color"]{width:100%;height:28px;border:0;padding:0;background:transparent}.designer-note{margin:9px 0 0;color:#8e8090;font-size:10px;line-height:1.45}
 @media(max-width:620px){.designer-grid{grid-template-columns:1fr}.designer-colors{grid-template-columns:repeat(3,1fr)}}
+
+
+/* v0.25: Leg Control */
+.leg-main-controls{margin-top:10px;border:1px solid rgba(122,220,255,.18);background:linear-gradient(180deg,rgba(64,182,255,.045),rgba(0,0,0,.14));border-radius:16px;padding:12px}
+.leg-main-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.leg-main-head>div{display:grid;gap:2px}.leg-main-head strong{font-size:14px}
+#legReset{min-height:40px;border:1px solid rgba(39,200,255,.32);background:var(--accent-soft);color:var(--text);border-radius:11px;padding:7px 10px;font-weight:850}
+.leg-slider-row{display:grid;gap:5px;margin:10px 0}.leg-slider-row label{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:11px}.leg-slider-row label strong{color:var(--accent);font-variant-numeric:tabular-nums}.leg-slider-row input{width:100%;accent-color:var(--accent)}
+.walk-row{display:grid;grid-template-columns:minmax(130px,.8fr) 1.2fr;gap:9px;align-items:center;margin-top:12px}
+#walkToggle{min-height:46px;border-radius:12px;border:1px solid #28536d;background:#091925;color:var(--text);font-weight:900}
+#walkToggle.active{border-color:var(--accent);background:var(--accent-soft)}
+.walk-row label{display:grid;gap:5px;color:var(--muted);font-size:10px}.walk-row label span{display:flex;justify-content:space-between}.walk-row label strong{color:var(--accent)}.walk-row input{width:100%;accent-color:var(--accent)}
+.leg-note{margin:9px 0 0;color:#7890a1;font-size:10px;line-height:1.45}
+@media(max-width:520px){.walk-row{grid-template-columns:1fr}}
 
 </style>
 </head>
@@ -1960,7 +1973,7 @@ body.menu-open{overflow:hidden}
           </div>
         </div>
 
-        <div class="stage-caption"><strong>v0.24:</strong> PS Avatar Premium</div>
+        <div class="stage-caption"><strong>v0.25:</strong> PS Avatar Premium</div>
       </div>
     </section>
 
@@ -2138,6 +2151,42 @@ body.menu-open{overflow:hidden}
             </label>
             <input id="rightArmSlider" type="range" min="0" max="95" value="0" step="1">
           </div>
+        </section>
+
+        <section class="leg-main-controls" aria-label="Bein Steuerung">
+          <div class="leg-main-head">
+            <div>
+              <span class="mini-label">BEINE · LEG CONTROL v1</span>
+              <strong>Hüfte & Gehen</strong>
+            </div>
+            <button id="legReset" type="button">↺ Beine neutral</button>
+          </div>
+
+          <div class="leg-slider-row">
+            <label for="leftLegSlider">
+              <span>🦵 Linkes Bein</span>
+              <strong id="leftLegSliderValue">0°</strong>
+            </label>
+            <input id="leftLegSlider" type="range" min="-24" max="24" value="0" step="1">
+          </div>
+
+          <div class="leg-slider-row">
+            <label for="rightLegSlider">
+              <span>🦵 Rechtes Bein</span>
+              <strong id="rightLegSliderValue">0°</strong>
+            </label>
+            <input id="rightLegSlider" type="range" min="-24" max="24" value="0" step="1">
+          </div>
+
+          <div class="walk-row">
+            <button id="walkToggle" type="button">🚶 Gehen starten</button>
+            <label for="walkSpeed">
+              <span>Tempo <strong id="walkSpeedValue">100%</strong></span>
+              <input id="walkSpeed" type="range" min="60" max="160" value="100" step="5">
+            </label>
+          </div>
+
+          <p class="leg-note">Jedes Bein dreht um einen eigenen Hüftpunkt. Beim Gehen schwingen beide Beine gegeneinander; Kopf, Arme und Lip-Sync bleiben unabhängig.</p>
         </section>
 
         <section class="brain-panel" aria-label="Avatar Brain">
@@ -2381,7 +2430,7 @@ body.menu-open{overflow:hidden}
       </article>
         </section>
 
-        <div class="menu-version">Version <strong>0.24</strong></div>
+        <div class="menu-version">Version <strong>0.25</strong></div>
       </div>
     </aside>
 
@@ -2391,7 +2440,7 @@ body.menu-open{overflow:hidden}
 (() => {
   "use strict";
 
-  const VERSION = "0.24";
+  const VERSION = "0.25";
 
   const avatarState = {
     version: VERSION,
@@ -2460,6 +2509,14 @@ body.menu-open{overflow:hidden}
       hip: 0,
       knee: 0,
       foot: 0
+    },
+
+    walk: {
+      enabled: false,
+      speed: 1,
+      amplitude: 16,
+      left: 0,
+      right: 0
     },
 
     brain: {
@@ -2588,6 +2645,16 @@ body.menu-open{overflow:hidden}
     leftArmSliderValue: document.getElementById("leftArmSliderValue"),
     rightArmSliderValue: document.getElementById("rightArmSliderValue"),
     armReset: document.getElementById("armReset"),
+    leftLegBase: document.getElementById("leftLegBase"),
+    rightLegBase: document.getElementById("rightLegBase"),
+    leftLegSlider: document.getElementById("leftLegSlider"),
+    rightLegSlider: document.getElementById("rightLegSlider"),
+    leftLegSliderValue: document.getElementById("leftLegSliderValue"),
+    rightLegSliderValue: document.getElementById("rightLegSliderValue"),
+    legReset: document.getElementById("legReset"),
+    walkToggle: document.getElementById("walkToggle"),
+    walkSpeed: document.getElementById("walkSpeed"),
+    walkSpeedValue: document.getElementById("walkSpeedValue"),
     brainToggle: document.getElementById("brainToggle"),
     brainStatus: document.getElementById("brainStatus"),
     brainDot: document.getElementById("brainDot"),
@@ -3503,10 +3570,125 @@ body.menu-open{overflow:hidden}
     `
   };
 
+  function ensureLegGroups() {
+    const svg=ui.torsoPart?.querySelector("svg");
+    if(!svg || svg.querySelector("#leftLegBase") || svg.querySelector("#rightLegBase")) return;
+
+    const paths=[...svg.querySelectorAll("path")];
+    const cleanD=el=>(el?.getAttribute("d")||"").replace(/\s+/g," ").trim();
+
+    const leftLeg=paths.find(p=>{
+      const d=cleanD(p);
+      return d.startsWith("M128 443") || d.startsWith("M127 445");
+    });
+    const rightLeg=paths.find(p=>{
+      const d=cleanD(p);
+      return d.startsWith("M218 450") || d.startsWith("M219 451");
+    });
+    const leftShoe=paths.find(p=>{
+      const d=cleanD(p);
+      return d.startsWith("M123 572") || d.startsWith("M121 571");
+    });
+    const rightShoe=paths.find(p=>{
+      const d=cleanD(p);
+      return d.startsWith("M297 572") || d.startsWith("M299 571");
+    });
+
+    const ns="http://www.w3.org/2000/svg";
+    const makeGroup=(id,leg,shoe)=>{
+      if(!leg) return null;
+      const g=document.createElementNS(ns,"g");
+      g.id=id;
+      leg.parentNode.insertBefore(g,leg);
+      g.appendChild(leg);
+      if(shoe) g.appendChild(shoe);
+      return g;
+    };
+
+    makeGroup("leftLegBase",leftLeg,leftShoe);
+    makeGroup("rightLegBase",rightLeg,rightShoe);
+  }
+
+  function getEffectiveLeftLegAngle(){
+    const walk=avatarState.walk||{left:0};
+    return Math.max(-30,Math.min(30,(avatarState.leftLeg.hip||0)+(walk.left||0)));
+  }
+
+  function getEffectiveRightLegAngle(){
+    const walk=avatarState.walk||{right:0};
+    return Math.max(-30,Math.min(30,(avatarState.rightLeg.hip||0)+(walk.right||0)));
+  }
+
+  function updateWalk(now){
+    const walk=avatarState.walk;
+    if(!walk) return;
+
+    if(walk.enabled){
+      const phase=now*0.001*(walk.speed||1)*Math.PI*2*0.72;
+      const swing=Math.sin(phase)*(walk.amplitude||16);
+      walk.left=swing;
+      walk.right=-swing;
+    }else{
+      walk.left+=(0-walk.left)*0.12;
+      walk.right+=(0-walk.right)*0.12;
+      if(Math.abs(walk.left)<0.03) walk.left=0;
+      if(Math.abs(walk.right)<0.03) walk.right=0;
+    }
+  }
+
+  function bindLegControls(){
+    refreshCharacterRefs();
+
+    if(ui.leftLegSlider){
+      ui.leftLegSlider.addEventListener("input",()=>{
+        avatarState.leftLeg.hip=Number(ui.leftLegSlider.value);
+        renderAvatar();
+      });
+    }
+    if(ui.rightLegSlider){
+      ui.rightLegSlider.addEventListener("input",()=>{
+        avatarState.rightLeg.hip=Number(ui.rightLegSlider.value);
+        renderAvatar();
+      });
+    }
+    if(ui.walkSpeed){
+      ui.walkSpeed.addEventListener("input",()=>{
+        avatarState.walk.speed=Number(ui.walkSpeed.value)/100;
+        if(ui.walkSpeedValue) ui.walkSpeedValue.textContent=ui.walkSpeed.value+"%";
+      });
+    }
+    if(ui.walkToggle){
+      ui.walkToggle.addEventListener("click",()=>{
+        avatarState.walk.enabled=!avatarState.walk.enabled;
+        ui.walkToggle.classList.toggle("active",avatarState.walk.enabled);
+        ui.walkToggle.textContent=avatarState.walk.enabled?"⏸ Gehen stoppen":"🚶 Gehen starten";
+      });
+    }
+    if(ui.legReset){
+      ui.legReset.addEventListener("click",()=>{
+        avatarState.leftLeg.hip=0;
+        avatarState.rightLeg.hip=0;
+        avatarState.walk.enabled=false;
+        avatarState.walk.left=0;
+        avatarState.walk.right=0;
+        if(ui.leftLegSlider) ui.leftLegSlider.value="0";
+        if(ui.rightLegSlider) ui.rightLegSlider.value="0";
+        if(ui.walkToggle){
+          ui.walkToggle.classList.remove("active");
+          ui.walkToggle.textContent="🚶 Gehen starten";
+        }
+        renderAvatar();
+      });
+    }
+  }
+
   function refreshCharacterRefs() {
+    ensureLegGroups();
     ui.headMotionGroup = document.getElementById("headMotionGroup");
     ui.leftArmBase = document.getElementById("leftArmBase");
     ui.rightArmBase = document.getElementById("rightArmBase");
+    ui.leftLegBase = document.getElementById("leftLegBase");
+    ui.rightLegBase = document.getElementById("rightLegBase");
     ui.pupilLeft = document.getElementById("pupilLeft");
     ui.pupilRight = document.getElementById("pupilRight");
     ui.lidTopLeft = document.getElementById("lidTopLeft");
@@ -3846,6 +4028,19 @@ body.menu-open{overflow:hidden}
       ui.rightArmBase.setAttribute("transform", t);
     }
 
+    const leftLegAngle=getEffectiveLeftLegAngle();
+    const rightLegAngle=getEffectiveRightLegAngle();
+
+    if(ui.leftLegBase){
+      ui.leftLegBase.setAttribute("transform","rotate("+leftLegAngle.toFixed(2)+" 165 447)");
+    }
+    if(ui.rightLegBase){
+      ui.rightLegBase.setAttribute("transform","rotate("+rightLegAngle.toFixed(2)+" 255 447)");
+    }
+
+    if(ui.leftLegSliderValue) ui.leftLegSliderValue.textContent=Math.round(leftLegAngle)+"°";
+    if(ui.rightLegSliderValue) ui.rightLegSliderValue.textContent=Math.round(rightLegAngle)+"°";
+
     const leftDisplay = Math.round(Math.abs(leftArmAngle));
     const rightDisplay = Math.round(Math.abs(rightArmAngle));
 
@@ -4033,6 +4228,7 @@ body.menu-open{overflow:hidden}
 
     updateNaturalIdle(now);
     updateAvatarBrain(now);
+    updateWalk(now);
     renderAvatar();
     updateEngineUi(now);
 
@@ -4904,6 +5100,17 @@ body.menu-open{overflow:hidden}
         avatarState.head.scale = 1;
         avatarState.leftArm.shoulder = 0;
         avatarState.rightArm.shoulder = 0;
+        avatarState.leftLeg.hip = 0;
+        avatarState.rightLeg.hip = 0;
+        avatarState.walk.enabled = false;
+        avatarState.walk.left = 0;
+        avatarState.walk.right = 0;
+        if (ui.walkToggle) {
+          ui.walkToggle.classList.remove("active");
+          ui.walkToggle.textContent = "🚶 Gehen starten";
+        }
+        if (ui.leftLegSlider) ui.leftLegSlider.value = "0";
+        if (ui.rightLegSlider) ui.rightLegSlider.value = "0";
         if (ui.autoTalk) ui.autoTalk.checked = false;
         setAutoTalk(false);
         setMouthMood("neutral");
@@ -4921,7 +5128,7 @@ body.menu-open{overflow:hidden}
     if (ui.menuButton) ui.menuButton.setAttribute("aria-expanded", open ? "true" : "false");
   }
 
-  // --- Figurenaufnahme v0.24 -------------------------------------------
+  // --- Figurenaufnahme v0.25 -------------------------------------------
   // Direkter Canvas-Renderer: keine langsame SVG->Bitmap-Konvertierung pro Frame.
   let avatarRecorder = null;
   let recorderChunks = [];
@@ -5062,6 +5269,19 @@ body.menu-open{overflow:hidden}
     }
   }
 
+  function withRecordedLegRotation(ctx,side,draw){
+    const left=side==="left";
+    const px=left?165:255;
+    const py=447;
+    const angle=left?getEffectiveLeftLegAngle():getEffectiveRightLegAngle();
+    ctx.save();
+    ctx.translate(px,py);
+    ctx.rotate(angle*Math.PI/180);
+    ctx.translate(-px,-py);
+    draw();
+    ctx.restore();
+  }
+
   function drawRecordedBearBody(ctx) {
     const s=0.7857;
     const x=360-210*s;
@@ -5117,25 +5337,29 @@ body.menu-open{overflow:hidden}
 
     fillStrokePath(ctx,BODY_PATHS.waist,"#0b0e12","#05080c",7);
     fillStrokePath(ctx,BODY_PATHS.hips,"#476fae","#27466f",8);
-    fillStrokePath(ctx,BODY_PATHS.leftLeg,"#4f79bc","#294b79",8);
-    fillStrokePath(ctx,BODY_PATHS.rightLeg,"#4f79bc","#294b79",8);
 
-    ctx.beginPath();ctx.moveTo(142,475);ctx.quadraticCurveTo(170,468,197,476);
-    ctx.strokeStyle="#648bd0";ctx.globalAlpha=.75;ctx.lineWidth=5;ctx.stroke();
-    ctx.beginPath();ctx.moveTo(223,476);ctx.quadraticCurveTo(250,468,278,475);ctx.stroke();
-    ctx.globalAlpha=1;
+    withRecordedLegRotation(ctx,"left",()=>{
+      fillStrokePath(ctx,BODY_PATHS.leftLeg,"#4f79bc","#294b79",8);
+      ctx.beginPath();ctx.moveTo(142,475);ctx.quadraticCurveTo(170,468,197,476);
+      ctx.strokeStyle="#648bd0";ctx.globalAlpha=.75;ctx.lineWidth=5;ctx.stroke();ctx.globalAlpha=1;
+      fillStrokePath(ctx,BODY_PATHS.leftShoe,"#f5f7fb","#c8ced7",7);
+      strokeLine(ctx,[[137,586],[190,590]],"#aeb5bf",4);
+      strokeLine(ctx,[[132,597],[193,601]],"#aeb5bf",4);
+    });
 
-    fillStrokePath(ctx,BODY_PATHS.leftShoe,"#f5f7fb","#c8ced7",7);
-    // premium seams
+    withRecordedLegRotation(ctx,"right",()=>{
+      fillStrokePath(ctx,BODY_PATHS.rightLeg,"#4f79bc","#294b79",8);
+      ctx.beginPath();ctx.moveTo(223,476);ctx.quadraticCurveTo(250,468,278,475);
+      ctx.strokeStyle="#648bd0";ctx.globalAlpha=.75;ctx.lineWidth=5;ctx.stroke();ctx.globalAlpha=1;
+      fillStrokePath(ctx,BODY_PATHS.rightShoe,"#f5f7fb","#c8ced7",7);
+      strokeLine(ctx,[[283,586],[230,590]],"#aeb5bf",4);
+      strokeLine(ctx,[[288,597],[227,601]],"#aeb5bf",4);
+    });
+
+    // premium seams above the legs
     strokeLine(ctx,[[104,150],[96,230],[101,325]],"#3b444f",4);
     strokeLine(ctx,[[316,150],[324,230],[319,325]],"#3b444f",4);
     ctx.beginPath();ctx.moveTo(145,324);ctx.quadraticCurveTo(210,344,275,324);ctx.strokeStyle="#2e3741";ctx.lineWidth=3;ctx.stroke();
-
-        fillStrokePath(ctx,BODY_PATHS.rightShoe,"#f5f7fb","#c8ced7",7);
-    strokeLine(ctx,[[137,586],[190,590]],"#aeb5bf",4);
-    strokeLine(ctx,[[132,597],[193,601]],"#aeb5bf",4);
-    strokeLine(ctx,[[283,586],[230,590]],"#aeb5bf",4);
-    strokeLine(ctx,[[288,597],[227,601]],"#aeb5bf",4);
 
     ctx.restore();
   }
@@ -5280,24 +5504,27 @@ body.menu-open{overflow:hidden}
 
     fillStrokePath(ctx,BODY_PATHS.waist,"#081321","#050b13",7);
     fillStrokePath(ctx,BODY_PATHS.hips,"#0d2341","#06101e",8);
-    fillStrokePath(ctx,BODY_PATHS.leftLeg,"#0d2341","#06101e",8);
-    fillStrokePath(ctx,BODY_PATHS.rightLeg,"#0d2341","#06101e",8);
 
-    ctx.strokeStyle="#edf2f5";ctx.lineWidth=6;
-    ctx.beginPath();ctx.moveTo(142,475);ctx.quadraticCurveTo(170,468,197,476);ctx.stroke();
-    ctx.beginPath();ctx.moveTo(223,476);ctx.quadraticCurveTo(250,468,278,475);ctx.stroke();
+    withRecordedLegRotation(ctx,"left",()=>{
+      fillStrokePath(ctx,BODY_PATHS.leftLeg,"#0d2341","#06101e",8);
+      ctx.beginPath();ctx.moveTo(142,475);ctx.quadraticCurveTo(170,468,197,476);ctx.strokeStyle="#edf2f5";ctx.lineWidth=6;ctx.stroke();
+      fillStrokePath(ctx,BODY_PATHS.leftShoe,"#f5f7fb","#aab5c0",7);
+      strokeLine(ctx,[[137,586],[190,590]],"#6d91b2",4);
+      strokeLine(ctx,[[132,597],[193,601]],"#6d91b2",4);
+    });
 
-    fillStrokePath(ctx,BODY_PATHS.leftShoe,"#f5f7fb","#aab5c0",7);
+    withRecordedLegRotation(ctx,"right",()=>{
+      fillStrokePath(ctx,BODY_PATHS.rightLeg,"#0d2341","#06101e",8);
+      ctx.beginPath();ctx.moveTo(223,476);ctx.quadraticCurveTo(250,468,278,475);ctx.strokeStyle="#edf2f5";ctx.lineWidth=6;ctx.stroke();
+      fillStrokePath(ctx,BODY_PATHS.rightShoe,"#f5f7fb","#aab5c0",7);
+      strokeLine(ctx,[[283,586],[230,590]],"#6d91b2",4);
+      strokeLine(ctx,[[288,597],[227,601]],"#6d91b2",4);
+    });
+
     // premium suit seams
     strokeLine(ctx,[[118,145],[108,225],[109,328]],"#315a82",4);
     strokeLine(ctx,[[302,145],[312,225],[311,328]],"#315a82",4);
     ctx.setLineDash([8,7]);strokeLine(ctx,[[210,151],[210,363]],"#284d76",3);ctx.setLineDash([]);
-
-        fillStrokePath(ctx,BODY_PATHS.rightShoe,"#f5f7fb","#aab5c0",7);
-    strokeLine(ctx,[[137,586],[190,590]],"#6d91b2",4);
-    strokeLine(ctx,[[132,597],[193,601]],"#6d91b2",4);
-    strokeLine(ctx,[[283,586],[230,590]],"#6d91b2",4);
-    strokeLine(ctx,[[288,597],[227,601]],"#6d91b2",4);
 
     ctx.restore();
   }
@@ -5431,17 +5658,23 @@ body.menu-open{overflow:hidden}
 
     fillStrokePath(ctx,BODY_PATHS.waist,"#080a0e","#050608",7);
     fillStrokePath(ctx,BODY_PATHS.hips,"#11141a","#050608",8);
-    fillStrokePath(ctx,BODY_PATHS.leftLeg,"#101319","#050608",8);
-    fillStrokePath(ctx,BODY_PATHS.rightLeg,"#101319","#050608",8);
-    fillStrokePath(ctx,BODY_PATHS.leftShoe,"#171a20","#050608",7);
+
+    withRecordedLegRotation(ctx,"left",()=>{
+      fillStrokePath(ctx,BODY_PATHS.leftLeg,"#101319","#050608",8);
+      fillStrokePath(ctx,BODY_PATHS.leftShoe,"#171a20","#050608",7);
+      strokeLine(ctx,[[135,590],[193,595]],"#c51a30",4);
+    });
+
+    withRecordedLegRotation(ctx,"right",()=>{
+      fillStrokePath(ctx,BODY_PATHS.rightLeg,"#101319","#050608",8);
+      fillStrokePath(ctx,BODY_PATHS.rightShoe,"#171a20","#050608",7);
+      strokeLine(ctx,[[285,590],[227,595]],"#c51a30",4);
+    });
+
     // premium jacket seams
     strokeLine(ctx,[[113,157],[105,226],[107,327]],"#292e36",4);
     strokeLine(ctx,[[307,157],[315,226],[313,327]],"#292e36",4);
     ctx.beginPath();ctx.moveTo(153,336);ctx.quadraticCurveTo(210,352,267,336);ctx.strokeStyle="#333842";ctx.lineWidth=3;ctx.stroke();
-
-        fillStrokePath(ctx,BODY_PATHS.rightShoe,"#171a20","#050608",7);
-    strokeLine(ctx,[[135,590],[193,595]],"#c51a30",4);
-    strokeLine(ctx,[[285,590],[227,595]],"#c51a30",4);
 
     ctx.restore();
   }
@@ -5619,26 +5852,31 @@ body.menu-open{overflow:hidden}
     const jeanGrad=ctx.createLinearGradient(0,405,0,590);
     jeanGrad.addColorStop(0,hexAdjust(designer.jeansColor,26));jeanGrad.addColorStop(.52,designer.jeansColor);jeanGrad.addColorStop(1,hexAdjust(designer.jeansColor,-32));
     fillStrokePath(ctx,BODY_PATHS.hips,jeanGrad,"#27466f",8);
-    fillStrokePath(ctx,BODY_PATHS.leftLeg,jeanGrad,"#294b79",8);
-    fillStrokePath(ctx,BODY_PATHS.rightLeg,jeanGrad,"#294b79",8);
-
-    ctx.strokeStyle="#7898ca";ctx.lineWidth=4;ctx.globalAlpha=.72;
-    ctx.beginPath();ctx.moveTo(142,475);ctx.quadraticCurveTo(170,468,197,476);ctx.stroke();
-    ctx.beginPath();ctx.moveTo(223,476);ctx.quadraticCurveTo(250,468,278,475);ctx.stroke();
-    ctx.globalAlpha=1;
-    ctx.setLineDash([7,7]);ctx.strokeStyle="rgba(136,163,203,.5)";ctx.lineWidth=2.5;
-    ctx.beginPath();ctx.moveTo(190,454);ctx.lineTo(184,566);ctx.stroke();
-    ctx.beginPath();ctx.moveTo(230,454);ctx.lineTo(236,566);ctx.stroke();
-    ctx.setLineDash([]);
 
     const shoeGrad=ctx.createLinearGradient(0,565,0,608);
     shoeGrad.addColorStop(0,"#fff");shoeGrad.addColorStop(.6,"#e9edf2");shoeGrad.addColorStop(1,"#cdd4dc");
-    fillStrokePath(ctx,BODY_PATHS.leftShoe,shoeGrad,"#b8c1ca",7);
-    fillStrokePath(ctx,BODY_PATHS.rightShoe,shoeGrad,"#b8c1ca",7);
-    strokeLine(ctx,[[137,584],[190,590]],"#8b98a5",3.5);
-    strokeLine(ctx,[[132,595],[193,601]],"#8b98a5",3.5);
-    strokeLine(ctx,[[283,584],[230,590]],"#8b98a5",3.5);
-    strokeLine(ctx,[[288,595],[227,601]],"#8b98a5",3.5);
+
+    withRecordedLegRotation(ctx,"left",()=>{
+      fillStrokePath(ctx,BODY_PATHS.leftLeg,jeanGrad,"#294b79",8);
+      ctx.strokeStyle="#7898ca";ctx.lineWidth=4;ctx.globalAlpha=.72;
+      ctx.beginPath();ctx.moveTo(142,475);ctx.quadraticCurveTo(170,468,197,476);ctx.stroke();ctx.globalAlpha=1;
+      ctx.setLineDash([7,7]);ctx.strokeStyle="rgba(136,163,203,.5)";ctx.lineWidth=2.5;
+      ctx.beginPath();ctx.moveTo(190,454);ctx.lineTo(184,566);ctx.stroke();ctx.setLineDash([]);
+      fillStrokePath(ctx,BODY_PATHS.leftShoe,shoeGrad,"#b8c1ca",7);
+      strokeLine(ctx,[[137,584],[190,590]],"#8b98a5",3.5);
+      strokeLine(ctx,[[132,595],[193,601]],"#8b98a5",3.5);
+    });
+
+    withRecordedLegRotation(ctx,"right",()=>{
+      fillStrokePath(ctx,BODY_PATHS.rightLeg,jeanGrad,"#294b79",8);
+      ctx.strokeStyle="#7898ca";ctx.lineWidth=4;ctx.globalAlpha=.72;
+      ctx.beginPath();ctx.moveTo(223,476);ctx.quadraticCurveTo(250,468,278,475);ctx.stroke();ctx.globalAlpha=1;
+      ctx.setLineDash([7,7]);ctx.strokeStyle="rgba(136,163,203,.5)";ctx.lineWidth=2.5;
+      ctx.beginPath();ctx.moveTo(230,454);ctx.lineTo(236,566);ctx.stroke();ctx.setLineDash([]);
+      fillStrokePath(ctx,BODY_PATHS.rightShoe,shoeGrad,"#b8c1ca",7);
+      strokeLine(ctx,[[283,584],[230,590]],"#8b98a5",3.5);
+      strokeLine(ctx,[[288,595],[227,601]],"#8b98a5",3.5);
+    });
 
     ctx.restore();
   }
@@ -6179,6 +6417,7 @@ body.menu-open{overflow:hidden}
   bindHeadControls();
   bindEyeControls();
   bindTouchControls();
+  bindLegControls();
   bindAudioLipSync();
   bindAvatarBrain();
   bindAvatarTalk();
