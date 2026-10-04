@@ -860,14 +860,14 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.23: Touch-Fix – JS darf den Kopf transformieren */
+/* v0.24: Touch-Fix – JS darf den Kopf transformieren */
 .avatar-head-module{
   will-change:transform;
   transition:transform 70ms linear;
 }
 
 
-/* v0.23: Kopfneigung über festen Cutout-Anker */
+/* v0.24: Kopfneigung über festen Cutout-Anker */
 .head-anchor{
   transform-origin:0 0;
   will-change:transform;
@@ -944,7 +944,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.23: Aufnahme sichtbar unter den Touchfeldern */
+/* v0.24: Aufnahme sichtbar unter den Touchfeldern */
 .record-workspace{
   margin-top:14px;
   border:1px solid rgba(255,255,255,.07);
@@ -992,7 +992,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.23: gleiche Figur auf Handy, Desktop und Aufnahme */
+/* v0.24: gleiche Figur auf Handy, Desktop und Aufnahme */
 .avatar-body{
   width:min(330px,65vw)!important;
   bottom:4px!important;
@@ -1018,7 +1018,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.23: sichtbare Arm-Regler auf der Hauptseite */
+/* v0.24: sichtbare Arm-Regler auf der Hauptseite */
 .arm-main-controls{
   margin-top:14px;
   border:1px solid rgba(39,200,255,.22);
@@ -1130,7 +1130,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.23: vier Charaktere */
+/* v0.24: vier Charaktere */
 .character-buttons{
   grid-template-columns:repeat(4,minmax(0,1fr));
 }
@@ -1520,7 +1520,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.23: Recorder-Format */
+/* v0.24: Recorder-Format */
 .record-format-choice{
   display:grid;
   grid-template-columns:auto minmax(150px,1fr);
@@ -1553,7 +1553,7 @@ body.menu-open{overflow:hidden}
 }
 
 
-/* v0.23: Avatar Designer */
+/* v0.24: Avatar Designer */
 .designer-panel{margin-top:10px;border:1px solid rgba(255,96,190,.22);background:linear-gradient(180deg,rgba(255,67,170,.045),rgba(0,0,0,.16));border-radius:18px;padding:12px}
 .designer-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.designer-head>div{display:grid;gap:2px}.designer-head strong{font-size:16px}
 #designerNotice{font-size:10px;color:var(--muted)}
@@ -1960,7 +1960,7 @@ body.menu-open{overflow:hidden}
           </div>
         </div>
 
-        <div class="stage-caption"><strong>v0.23:</strong> PS Avatar Premium</div>
+        <div class="stage-caption"><strong>v0.24:</strong> PS Avatar Premium</div>
       </div>
     </section>
 
@@ -2034,7 +2034,7 @@ body.menu-open{overflow:hidden}
         </details>
       </fieldset>
 
-      <p class="designer-note">Die Regler verändern nur die Zeichnung. Blick, Blinzeln, Lip-Sync, Kopfbewegung, Arme und Avatar Brain laufen weiter.</p>
+      <p class="designer-note">Die Formregler funktionieren jetzt bei allen Figuren. Blick, Blinzeln, Lip-Sync, Kopfbewegung, Arme und Avatar Brain laufen weiter. Einige Spezialregler wirken je nach Figur unterschiedlich.</p>
     </section>
 
     <section class="touch-workspace">
@@ -2381,7 +2381,7 @@ body.menu-open{overflow:hidden}
       </article>
         </section>
 
-        <div class="menu-version">Version <strong>0.23</strong></div>
+        <div class="menu-version">Version <strong>0.24</strong></div>
       </div>
     </aside>
 
@@ -2391,7 +2391,7 @@ body.menu-open{overflow:hidden}
 (() => {
   "use strict";
 
-  const VERSION = "0.23";
+  const VERSION = "0.24";
 
   const avatarState = {
     version: VERSION,
@@ -2868,11 +2868,18 @@ body.menu-open{overflow:hidden}
     ui.psEyeClipRight=ui.headPart?.querySelector("#psEyeClipRight")||null;
     ui.psGlassesGroup=ui.headPart?.querySelector("#psGlassesGroup")||null;
     ui.psNoseGroup=ui.headPart?.querySelector("#psNoseGroup")||null;
+    ui.genericBodySvg=ui.torsoPart?.querySelector("svg")||null;
+    ui.genericEyesModule=ui.headPart?.querySelector("#eyesModule")||null;
+    ui.genericCapGroup=ui.headPart?.querySelector("#designerCapGroup")||null;
+    ui.genericGlassesGroup=ui.headPart?.querySelector("#designerGlassesGroup")||null;
+    ui.genericFeatureGroup=ui.headPart?.querySelector("#designerFeatureGroup")||null;
   }
   function updateDesignerAvailability(){
-    const human=avatarState.character==="human";
-    if(ui.designerHumanOnly)ui.designerHumanOnly.disabled=!human;
-    if(ui.designerNotice)ui.designerNotice.textContent=human?"Alle Bewegungen bleiben aktiv":"Designer v1 ist aktuell für den PS Avatar";
+    if(ui.designerHumanOnly) ui.designerHumanOnly.disabled=false;
+    if(ui.designerNotice){
+      const names={human:"PS Avatar",bear:"PS Bär",gull:"BreuerBeatz",mask:"Mask Avatar"};
+      ui.designerNotice.textContent=(names[avatarState.character]||"Avatar")+" · Formregler aktiv · Bewegungen bleiben erhalten";
+    }
   }
   function applyHumanDesigner(){
     if(avatarState.character!=="human")return;
@@ -2893,6 +2900,53 @@ body.menu-open{overflow:hidden}
     updateGradientStops(ui.torsoPart,"psSkinBodyGrad",d.skinColor);updateGradientStops(ui.torsoPart,"psHoodieGrad",d.hoodieColor);updateGradientStops(ui.torsoPart,"psSleeveGrad",d.hoodieColor);updateGradientStops(ui.torsoPart,"psJeanGrad",d.jeansColor);
     if(ui.psMoustache)ui.psMoustache.setAttribute("fill",hexAdjust(d.beardColor,-25));
   }
+  function applyCurrentAvatarDesigner(){
+    const d=avatarState.designer||DESIGNER_DEFAULTS;
+
+    if(avatarState.character==="human"){
+      applyHumanDesigner();
+      return;
+    }
+
+    refreshDesignerRefs();
+
+    if(ui.genericBodySvg){
+      ui.genericBodySvg.style.transformOrigin="50% 100%";
+      ui.genericBodySvg.style.transform="scaleX("+(d.bodyWidth/100)+")";
+    }
+
+    if(ui.genericEyesModule){
+      const eyeScale=d.eyeSize/100;
+      const spacingScale=d.eyeSpacing/100;
+      setSvgTransform(
+        ui.genericEyesModule,
+        svgAround(210,164,eyeScale*spacingScale,eyeScale,0,d.eyeY)
+      );
+    }
+
+    setSvgTransform(
+      ui.genericCapGroup,
+      svgAround(210,88,d.capSize/100,d.capSize/100,0,d.capY)
+    );
+
+    setSvgTransform(
+      ui.genericGlassesGroup,
+      svgAround(210,166,d.glassesSize/100,d.glassesSize/100,0,d.glassesY)
+    );
+
+    setSvgTransform(
+      ui.genericFeatureGroup,
+      svgAround(210,220,d.noseSize/100,d.noseSize/100,0,d.noseY)
+    );
+
+    if(ui.mouthHole?.parentElement){
+      setSvgTransform(
+        ui.mouthHole.parentElement,
+        svgAround(210,247,d.mouthSize/100,d.mouthSize/100,0,d.mouthY)
+      );
+    }
+  }
+
   function syncDesignerControls(){
     const d=avatarState.designer;
     document.querySelectorAll("[data-designer-key]").forEach(input=>{const k=input.dataset.designerKey;if(k in d)input.value=String(d[k]);});
@@ -3002,6 +3056,11 @@ body.menu-open{overflow:hidden}
               fill="#f5f7fb" stroke="#c8ced7" stroke-width="7"/>
         <path d="M137 586 L190 590 M132 597 L193 601 M283 586 L230 590 M288 597 L227 601"
               fill="none" stroke="#aeb5bf" stroke-width="4" stroke-linecap="round"/>
+        <path d="M104 150 Q92 231 101 325 M316 150 Q328 231 319 325"
+              fill="none" stroke="#3b444f" stroke-width="4" opacity=".7" stroke-linecap="round"/>
+        <path d="M145 324 Q210 344 275 324" fill="none" stroke="#2e3741" stroke-width="3" opacity=".75"/>
+        <path d="M151 505 Q171 495 191 504 M229 504 Q249 495 269 505"
+              fill="none" stroke="#315783" stroke-width="3.5" opacity=".8"/>
       </svg>
     `,
     head: `
@@ -3026,6 +3085,7 @@ body.menu-open{overflow:hidden}
                 fill="#955524" opacity=".58"/>
 
           <!-- Cap -->
+          <g id="designerCapGroup">
           <path d="M89 105 Q91 37 145 19 Q210 -2 275 19 Q329 37 331 105
                    Q289 80 210 80 Q131 80 89 105 Z"
                 fill="#20252c" stroke="#07090c" stroke-width="9"/>
@@ -3034,6 +3094,9 @@ body.menu-open{overflow:hidden}
           <path d="M210 12 L210 77" stroke="#0a0d11" stroke-width="5"/>
           <path d="M143 25 Q133 55 135 83 M277 25 Q287 55 285 83"
                 fill="none" stroke="#0a0d11" stroke-width="5"/>
+          <path d="M116 78 Q165 41 210 40 Q255 41 304 78"
+                fill="none" stroke="#59636f" stroke-width="3" opacity=".45" stroke-linecap="round"/>
+          </g>
 
           <!-- Augen -->
           <g id="eyesModule">
@@ -3053,7 +3116,7 @@ body.menu-open{overflow:hidden}
           </g>
 
           <!-- Brille -->
-          <g fill="none" stroke="#090b0d" stroke-width="9">
+          <g id="designerGlassesGroup" fill="none" stroke="#090b0d" stroke-width="9">
             <rect x="99" y="132" width="106" height="70" rx="28"/>
             <rect x="215" y="132" width="106" height="70" rx="28"/>
             <path d="M205 157 Q210 151 215 157"/>
@@ -3062,10 +3125,15 @@ body.menu-open{overflow:hidden}
           </g>
 
           <!-- Schnauze -->
+          <g id="designerFeatureGroup">
           <ellipse cx="210" cy="230" rx="72" ry="58" fill="#d8954e" stroke="#6b3b1c" stroke-width="6"/>
           <ellipse cx="210" cy="207" rx="29" ry="22" fill="#111318"/>
           <ellipse cx="202" cy="200" rx="8" ry="5" fill="#4b4f55" opacity=".75"/>
           <path d="M210 226 L210 239" stroke="#23150d" stroke-width="6" stroke-linecap="round"/>
+          <path d="M172 230 Q183 237 194 231 M226 231 Q237 237 248 230"
+                fill="none" stroke="#9c622f" stroke-width="3" opacity=".72" stroke-linecap="round"/>
+          <circle cx="184" cy="219" r="2.5" fill="#7c481f"/><circle cx="236" cy="219" r="2.5" fill="#7c481f"/>
+          </g>
 
           <!-- Dynamischer Mund -->
           <g id="mouthModule">
@@ -3179,6 +3247,11 @@ body.menu-open{overflow:hidden}
               fill="#f5f7fb" stroke="#aab5c0" stroke-width="7"/>
         <path d="M136 588 L190 592 M132 599 L193 602 M284 588 L230 592 M288 599 L227 602"
               fill="none" stroke="#6d91b2" stroke-width="4" stroke-linecap="round"/>
+        <path d="M118 145 Q101 223 109 328 M302 145 Q319 223 311 328"
+              fill="none" stroke="#315a82" stroke-width="4" opacity=".82" stroke-linecap="round"/>
+        <path d="M210 151 L210 363" stroke="#284d76" stroke-width="3" opacity=".8" stroke-dasharray="8 7"/>
+        <path d="M151 522 Q171 512 192 520 M228 520 Q249 512 269 522"
+              fill="none" stroke="#4b91ca" stroke-width="4" opacity=".72"/>
       </svg>
     `,
     head: `
@@ -3200,6 +3273,7 @@ body.menu-open{overflow:hidden}
                 fill="#f3f5f5" stroke="#59636d" stroke-width="7" stroke-linejoin="round"/>
 
           <!-- schwarze Mütze -->
+          <g id="designerCapGroup">
           <path d="M92 111 Q92 42 145 20 Q210 -5 275 20 Q328 42 328 111
                    Q284 83 210 83 Q136 83 92 111 Z"
                 fill="#15191f" stroke="#07090c" stroke-width="9"/>
@@ -3208,6 +3282,9 @@ body.menu-open{overflow:hidden}
           <text x="210" y="66" text-anchor="middle"
                 fill="#f0f4f7" font-size="22" font-weight="900"
                 font-family="Arial, sans-serif">BreuerBeatz</text>
+          <path d="M115 81 Q163 45 210 44 Q257 45 305 81"
+                fill="none" stroke="#56616e" stroke-width="3" opacity=".45" stroke-linecap="round"/>
+          </g>
 
           <!-- Augen -->
           <g id="eyesModule">
@@ -3226,7 +3303,7 @@ body.menu-open{overflow:hidden}
           </g>
 
           <!-- dunkle Brille, Augen bleiben leicht sichtbar -->
-          <g stroke="#080a0d" stroke-width="9">
+          <g id="designerGlassesGroup" stroke="#080a0d" stroke-width="9">
             <rect x="99" y="132" width="106" height="70" rx="24" fill="#11151a" fill-opacity=".22"/>
             <rect x="215" y="132" width="106" height="70" rx="24" fill="#11151a" fill-opacity=".22"/>
             <path d="M205 157 Q210 151 215 157" fill="none"/>
@@ -3234,6 +3311,7 @@ body.menu-open{overflow:hidden}
           </g>
 
           <!-- Schnabel -->
+          <g id="designerFeatureGroup">
           <path d="M164 209 Q210 184 256 209
                    Q278 223 294 239
                    Q258 247 226 252
@@ -3243,7 +3321,13 @@ body.menu-open{overflow:hidden}
           <path d="M154 244 Q194 263 230 255 Q260 250 294 239
                    Q269 269 226 279 Q184 285 155 263 Q145 254 154 244 Z"
                 fill="#e9900d" stroke="#8e5700" stroke-width="6"/>
+          <path d="M172 214 Q211 197 252 215" fill="none" stroke="#ffd06a" stroke-width="4" opacity=".8" stroke-linecap="round"/>
+          </g>
 
+          <path d="M105 224 Q126 244 145 249 M315 224 Q294 244 275 249"
+                fill="none" stroke="#c4ccd2" stroke-width="4" opacity=".8" stroke-linecap="round"/>
+          <path d="M121 272 Q145 293 168 300 M299 272 Q275 293 252 300"
+                fill="none" stroke="#dce1e4" stroke-width="3" opacity=".8" stroke-linecap="round"/>
           <!-- Dynamischer Mund / Schnabelöffnung -->
           <g id="mouthModule">
             <ellipse id="mouthHole" cx="210" cy="247" rx="0" ry="0" fill="#5b2500"/>
@@ -3323,6 +3407,11 @@ body.menu-open{overflow:hidden}
               fill="#171a20" stroke="#050608" stroke-width="7"/>
         <path d="M135 590 L193 595 M285 590 L227 595"
               stroke="#c51a30" stroke-width="4" stroke-linecap="round"/>
+        <path d="M113 157 Q101 226 107 327 M307 157 Q319 226 313 327"
+              fill="none" stroke="#292e36" stroke-width="4" opacity=".82" stroke-linecap="round"/>
+        <path d="M153 336 Q210 352 267 336" fill="none" stroke="#333842" stroke-width="3"/>
+        <path d="M154 471 L166 476 M254 476 L266 471 M151 520 L165 525 M255 525 L269 520"
+              stroke="#9a1020" stroke-width="3" opacity=".85" stroke-linecap="round"/>
       </svg>
     `,
     head: `
@@ -3345,6 +3434,7 @@ body.menu-open{overflow:hidden}
                 fill="#3a3035" opacity=".62"/>
 
           <!-- Cap -->
+          <g id="designerCapGroup">
           <path d="M89 105 Q91 37 145 19 Q210 -2 275 19 Q329 37 331 105
                    Q289 80 210 80 Q131 80 89 105 Z"
                 fill="#090b0f" stroke="#020304" stroke-width="9"/>
@@ -3352,8 +3442,11 @@ body.menu-open{overflow:hidden}
                 fill="#06070a" stroke="#020304" stroke-width="8"/>
           <path d="M94 94 Q129 42 172 23 M248 22 Q300 42 326 92"
                 fill="none" stroke="#ff1739" stroke-width="7" stroke-linecap="round"/>
+          <path d="M115 79 Q160 45 210 43 Q260 45 305 79"
+                fill="none" stroke="#424750" stroke-width="3" opacity=".5" stroke-linecap="round"/>
+          </g>
 
-          <!-- Augenhöhlen / leuchtende Augen -->
+          <!-- Augenhöhlen / normale Augen -->
           <path d="M108 151 Q150 121 198 148 Q180 190 148 194 Q122 192 108 174 Z"
                 fill="#111016" stroke="#35141d" stroke-width="5"/>
           <path d="M312 151 Q270 121 222 148 Q240 190 272 194 Q298 192 312 174 Z"
@@ -3387,8 +3480,16 @@ body.menu-open{overflow:hidden}
           </g>
 
           <!-- Nase -->
+          <g id="designerFeatureGroup">
           <path d="M210 167 L199 207 Q210 216 221 207"
                 fill="none" stroke="#2a2024" stroke-width="6" stroke-linecap="round"/>
+          </g>
+
+          <!-- zusätzliche Maskenstruktur -->
+          <path d="M111 267 Q137 287 160 293 M309 267 Q283 287 260 293"
+                fill="none" stroke="#8a747b" stroke-width="3" opacity=".36" stroke-linecap="round"/>
+          <path d="M188 111 L181 126 M232 111 L239 126"
+                stroke="#9e1726" stroke-width="3" opacity=".75" stroke-linecap="round"/>
 
           <!-- Dynamischer Mund -->
           <g id="mouthModule">
@@ -3726,15 +3827,11 @@ body.menu-open{overflow:hidden}
     }
 
     if (ui.headMotionGroup) {
-      if (avatarState.character === "human") {
-        const d=avatarState.designer || DESIGNER_DEFAULTS;
-        ui.headMotionGroup.setAttribute("transform",svgAround(210,180,d.headWidth/100,d.headHeight/100,0,0));
-      } else {
-        ui.headMotionGroup.removeAttribute("transform");
-      }
+      const d=avatarState.designer || DESIGNER_DEFAULTS;
+      ui.headMotionGroup.setAttribute("transform",svgAround(210,180,d.headWidth/100,d.headHeight/100,0,0));
     }
 
-    applyHumanDesigner();
+    applyCurrentAvatarDesigner();
 
     // Starre Cutout-Arme: je Seite ein klarer Schulter-Drehpunkt.
     const leftArmAngle = getEffectiveLeftArmAngle();
@@ -4824,7 +4921,7 @@ body.menu-open{overflow:hidden}
     if (ui.menuButton) ui.menuButton.setAttribute("aria-expanded", open ? "true" : "false");
   }
 
-  // --- Figurenaufnahme v0.23 -------------------------------------------
+  // --- Figurenaufnahme v0.24 -------------------------------------------
   // Direkter Canvas-Renderer: keine langsame SVG->Bitmap-Konvertierung pro Frame.
   let avatarRecorder = null;
   let recorderChunks = [];
@@ -4974,6 +5071,9 @@ body.menu-open{overflow:hidden}
     ctx.translate(x,y);
     ctx.scale(s,s);
 
+    const designer=avatarState.designer || DESIGNER_DEFAULTS;
+    ctx.translate(210,620);ctx.scale(designer.bodyWidth/100,1);ctx.translate(-210,-620);
+
     const leftArmAngle=getEffectiveLeftArmAngle();
     const rightArmAngle=getEffectiveRightArmAngle();
 
@@ -5026,7 +5126,12 @@ body.menu-open{overflow:hidden}
     ctx.globalAlpha=1;
 
     fillStrokePath(ctx,BODY_PATHS.leftShoe,"#f5f7fb","#c8ced7",7);
-    fillStrokePath(ctx,BODY_PATHS.rightShoe,"#f5f7fb","#c8ced7",7);
+    // premium seams
+    strokeLine(ctx,[[104,150],[96,230],[101,325]],"#3b444f",4);
+    strokeLine(ctx,[[316,150],[324,230],[319,325]],"#3b444f",4);
+    ctx.beginPath();ctx.moveTo(145,324);ctx.quadraticCurveTo(210,344,275,324);ctx.strokeStyle="#2e3741";ctx.lineWidth=3;ctx.stroke();
+
+        fillStrokePath(ctx,BODY_PATHS.rightShoe,"#f5f7fb","#c8ced7",7);
     strokeLine(ctx,[[137,586],[190,590]],"#aeb5bf",4);
     strokeLine(ctx,[[132,597],[193,601]],"#aeb5bf",4);
     strokeLine(ctx,[[283,586],[230,590]],"#aeb5bf",4);
@@ -5048,6 +5153,9 @@ body.menu-open{overflow:hidden}
     ctx.rotate(lean*Math.PI/180);
     ctx.scale(s,s);
     ctx.translate(-210,-360);
+
+    const designer=avatarState.designer || DESIGNER_DEFAULTS;
+    ctx.translate(210,180);ctx.scale(designer.headWidth/100,designer.headHeight/100);ctx.translate(-210,-180);
 
     // ears
     ctx.beginPath();ctx.arc(78,132,45,0,Math.PI*2);
@@ -5100,9 +5208,10 @@ body.menu-open{overflow:hidden}
 
     // mouth
     const widthScale=(face.mouthWidth||100)/100;
-    const halfWidth=26*widthScale;
-    const openRy=(face.mouthOpen||0)/100*15;
-    const baseY=247;
+    const mouthScale=designer.mouthSize/100;
+    const halfWidth=26*widthScale*mouthScale;
+    const openRy=(face.mouthOpen||0)/100*15*mouthScale;
+    const baseY=247+designer.mouthY;
 
     if(openRy>0.25){
       ctx.beginPath();ctx.ellipse(210,baseY+4,halfWidth*.82,openRy,0,0,Math.PI*2);
@@ -5131,6 +5240,9 @@ body.menu-open{overflow:hidden}
     ctx.save();
     ctx.translate(x,y);
     ctx.scale(s,s);
+
+    const designer=avatarState.designer || DESIGNER_DEFAULTS;
+    ctx.translate(210,620);ctx.scale(designer.bodyWidth/100,1);ctx.translate(-210,-620);
 
     const leftArmAngle=getEffectiveLeftArmAngle();
     const rightArmAngle=getEffectiveRightArmAngle();
@@ -5176,7 +5288,12 @@ body.menu-open{overflow:hidden}
     ctx.beginPath();ctx.moveTo(223,476);ctx.quadraticCurveTo(250,468,278,475);ctx.stroke();
 
     fillStrokePath(ctx,BODY_PATHS.leftShoe,"#f5f7fb","#aab5c0",7);
-    fillStrokePath(ctx,BODY_PATHS.rightShoe,"#f5f7fb","#aab5c0",7);
+    // premium suit seams
+    strokeLine(ctx,[[118,145],[108,225],[109,328]],"#315a82",4);
+    strokeLine(ctx,[[302,145],[312,225],[311,328]],"#315a82",4);
+    ctx.setLineDash([8,7]);strokeLine(ctx,[[210,151],[210,363]],"#284d76",3);ctx.setLineDash([]);
+
+        fillStrokePath(ctx,BODY_PATHS.rightShoe,"#f5f7fb","#aab5c0",7);
     strokeLine(ctx,[[137,586],[190,590]],"#6d91b2",4);
     strokeLine(ctx,[[132,597],[193,601]],"#6d91b2",4);
     strokeLine(ctx,[[283,586],[230,590]],"#6d91b2",4);
@@ -5198,6 +5315,9 @@ body.menu-open{overflow:hidden}
     ctx.rotate(lean*Math.PI/180);
     ctx.scale(s,s);
     ctx.translate(-210,-360);
+
+    const designer=avatarState.designer || DESIGNER_DEFAULTS;
+    ctx.translate(210,180);ctx.scale(designer.headWidth/100,designer.headHeight/100);ctx.translate(-210,-180);
 
     // white head
     ctx.beginPath();ctx.ellipse(210,174,142,146,0,0,Math.PI*2);
@@ -5246,9 +5366,10 @@ body.menu-open{overflow:hidden}
 
     // animated mouth
     const widthScale=(face.mouthWidth||100)/100;
-    const halfWidth=26*widthScale;
-    const openRy=(face.mouthOpen||0)/100*15;
-    const baseY=247;
+    const mouthScale=designer.mouthSize/100;
+    const halfWidth=26*widthScale*mouthScale;
+    const openRy=(face.mouthOpen||0)/100*15*mouthScale;
+    const baseY=247+designer.mouthY;
 
     if(openRy>0.25){
       ctx.beginPath();ctx.ellipse(210,baseY+4,halfWidth*.82,openRy,0,0,Math.PI*2);
@@ -5277,6 +5398,9 @@ body.menu-open{overflow:hidden}
     ctx.save();
     ctx.translate(x,y);
     ctx.scale(s,s);
+
+    const designer=avatarState.designer || DESIGNER_DEFAULTS;
+    ctx.translate(210,620);ctx.scale(designer.bodyWidth/100,1);ctx.translate(-210,-620);
 
     const leftArmAngle=getEffectiveLeftArmAngle();
     const rightArmAngle=getEffectiveRightArmAngle();
@@ -5310,7 +5434,12 @@ body.menu-open{overflow:hidden}
     fillStrokePath(ctx,BODY_PATHS.leftLeg,"#101319","#050608",8);
     fillStrokePath(ctx,BODY_PATHS.rightLeg,"#101319","#050608",8);
     fillStrokePath(ctx,BODY_PATHS.leftShoe,"#171a20","#050608",7);
-    fillStrokePath(ctx,BODY_PATHS.rightShoe,"#171a20","#050608",7);
+    // premium jacket seams
+    strokeLine(ctx,[[113,157],[105,226],[107,327]],"#292e36",4);
+    strokeLine(ctx,[[307,157],[315,226],[313,327]],"#292e36",4);
+    ctx.beginPath();ctx.moveTo(153,336);ctx.quadraticCurveTo(210,352,267,336);ctx.strokeStyle="#333842";ctx.lineWidth=3;ctx.stroke();
+
+        fillStrokePath(ctx,BODY_PATHS.rightShoe,"#171a20","#050608",7);
     strokeLine(ctx,[[135,590],[193,595]],"#c51a30",4);
     strokeLine(ctx,[[285,590],[227,595]],"#c51a30",4);
 
@@ -5330,6 +5459,9 @@ body.menu-open{overflow:hidden}
     ctx.rotate(lean*Math.PI/180);
     ctx.scale(s,s);
     ctx.translate(-210,-360);
+
+    const designer=avatarState.designer || DESIGNER_DEFAULTS;
+    ctx.translate(210,180);ctx.scale(designer.headWidth/100,designer.headHeight/100);ctx.translate(-210,-180);
 
     // face / mask
     ctx.beginPath();ctx.ellipse(210,169,137,145,0,0,Math.PI*2);
@@ -5383,9 +5515,10 @@ body.menu-open{overflow:hidden}
 
     // mouth
     const widthScale=(face.mouthWidth||100)/100;
-    const halfWidth=26*widthScale;
-    const openRy=(face.mouthOpen||0)/100*15;
-    const baseY=250;
+    const mouthScale=designer.mouthSize/100;
+    const halfWidth=26*widthScale*mouthScale;
+    const openRy=(face.mouthOpen||0)/100*15*mouthScale;
+    const baseY=250+designer.mouthY;
     if(openRy>0.25){
       ctx.beginPath();ctx.ellipse(210,baseY+4,halfWidth*.82,openRy,0,0,Math.PI*2);ctx.fillStyle="#070407";ctx.fill();
       if((face.mouthOpen||0)>20){
