@@ -497,7 +497,7 @@ body.menu-open{overflow:hidden}
 /* Schritt 8: natürliche Kopfbewegung */
 .avatar-head-module{
   width:min(610px,96vw);
-  transform:none!important;
+  transform:none;
   filter:drop-shadow(0 18px 30px rgba(0,0,0,.38));
 }
 .avatar-head-module svg{
@@ -832,7 +832,7 @@ body.menu-open{overflow:hidden}
   left:0!important;
   bottom:0!important;
   width:min(300px,56vw)!important;
-  transform:translateX(-50%)!important;
+  transform:translateX(-50%);
   transform-origin:50% 88%!important;
   filter:drop-shadow(0 10px 16px rgba(0,0,0,.20))!important;
 }
@@ -857,6 +857,13 @@ body.menu-open{overflow:hidden}
   .avatar-head-module{
     width:min(275px,58vw)!important;
   }
+}
+
+
+/* v0.13.1: Touch-Fix – JS darf den Kopf transformieren */
+.avatar-head-module{
+  will-change:transform;
+  transition:transform 70ms linear;
 }
 
 </style>
@@ -1276,7 +1283,7 @@ body.menu-open{overflow:hidden}
       </article>
         </section>
 
-        <div class="menu-version">Version <strong>0.13</strong></div>
+        <div class="menu-version">Version <strong>0.13.1</strong></div>
       </div>
     </aside>
 
@@ -1286,7 +1293,7 @@ body.menu-open{overflow:hidden}
 (() => {
   "use strict";
 
-  const VERSION = "0.13";
+  const VERSION = "0.13.1";
 
   const avatarState = {
     version: VERSION,
@@ -1465,8 +1472,8 @@ body.menu-open{overflow:hidden}
     const lift = head.idleLift || 0;
 
     if (ui.headPart) {
-      const x = lean * 0.35;
-      const y = lift + nod * 0.10;
+      const x = lean * 0.22;
+      const y = lift + nod * 0.08;
 
       ui.headPart.style.transform =
         "translateX(-50%) translate(" +
@@ -2030,7 +2037,7 @@ body.menu-open{overflow:hidden}
     });
 
     bindTouchPad(ui.headPad, (x,y) => {
-      avatarState.head.sideLean = (x - 0.5) * 18;
+      avatarState.head.sideLean = (x - 0.5) * 20;
       avatarState.head.tilt = (y - 0.5) * 6;
       avatarState.head.lastInteractionAt = performance.now();
     });
